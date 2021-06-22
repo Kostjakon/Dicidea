@@ -1,0 +1,464 @@
+﻿<UserControl
+    x:Class="DicePage.Views.DiceDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    d:DesignHeight="788"
+    d:DesignWidth="1420"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Rectangle
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Grid.Column="0"
+            Width="280"
+            Fill="Black" />
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalContentAlignment="Left"
+            Command="{Binding GoToDiceOverviewCommand}"
+            Style="{StaticResource NavigationButton}">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <svg:SVGImage
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource MarginHorizontal20}"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/iconmonstr-redo-3.svg" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Dice"
+                    FontSize="{StaticResource HeaderL}" />
+            </StackPanel>
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding GroupedDiceView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border Margin="{StaticResource MarginAllSides20}">
+                                <TextBlock
+                                    FontSize="{StaticResource HeaderL}"
+                                    FontWeight="SemiBold"
+                                    Foreground="{StaticResource DiceBrush}"
+                                    Text="{Binding Path=Name, Converter={StaticResource NameToInitialConverter}}" />
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <svg:SVGImage
+                            Width="40"
+                            Height="40"
+                            Margin="{StaticResource MarginHorizontal20}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            OverrideColor="{StaticResource IconColor}"
+                            UriSource="../Icons/dice-five-solid.svg" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <Label
+                                VerticalAlignment="Center"
+                                Content="{Binding Dice.Name}"
+                                FontSize="{StaticResource HeaderM}" />
+                            <Label
+                                VerticalAlignment="Center"
+                                Content="{Binding Dice.Description}"
+                                FontSize="{StaticResource FontSizeS}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedDice.Dice.Name}"
+                FontSize="{StaticResource HeaderL}" />
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedDice.Dice.Description}"
+                FontSize="{StaticResource FontSizeM}" />
+        </StackPanel>
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Command="{Binding SaveCommand}"
+            Margin="{StaticResource MarginHorizontal20}"
+            Style="{StaticResource ContentEditorButton}">
+            <svg:SVGImage
+                Width="28"
+                Height="28"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                OverrideColor="{StaticResource IconColor}"
+                UriSource="../Icons/save-solid.svg" />
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding SelectedDice.GroupedCategoriesView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center">
+                        <materialDesign:Flipper
+                            Margin="{StaticResource MarginAllSides20}"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Style="{StaticResource MaterialDesignCardFlipper}">
+                            <materialDesign:Flipper.FrontContent>
+                                <Grid Width="350">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding Path=Category.Name}" 
+                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
+                                    <TextBox
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Style="{StaticResource DiceTextBox}"
+                                        Text="{Binding Path=Category.Name}" 
+                                        Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}"/>
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        Orientation="Horizontal">
+                                        <Button
+                                            Width="40"
+                                            Height="40"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding EditCommand}"
+                                            Style="{StaticResource DiceViewEditButton}">
+                                            <svg:SVGImage
+                                                Width="28"
+                                                Height="28"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                OverrideColor="{StaticResource IconColor}"
+                                                UriSource="../Icons/pen-solid.svg" />
+                                        </Button>
+                                        <Button
+                                            Width="80"
+                                            Height="40"
+                                            Margin="{StaticResource MarginLeft10}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Background="{StaticResource DiceBrush}"
+                                            Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                            Content="Flip" />
+                                    </StackPanel>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource HeaderM}"
+                                        Text="{Binding Path=Category.Description}"
+                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"
+                                        TextWrapping="Wrap" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource HeaderM}"
+                                        Text="{Binding Path=Category.Description}"
+                                        Style="{StaticResource DiceTextBox}"
+                                        Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}"
+                                        TextWrapping="Wrap" />
+                                    <ListView
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Focusable="True"
+                                        ItemsSource="{Binding GroupedElementsView}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel
+                                                    Width="350"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource CategoryBrush}">
+                                                    <StackPanel
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        Orientation="Horizontal">
+                                                        <RadioButton
+                                                            Margin="{StaticResource MarginLeft20}"
+                                                            Command="{Binding FlipCommand}"
+                                                            GroupName="{Binding Category.Id}"
+                                                            IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                                                        <Button
+                                                            Width="28"
+                                                            Height="28"
+                                                            Margin="{StaticResource MarginLeft20}"
+                                                            Command="{Binding EditCommand}"
+                                                            Style="{StaticResource DiceViewEditButton}">
+                                                            <svg:SVGImage
+                                                                Width="20"
+                                                                Height="20"
+                                                                HorizontalContentAlignment="Center"
+                                                                VerticalContentAlignment="Center"
+                                                                OverrideColor="{StaticResource IconColor}"
+                                                                UriSource="../Icons/pen-solid.svg" />
+                                                        </Button>
+                                                        <Button
+                                                            Width="28"
+                                                            Height="28"
+                                                            Margin="{StaticResource MarginLeft10}"
+                                                            Background="Transparent"
+                                                            Style="{StaticResource ContentEditorButton}">
+                                                            <svg:SVGImage
+                                                                Width="20"
+                                                                Height="20"
+                                                                HorizontalContentAlignment="Center"
+                                                                VerticalContentAlignment="Center"
+                                                                OverrideColor="{StaticResource IconColor}"
+                                                                UriSource="../Icons/trash-solid.svg" />
+                                                        </Button>
+                                                        <TextBlock
+                                                            Margin="{StaticResource MarginAllSides20}"
+                                                            FontSize="{StaticResource HeaderM}"
+                                                            Text="{Binding Path=Element.Name}" 
+                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
+                                                        <TextBox
+                                                            Margin="{StaticResource MarginAllSides20}"
+                                                            FontSize="{StaticResource HeaderM}"
+                                                            Text="{Binding Path=Element.Name}"
+                                                            Style="{StaticResource DiceTextBox}"
+                                                            Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <Button
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Width="350"
+                                        Height="40"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="{StaticResource DiceBrush}">
+                                        <svg:SVGImage
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            OverrideColor="{StaticResource IconColor}"
+                                            UriSource="../Icons/plus-solid.svg" />
+                                    </Button>
+                                </Grid>
+                            </materialDesign:Flipper.FrontContent>
+                            <materialDesign:Flipper.BackContent>
+                                <Grid Width="350">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
+                                        <Run FontSize="{StaticResource HeaderL}" Text="{Binding Path=Category.Name}" />
+                                        <LineBreak />
+                                        <Run FontSize="{StaticResource HeaderM}" Text="Element - " />
+                                        <Run FontSize="{StaticResource HeaderM}" Text="{Binding Path=SelectedElement.Element.Name}" />
+                                    </TextBlock>
+                                    <Button
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Width="80"
+                                        Height="40"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Background="{StaticResource DiceBrush}"
+                                        Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                        Content="Flip" />
+                                    <ListView
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        ItemsSource="{Binding SelectedElement.GroupedValuesView}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel
+                                                    Width="350"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource CategoryBrush}"
+                                                    Orientation="Horizontal">
+                                                    <Button
+                                                        Width="28"
+                                                        Height="28"
+                                                        Margin="{StaticResource MarginLeft20}"
+                                                        Command="{Binding EditCommand}"
+                                                        Style="{StaticResource DiceViewEditButton}">
+                                                        <svg:SVGImage
+                                                            Width="20"
+                                                            Height="20"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            OverrideColor="{StaticResource IconColor}"
+                                                            UriSource="../Icons/pen-solid.svg" />
+                                                    </Button>
+                                                    <Button
+                                                        Width="28"
+                                                        Height="28"
+                                                        Margin="{StaticResource MarginLeft10}"
+                                                        Background="Transparent"
+                                                        Style="{StaticResource ContentEditorButton}">
+                                                        <svg:SVGImage
+                                                            Width="20"
+                                                            Height="20"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            OverrideColor="{StaticResource IconColor}"
+                                                            UriSource="../Icons/trash-solid.svg" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Margin="{StaticResource MarginHorizontal20Vertical10}"
+                                                        FontSize="{StaticResource HeaderM}"
+                                                        Text="{Binding Path=Value.Name}"
+                                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                                    <TextBox
+                                                        Margin="{StaticResource MarginHorizontal20Vertical10}"
+                                                        FontSize="{StaticResource HeaderM}"
+                                                        Text="{Binding Path=Value.Name}"
+                                                        Style="{StaticResource DiceTextBox}"
+                                                        Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <Button
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Width="350"
+                                        Height="32"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="{StaticResource DiceBrush}">
+                                        <svg:SVGImage
+                                            Width="20"
+                                            Height="20"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            OverrideColor="{StaticResource IconColor}"
+                                            UriSource="../Icons/plus-solid.svg" />
+                                    </Button>
+                                </Grid>
+                            </materialDesign:Flipper.BackContent>
+                        </materialDesign:Flipper>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
+</UserControl>

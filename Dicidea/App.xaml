@@ -1,0 +1,263 @@
+﻿<prism:PrismApplication
+    x:Class="Dicidea.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Dicidea.Core.Converters;assembly=Dicidea.Core"
+    xmlns:local="clr-namespace:Dicidea"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Dark"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Purple" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/themes/materialdesigntheme.defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary>
+                    <Thickness x:Key="MarginAllSides20">20</Thickness>
+                    <Thickness x:Key="MarginHorizontal20">20 0</Thickness>
+                    <Thickness x:Key="MarginHorizontal20Vertical10">20 10</Thickness>
+                    <Thickness x:Key="MarginBottom20">0 0 0 20</Thickness>
+                    <Thickness x:Key="MarginLeft20">20 0 0 0</Thickness>
+                    <Thickness x:Key="MarginHorizontalBottom20">20 0 20 20</Thickness>
+                    <Thickness x:Key="MarginHorizontal20Bottom10">20 0 20 10</Thickness>
+                    <Thickness x:Key="MarginHorizontal10">10 0</Thickness>
+                    <Thickness x:Key="MarginAllSides10">10</Thickness>
+                    <Thickness x:Key="PaddingBottom10">0 0 0 10</Thickness>
+                    <Thickness x:Key="MarginLeft10">10 0 0 0</Thickness>
+                    <system:Double x:Key="HeaderXL">32</system:Double>
+                    <system:Double x:Key="HeaderL">24</system:Double>
+                    <system:Double x:Key="HeaderM">16</system:Double>
+                    <system:Double x:Key="FontSizeM">12</system:Double>
+                    <system:Double x:Key="FontSizeS">10</system:Double>
+                    <system:Double x:Key="OverviewTileHeight">200</system:Double>
+                    <system:Double x:Key="DoubleOverviewTileHeight">440</system:Double>
+                    <system:Double x:Key="OverviewIconSize">120</system:Double>
+                    <Color x:Key="IdeasColor">#E3B178</Color>
+                    <SolidColorBrush x:Key="IdeasBrush" Color="{DynamicResource IdeasColor}" />
+                    <Color x:Key="RollEmColor">#9878F1</Color>
+                    <SolidColorBrush x:Key="RollEmBrush" Color="{DynamicResource RollEmColor}" />
+                    <Color x:Key="DiceColor">#72B9FF</Color>
+                    <SolidColorBrush x:Key="DiceBrush" Color="{DynamicResource DiceColor}" />
+                    <Color x:Key="MenuColor">#9DC16F</Color>
+                    <SolidColorBrush x:Key="MenuBrush" Color="{DynamicResource MenuColor}" />
+                    <Color x:Key="IconColor">White</Color>
+                    <Color x:Key="CategoryColor">#131313</Color>
+                    <SolidColorBrush x:Key="CategoryBrush" Color="{DynamicResource CategoryColor}" />
+
+                    <Style x:Key="MaterialDesignLightRadioButton" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignRadioButton}">
+                        <Setter Property="Background" Value="{DynamicResource DiceBrush}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource DiceBrush}"/>
+                    </Style>
+
+                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                        <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+                    </Style>
+                    <Style x:Key="TitleBarButton" TargetType="Button">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+                        <Setter Property="IsTabStop" Value="False" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                    <Style x:Key="ContentEditorButton" TargetType="Button">
+                        <Setter Property="Width" Value="40" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                    <Style x:Key="FlipButton" TargetType="Button">
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FontSize" Value="{DynamicResource HeaderM}"></Setter>
+                    </Style>
+
+                    <DataTemplate x:Key="EditSvc">
+                        <svg:SVGImage
+                            Width="28"
+                            Height="28"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            OverrideColor="{StaticResource IconColor}"
+                            UriSource="../Icons/pen-solid.svg" />
+                    </DataTemplate>
+                    <Style x:Key="DiceViewEditButton" TargetType="Button">
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditEnabled}"
+                                         Value="True">
+                                <Setter Property="Background" Value="{StaticResource DiceBrush}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="NavigationButton" TargetType="Button">
+                        <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Width" Value="280" />
+                        <Setter Property="Height" Value="80" />
+                    </Style>
+                    <Style x:Key="DiceCard" TargetType="materialDesign:Flipper">
+                        <Setter Property="materialDesign:Flipper.Background" Value="Black" />
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+
+                    <Style
+                        x:Key="MaterialDesignCardFlipper"
+                        BasedOn="{StaticResource {x:Type materialDesign:Flipper}}"
+                        TargetType="{x:Type materialDesign:Flipper}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type materialDesign:Flipper}">
+                                    <Border
+                                        x:Name="Border"
+                                        Background="Black"
+                                        BorderBrush="Black"
+                                        BorderThickness="0">
+                                        <materialDesign:Plane3D
+                                            x:Name="PART_Plane3D"
+                                            RotationY="0"
+                                            ZFactor="2.055">
+                                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="{TemplateBinding materialDesign:ShadowAssist.ShadowDepth}" Background="Black">
+                                                <Grid>
+                                                    <ContentPresenter
+                                                        x:Name="FrontContentPresenter"
+                                                        Margin="20"
+                                                        Content="{TemplateBinding FrontContent}"
+                                                        ContentStringFormat="{TemplateBinding FrontContentStringFormat}"
+                                                        ContentTemplate="{TemplateBinding FrontContentTemplate}"
+                                                        ContentTemplateSelector="{TemplateBinding FrontContentTemplateSelector}"
+                                                        RenderTransformOrigin=".5,.5" />
+                                                    <ContentPresenter
+                                                        x:Name="BackContentPresenter"
+                                                        Margin="20"
+                                                        Content="{TemplateBinding BackContent}"
+                                                        ContentStringFormat="{TemplateBinding BackContentStringFormat}"
+                                                        ContentTemplate="{TemplateBinding BackContentTemplate}"
+                                                        ContentTemplateSelector="{TemplateBinding BackContentTemplateSelector}"
+                                                        RenderTransformOrigin=".5,.5"
+                                                        Visibility="Collapsed" />
+                                                </Grid>
+                                            </materialDesign:Card>
+                                        </materialDesign:Plane3D>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="FlipStates">
+                                                <VisualStateGroup.Transitions>
+                                                    <VisualTransition From="Unflipped" To="Flipped">
+                                                        <Storyboard FillBehavior="HoldEnd">
+                                                            <DoubleAnimationUsingKeyFrames
+                                                                Storyboard.TargetName="PART_Plane3D"
+                                                                Storyboard.TargetProperty="RotationY"
+                                                                Duration="0:0:0.4">
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.0"
+                                                                    Value="0" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.2"
+                                                                    Value="-90" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.2"
+                                                                    Value="90" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.4"
+                                                                    Value="0" />
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FrontContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </VisualTransition>
+                                                    <VisualTransition From="Flipped" To="Unflipped">
+                                                        <Storyboard FillBehavior="HoldEnd">
+                                                            <DoubleAnimationUsingKeyFrames
+                                                                Storyboard.TargetName="PART_Plane3D"
+                                                                Storyboard.TargetProperty="RotationY"
+                                                                Duration="0:0:0.4">
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.0"
+                                                                    Value="0" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.2"
+                                                                    Value="90" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.2"
+                                                                    Value="-90" />
+                                                                <EasingDoubleKeyFrame
+                                                                    EasingFunction="{StaticResource FlipEase}"
+                                                                    KeyTime="0:0:0.4"
+                                                                    Value="0" />
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FrontContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </VisualTransition>
+                                                </VisualStateGroup.Transitions>
+
+                                                <VisualState x:Name="Unflipped">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FrontContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState x:Name="Flipped">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FrontContentPresenter" Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style x:Key="DiceTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBoxBase}">
+                        <Setter Property="TextAlignment" Value="Left" />
+                        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DiceBrush}"></Setter>
+                        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource DiceBrush}"></Setter>
+                        <Setter Property="CaretBrush" Value="{DynamicResource DiceBrush}"></Setter>
+                    </Style>
+
+                    <converters:ConverterVisibility x:Key="ConverterVisibility" />
+                    <converters:NameToInitialConverter x:Key="NameToInitialConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>

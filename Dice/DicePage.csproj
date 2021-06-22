@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>DicePage</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Icons\caret-right-solid.svg" />
+    <None Remove="Icons\dice-five-solid.svg" />
+    <None Remove="Icons\iconmonstr-redo-3.svg" />
+    <None Remove="Icons\pen-solid.svg" />
+    <None Remove="Icons\plus-solid.svg" />
+    <None Remove="Icons\save-solid.svg" />
+    <None Remove="Icons\trash-solid.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.SVGImage" Version="4.1.92" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.5" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dicidea.Core\Dicidea.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\caret-right-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\dice-five-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-redo-3.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\pen-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\plus-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\save-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\trash-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+</Project>

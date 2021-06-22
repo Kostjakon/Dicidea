@@ -1,0 +1,160 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Dicidea</AssemblyName>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Backgrounds\Environment_Study_02_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_04_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_05_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_06_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_09_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_10_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_11_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_12_07_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_16_04_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_18_04_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_22_04_2016.jpg" />
+    <None Remove="Backgrounds\Environment_Study_23_04_2016.jpg" />
+    <None Remove="Icons\267318-200.png" />
+    <None Remove="Icons\bars-solid.svg" />
+    <None Remove="Icons\caret-down-solid.svg" />
+    <None Remove="Icons\caret-right-solid.svg" />
+    <None Remove="Icons\dice-five-solid.svg" />
+    <None Remove="Icons\dice-solid.svg" />
+    <None Remove="Icons\ellipsis-h-solid.svg" />
+    <None Remove="Icons\external-link-square-alt-solid.svg" />
+    <None Remove="Icons\iconfinder_info_293683.svg" />
+    <None Remove="Icons\iconmonstr-arrow-68.svg" />
+    <None Remove="Icons\iconmonstr-paintbrush-6.ico" />
+    <None Remove="Icons\iconmonstr-paintbrush-6.svg" />
+    <None Remove="Icons\iconmonstr-redo-3.svg" />
+    <None Remove="Icons\iconmonstr-view-5.svg" />
+    <None Remove="Icons\minus-solid.svg" />
+    <None Remove="Icons\pen-solid.svg" />
+    <None Remove="Icons\share-square-solid.svg" />
+    <None Remove="Icons\times-solid.svg" />
+    <None Remove="Icons\window-maximize-solid.svg" />
+    <None Remove="Icons\window-restore-solid.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.SVGImage" Version="4.1.92" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.5" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dice\DicePage.csproj" />
+    <ProjectReference Include="..\Dicidea.Core\Dicidea.Core.csproj" />
+    <ProjectReference Include="..\Menu\MenuPage.csproj" />
+    <ProjectReference Include="..\Navigation\Navigation.csproj" />
+    <ProjectReference Include="..\Overview\OverviewPage.csproj" />
+    <ProjectReference Include="..\RollEmSpace\RollEmSpacePage.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Backgrounds\Environment_Study_02_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_04_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_05_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_06_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_09_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_10_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_11_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_12_07_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_16_04_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_18_04_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_22_04_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Backgrounds\Environment_Study_23_04_2016.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\bars-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\caret-down-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\caret-right-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\dice-five-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\dice-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\ellipsis-h-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\external-link-square-alt-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconfinder_info_293683.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-arrow-68.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-paintbrush-6.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-paintbrush-6.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-redo-3.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\iconmonstr-view-5.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\minus-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\pen-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\share-square-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\times-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\window-maximize-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\window-restore-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\Shell.xaml.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+</Project>

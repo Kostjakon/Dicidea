@@ -1,0 +1,256 @@
+﻿<UserControl
+    x:Class="OverviewPage.Views.Overview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:svg1="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    d:DesignHeight="840"
+    d:DesignWidth="1200"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Content="Overview"
+            FontSize="60" />
+        <Grid
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Width="960"
+            Height="480"
+            ShowGridLines="false">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Name="MenuButton"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{StaticResource OverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Background="{StaticResource MenuBrush}"
+                Command="{Binding GoToMenu}">
+                <StackPanel Orientation="Vertical">
+                    <svg1:SVGImage
+                        Width="{StaticResource OverviewIconSize}"
+                        Height="{StaticResource OverviewIconSize}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        OverrideColor="{StaticResource IconColor}"
+                        UriSource="../Icons/bars-solid.svg" />
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="Menu"
+                        FontSize="{StaticResource HeaderM}" />
+                </StackPanel>
+            </Button>
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="{StaticResource OverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Background="{StaticResource RollEmBrush}"
+                Command="{Binding GoToRollEmSpace}">
+                <StackPanel Orientation="Vertical">
+                    <svg1:SVGImage
+                        Width="{StaticResource OverviewIconSize}"
+                        Height="{StaticResource OverviewIconSize}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        OverrideColor="{StaticResource IconColor}"
+                        UriSource="../Icons/dice-solid.svg" />
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="Roll'em spaces"
+                        FontSize="{StaticResource HeaderM}" />
+                </StackPanel>
+            </Button>
+            <Button
+                Grid.Row="0"
+                Grid.Column="2"
+                Width="{StaticResource DoubleOverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Padding="0"
+                Background="{StaticResource RollEmBrush}">
+                <Grid Width="{StaticResource DoubleOverviewTileHeight}" Height="{StaticResource OverviewTileHeight}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center">
+                        <svg1:SVGImage
+                            Width="{StaticResource OverviewIconSize}"
+                            Height="{StaticResource OverviewIconSize}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            OverrideColor="{StaticResource IconColor}"
+                            UriSource="../Icons/dice-solid.svg" />
+                        <Label
+                            HorizontalAlignment="Center"
+                            Content="Roll'em spaces"
+                            FontSize="{StaticResource HeaderM}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <Label
+                            Width="{StaticResource OverviewTileHeight}"
+                            Padding="{StaticResource PaddingBottom10}"
+                            HorizontalAlignment="Center"
+                            Content="Last used Roll 'em space"
+                            FontSize="{StaticResource HeaderM}" />
+                        <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
+                            HorizontalAlignment="Center"
+                            FontSize="{StaticResource FontSizeM}"
+                            TextWrapping="Wrap">
+                            Last used Roll 'em space Beschreibung, das hier ist ein Platzhalter und muss später ersetzt werden.
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="{StaticResource OverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Background="{StaticResource DiceBrush}"
+                Command="{Binding GoToDiceCommand}">
+                <StackPanel Orientation="Vertical">
+                    <svg1:SVGImage
+                        Width="{StaticResource OverviewIconSize}"
+                        Height="{StaticResource OverviewIconSize}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        OverrideColor="{StaticResource IconColor}"
+                        UriSource="../Icons/dice-five-solid.svg" />
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="Dice"
+                        FontSize="{StaticResource HeaderM}" />
+                </StackPanel>
+            </Button>
+            <Button
+                Grid.Row="1"
+                Grid.Column="1"
+                Width="{StaticResource OverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Background="{StaticResource IdeasBrush}"
+                IsEnabled="False">
+                <StackPanel Orientation="Vertical">
+                    <svg1:SVGImage
+                        Width="{StaticResource OverviewIconSize}"
+                        Height="{StaticResource OverviewIconSize}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        OverrideColor="{StaticResource IconColor}"
+                        UriSource="../Icons/iconmonstr-paintbrush-6.svg" />
+                    <Label
+                        HorizontalAlignment="Center"
+                        Content="Ideas"
+                        FontSize="{StaticResource HeaderM}" />
+                </StackPanel>
+            </Button>
+            <Button
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="{StaticResource DoubleOverviewTileHeight}"
+                Height="{StaticResource OverviewTileHeight}"
+                Margin="{StaticResource MarginAllSides20}"
+                Background="{StaticResource IdeasBrush}"
+                IsEnabled="False">
+                <Grid Width="{StaticResource DoubleOverviewTileHeight}" Height="{StaticResource OverviewTileHeight}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center">
+                        <svg1:SVGImage
+                            Width="{StaticResource OverviewIconSize}"
+                            Height="{StaticResource OverviewIconSize}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            OverrideColor="{StaticResource IconColor}"
+                            UriSource="../Icons/iconmonstr-paintbrush-6.svg" />
+                        <Label
+                            HorizontalAlignment="Center"
+                            Content="Ideas"
+                            FontSize="{StaticResource HeaderM}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <Label
+                            Width="{StaticResource OverviewTileHeight}"
+                            Padding="{StaticResource PaddingBottom10}"
+                            HorizontalAlignment="Center"
+                            Content="Last rolled ideas"
+                            FontSize="{StaticResource HeaderM}" />
+                        <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
+                            HorizontalAlignment="Center"
+                            FontSize="{StaticResource FontSizeM}"
+                            TextWrapping="Wrap">
+                            Anzahl der Ideen: x<LineBreak />
+                            Verwendeter Roll 'em space:<LineBreak />
+                            xy<LineBreak />
+                            Anzahl der Würfel: y</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </Grid>
+        <ContentControl MinWidth="200" prism:RegionManager.RegionName="OverviewStartscreen" />
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</UserControl>
