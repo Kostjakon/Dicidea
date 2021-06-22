@@ -22,7 +22,7 @@ namespace DicePage.ViewModels
             _diceDataService = diceDataService;
             _selectedDice = dice;
             _selectedCategory = category;
-            Task.Run(LoadElements);
+            LoadElements();
         }
 
         public ObservableCollection<ElementViewModel> Elements
