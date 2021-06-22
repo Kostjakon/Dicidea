@@ -31,6 +31,7 @@ namespace DicePage.ViewModels
 
         public DiceOverviewViewModel(IRegionManager regionManager)
         {
+            
             _regionManager = regionManager;
             if (DiceView != null)
             {
@@ -40,7 +41,6 @@ namespace DicePage.ViewModels
             SortCommand = new DelegateCommand(SortExecute);
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
-            EditCommand = new DelegateCommand(EditExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
 
@@ -85,7 +85,6 @@ namespace DicePage.ViewModels
         public DelegateCommand SortCommand { get; set; }
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
-        public DelegateCommand EditCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
         public ListCollectionView DiceView { get; private set; }
@@ -166,16 +165,13 @@ namespace DicePage.ViewModels
             DiceViewModel result = _diceListViewModel.AddDiceAsync().Result;
             GroupedDiceView.MoveCurrentTo(result);
             GroupedDiceView.Refresh();
+
         }
         private async void SaveExecute()
         {
-            await Task.Run(_diceListViewModel.SaveDiceAsync);
+            await _diceListViewModel.SaveDiceAsync();
         }
-        private void EditExecute()
-        {
-            Debug.WriteLine("Edit Dice");
-            GroupedDiceView.Refresh();
-        }
+
         private async void DeleteExecute()
         {
             Debug.WriteLine("Delete Dice");
@@ -196,6 +192,7 @@ namespace DicePage.ViewModels
             GroupedDiceView = new ListCollectionView(diceViewModels)
             {
                 IsLiveSorting = true,
+                IsLiveGrouping = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
             GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription

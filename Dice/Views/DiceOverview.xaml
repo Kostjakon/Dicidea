@@ -80,7 +80,8 @@
             ItemsSource="{Binding GroupedDiceView}"
             MouseDoubleClick="DiceOverview_MouseDoubleClick"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.ScrollChanged="DiceScrollViewer_OnScrollChanged">
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>

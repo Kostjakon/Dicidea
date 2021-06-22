@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:Dicidea"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage">
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -49,9 +49,12 @@
                     <Color x:Key="CategoryColor">#131313</Color>
                     <SolidColorBrush x:Key="CategoryBrush" Color="{DynamicResource CategoryColor}" />
 
-                    <Style x:Key="MaterialDesignLightRadioButton" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MaterialDesignRadioButton}">
-                        <Setter Property="Background" Value="{DynamicResource DiceBrush}"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource DiceBrush}"/>
+                    <Style
+                        x:Key="MaterialDesignLightRadioButton"
+                        BasedOn="{StaticResource MaterialDesignRadioButton}"
+                        TargetType="{x:Type RadioButton}">
+                        <Setter Property="Background" Value="{DynamicResource DiceBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource DiceBrush}" />
                     </Style>
 
                     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -77,7 +80,7 @@
                         <Setter Property="Background" Value="Black" />
                         <Setter Property="Foreground" Value="White" />
                         <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="FontSize" Value="{DynamicResource HeaderM}"></Setter>
+                        <Setter Property="FontSize" Value="{DynamicResource HeaderM}" />
                     </Style>
 
                     <DataTemplate x:Key="EditSvc">
@@ -95,8 +98,7 @@
                         <Setter Property="Foreground" Value="White" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditEnabled}"
-                                         Value="True">
+                            <DataTrigger Binding="{Binding IsEditEnabled}" Value="True">
                                 <Setter Property="Background" Value="{StaticResource DiceBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -247,11 +249,14 @@
                         </Setter>
                     </Style>
 
-                    <Style x:Key="DiceTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBoxBase}">
+                    <Style
+                        x:Key="DiceTextBox"
+                        BasedOn="{StaticResource MaterialDesignTextBoxBase}"
+                        TargetType="{x:Type TextBox}">
                         <Setter Property="TextAlignment" Value="Left" />
-                        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DiceBrush}"></Setter>
-                        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource DiceBrush}"></Setter>
-                        <Setter Property="CaretBrush" Value="{DynamicResource DiceBrush}"></Setter>
+                        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DiceBrush}" />
+                        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource DiceBrush}" />
+                        <Setter Property="CaretBrush" Value="{DynamicResource DiceBrush}" />
                     </Style>
 
                     <converters:ConverterVisibility x:Key="ConverterVisibility" />

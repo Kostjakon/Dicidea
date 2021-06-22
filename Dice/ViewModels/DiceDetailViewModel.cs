@@ -57,10 +57,10 @@ namespace DicePage.ViewModels
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
-        private void AddExecute()
+        private async void AddExecute()
         {
             Debug.WriteLine("Add Category");
-            Task.Run(SelectedDice.AddCategoryAsync);
+            await SelectedDice.AddCategoryAsync();
         }
         private void EditExecute()
         {
@@ -68,11 +68,11 @@ namespace DicePage.ViewModels
         }
         private async void DeleteExecute()
         {
-            await Task.Run(SelectedDice.DeleteCategoryAsync);
+            await SelectedDice.DeleteCategoryAsync();
         }
         private async void SaveExecute()
         {
-            await Task.Run(_diceListViewModel.SaveDiceAsync);
+            await _diceListViewModel.SaveDiceAsync();
         }
 
         public IRegionManager RegionManager { get; private set; }

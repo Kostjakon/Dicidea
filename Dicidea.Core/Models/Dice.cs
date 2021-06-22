@@ -16,7 +16,7 @@ namespace Dicidea.Core.Models
             Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
             Id = Guid.NewGuid().ToString("N");
             Debug.WriteLine("New dice");
-            Name = "New Dice";
+            Name = "";
             Categories = new List<Category>
             {
                 new Category(true)

@@ -24,7 +24,7 @@ namespace DicePage.ViewModels
             _selectedDice = dice;
             _selectedCategory = category;
             _selectedElement = element;
-            Task.Run(LoadElements).Wait();
+            Task.Run(LoadElements);
         }
 
         public ObservableCollection<ValueViewModel> Values

@@ -45,6 +45,15 @@ namespace DicePage.Views
             }
             
         }
-        
+
+        // Nicht von mir
+        private void DiceScrollViewer_OnScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.OriginalSource is ScrollViewer scrollViewer && Math.Abs(e.ExtentHeightChange)>0.0)
+            {
+                scrollViewer.ScrollToTop();
+            }
+        }
+        // Bis hier
     }
 }

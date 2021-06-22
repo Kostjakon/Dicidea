@@ -22,7 +22,8 @@ namespace DicePage.ViewModels
             _diceDataService = diceDataService;
             _selectedDice = dice;
             //Debug.WriteLine(dice.Dice.Name);
-            Task.Run(LoadCategories).Wait();
+            //Task.Run(LoadCategories);
+            LoadCategories();
         }
 
         public ObservableCollection<CategoryViewModel> Categories
@@ -49,6 +50,7 @@ namespace DicePage.ViewModels
             // DICEVIEWMODEL!
             Categories.Add(newCategory);
             Debug.WriteLine("Add Category in CategoryListViewModel - After Adding to Categories");
+
             return newCategory;
         }
 
