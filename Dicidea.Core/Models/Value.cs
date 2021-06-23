@@ -4,14 +4,15 @@ using Newtonsoft.Json;
 
 namespace Dicidea.Core.Models
 {
-    public class Value : NotifyPropertyChanges
+    public class Value : NotifyDataErrorInfo<Value>
     {
         private string _name;
         private string _pictureUri;
         public Value(bool newValue)
         {
+            Rules.Add(new DelegateRule<Value>(nameof(Name), "The value has to have a name.", v => !string.IsNullOrWhiteSpace(v?.Name)));
             Id = Guid.NewGuid().ToString("N");
-            Name = "New Value";
+            Name = "";
         }
         public Value() { }
 

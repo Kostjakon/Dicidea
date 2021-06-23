@@ -17,6 +17,7 @@ namespace Dicidea.Core.Models
             Id = Guid.NewGuid().ToString("N");
             Debug.WriteLine("New dice");
             Name = "";
+            Description = "";
             Categories = new List<Category>
             {
                 new Category(true)

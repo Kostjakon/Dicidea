@@ -18,7 +18,7 @@ namespace DicePage.ViewModels
         public DiceListViewModel(IDiceDataService diceDataService)
         {
             _diceDataService = diceDataService;
-            Task.Run(LoadDiceAsync).Wait();
+            LoadDiceAsync();
         }
 
         public ObservableCollection<DiceViewModel> AllDice

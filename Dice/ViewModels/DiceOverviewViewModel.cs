@@ -162,7 +162,7 @@ namespace DicePage.ViewModels
 
         private async void AddExecute()
         {
-            DiceViewModel result = _diceListViewModel.AddDiceAsync().Result;
+            DiceViewModel result = await _diceListViewModel.AddDiceAsync();
             GroupedDiceView.MoveCurrentTo(result);
             GroupedDiceView.Refresh();
 

@@ -12,9 +12,10 @@ namespace Dicidea.Core.Models
 
         public Category(bool newCategory)
         {
-            Rules.Add(new DelegateRule<Category>(nameof(Name), "The dice has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
+            Rules.Add(new DelegateRule<Category>(nameof(Name), "The category has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
             Id = Guid.NewGuid().ToString("N");
-            Name = "New Category";
+            Name = " ";
+            Description = " ";
             Elements = new List<Element>
             {
                 new Element(true)
@@ -22,7 +23,7 @@ namespace Dicidea.Core.Models
         }
         public Category()
         {
-            Rules.Add(new DelegateRule<Category>(nameof(Name), "The dice has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
+            Rules.Add(new DelegateRule<Category>(nameof(Name), "The category has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
         }
 
         [JsonProperty(PropertyName = "CategoryId", Required = Required.Always)]

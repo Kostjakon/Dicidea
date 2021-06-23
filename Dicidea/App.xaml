@@ -22,16 +22,23 @@
                     <Thickness x:Key="MarginHorizontal20">20 0</Thickness>
                     <Thickness x:Key="MarginHorizontal20Vertical10">20 10</Thickness>
                     <Thickness x:Key="MarginBottom20">0 0 0 20</Thickness>
+                    <Thickness x:Key="MarginBottom14">0 0 0 14</Thickness>
+                    <Thickness x:Key="MarginBottom4">0 0 0 4</Thickness>
+                    <Thickness x:Key="MarginLeft2">2 0 0 0</Thickness>
                     <Thickness x:Key="MarginLeft20">20 0 0 0</Thickness>
+                    <Thickness x:Key="MarginRight20">0 0 20 0</Thickness>
                     <Thickness x:Key="MarginHorizontalBottom20">20 0 20 20</Thickness>
                     <Thickness x:Key="MarginHorizontal20Bottom10">20 0 20 10</Thickness>
                     <Thickness x:Key="MarginHorizontal10">10 0</Thickness>
                     <Thickness x:Key="MarginAllSides10">10</Thickness>
                     <Thickness x:Key="PaddingBottom10">0 0 0 10</Thickness>
+                    <Thickness x:Key="MarginTop10">0 10 0 0</Thickness>
+                    <Thickness x:Key="MarginTop4">0 4 0 0</Thickness>
                     <Thickness x:Key="MarginLeft10">10 0 0 0</Thickness>
                     <system:Double x:Key="HeaderXL">32</system:Double>
                     <system:Double x:Key="HeaderL">24</system:Double>
                     <system:Double x:Key="HeaderM">16</system:Double>
+                    <system:Double x:Key="FontSizeL">14</system:Double>
                     <system:Double x:Key="FontSizeM">12</system:Double>
                     <system:Double x:Key="FontSizeS">10</system:Double>
                     <system:Double x:Key="OverviewTileHeight">200</system:Double>
@@ -83,18 +90,9 @@
                         <Setter Property="FontSize" Value="{DynamicResource HeaderM}" />
                     </Style>
 
-                    <DataTemplate x:Key="EditSvc">
-                        <svg:SVGImage
-                            Width="28"
-                            Height="28"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            OverrideColor="{StaticResource IconColor}"
-                            UriSource="../Icons/pen-solid.svg" />
-                    </DataTemplate>
                     <Style x:Key="DiceViewEditButton" TargetType="Button">
                         <Setter Property="Height" Value="40" />
-                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Foreground" Value="White" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Style.Triggers>
@@ -102,6 +100,12 @@
                                 <Setter Property="Background" Value="{StaticResource DiceBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
+                    </Style>
+                    <Style x:Key="DiceViewDeleteButton" TargetType="Button">
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
                     </Style>
                     <Style x:Key="NavigationButton" TargetType="Button">
                         <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />

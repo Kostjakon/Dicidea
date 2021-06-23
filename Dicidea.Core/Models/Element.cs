@@ -12,14 +12,18 @@ namespace Dicidea.Core.Models
 
         public Element(bool newElement)
         {
+            Rules.Add(new DelegateRule<Element>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Id = Guid.NewGuid().ToString("N"); 
-            Name = "New Element";
+            Name = "";
             Values = new List<Value>
             {
                 new Value(true)
             };
         }
-        public Element() { }
+        public Element()
+        {
+            Rules.Add(new DelegateRule<Element>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
+        }
 
         [JsonProperty(PropertyName = "ElementId", Required = Required.Always)]
         public string Id { get; set; }

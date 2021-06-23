@@ -41,11 +41,11 @@ namespace DicePage.ViewModels
         public async Task<CategoryViewModel> AddCategoryAsync()
         {
             Debug.WriteLine("Add Category in CategoryListViewModel");
-            var categoryModel = new Category();
+            var categoryModel = new Category(true);
             await _diceDataService.AddCategoryAsync(_selectedDice.Dice, categoryModel);
 
             Debug.WriteLine("Add Category in CategoryListViewModel - After Adding to diceDataService");
-            var newCategory = new CategoryViewModel(_selectedDice.Dice, categoryModel, _diceDataService);
+            var newCategory = new CategoryViewModel(_selectedDice, categoryModel, _diceDataService);
             Debug.WriteLine("Add Category in CategoryListViewModel - After Creating new CategoryViewModel");
             // DICEVIEWMODEL!
             Categories.Add(newCategory);
@@ -59,7 +59,7 @@ namespace DicePage.ViewModels
             Categories = new ObservableCollection<CategoryViewModel>();
             List<Category> categories = _selectedDice.Dice.Categories;
             //Debug.WriteLine(categories != null);
-            if(categories!= null) categories.ToList().ForEach(c => Categories.Add(new CategoryViewModel(_selectedDice.Dice, c, _diceDataService)));
+            if(categories!= null) categories.ToList().ForEach(c => Categories.Add(new CategoryViewModel(_selectedDice, c, _diceDataService)));
         }
     }
 }

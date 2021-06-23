@@ -143,6 +143,7 @@
                                     <TextBox
                                         Grid.Row="0"
                                         Grid.Column="0"
+                                        MinWidth="40"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -240,7 +241,8 @@
                                         Grid.ColumnSpan="2"
                                         ItemsSource="{Binding GroupedCategoriesView}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        Focusable="False">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="Padding" Value="0" />
@@ -255,37 +257,64 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     Background="{StaticResource CategoryBrush}">
-                                                    <TextBlock
-                                                        Margin="{StaticResource MarginAllSides20}"
-                                                        FontSize="{StaticResource HeaderM}"
-                                                        Text="{Binding Path=Category.Name}" />
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button
+                                                            Width="32"
+                                                            Height="32"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Margin="{StaticResource MarginLeft20}"
+                                                            Command="{Binding DeleteCommand}"
+                                                            Style="{StaticResource DiceViewDeleteButton}" >
+                                                            <svg:SVGImage
+                                                                Width="20"
+                                                                Height="20"
+                                                                HorizontalContentAlignment="Center"
+                                                                VerticalContentAlignment="Center"
+                                                                OverrideColor="{StaticResource IconColor}"
+                                                                UriSource="../Icons/trash-solid.svg" />
+                                                        </Button>
+                                                        <Button
+                                                            Width="32"
+                                                            Height="32"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Margin="{StaticResource MarginLeft10}"
+                                                            Command="{Binding EditCommand}"
+                                                            Style="{StaticResource DiceViewEditButton}" >
+                                                            <svg:SVGImage
+                                                                Width="20"
+                                                                Height="20"
+                                                                HorizontalContentAlignment="Center"
+                                                                VerticalContentAlignment="Center"
+                                                                OverrideColor="{StaticResource IconColor}"
+                                                                UriSource="../Icons/pen-solid.svg" />
+                                                        </Button>
+                                                        <TextBlock
+                                                            MinWidth="160"
+                                                            MaxWidth="172"
+                                                            MaxHeight="40"
+                                                            Margin="{StaticResource MarginAllSides20}"
+                                                            FontSize="{StaticResource HeaderM}"
+                                                            Text="{Binding Path=Category.Name}"
+                                                            TextWrapping="Wrap"
+                                                            TextTrimming="WordEllipsis"
+                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
+                                                        <TextBox
+                                                            MinWidth="160"
+                                                            MaxWidth="160"
+                                                            Margin="{StaticResource MarginAllSides20}"
+                                                            VerticalAlignment="Top"
+                                                            FontSize="{StaticResource HeaderM}"
+                                                            Style="{StaticResource DiceTextBox}"
+                                                            Text="{Binding Path=Category.Name}"
+                                                            TextWrapping="Wrap"
+                                                            Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                                    </StackPanel>
                                                     <Rectangle
                                                         Width="250"
                                                         Height="2"
-                                                        Margin="{StaticResource MarginBottom20}"
                                                         HorizontalAlignment="Center"
-                                                        Fill="Black" />
-                                                    <ListView
-                                                        Margin="0,0,0,20"
-                                                        BorderThickness="0"
-                                                        Focusable="False"
-                                                        ItemsSource="{Binding GroupedElementsView}"
-                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                                        <ListView.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
-                                                                    <TextBlock
-                                                                        Margin="{StaticResource MarginHorizontal20}"
-                                                                        FontSize="{StaticResource FontSizeM}"
-                                                                        Text="{Binding Path=Element.Name}" />
-                                                                </StackPanel>
-                                                            </DataTemplate>
-                                                        </ListView.ItemTemplate>
-                                                    </ListView>
-                                                    <Rectangle
-                                                        Width="300"
-                                                        Height="5"
                                                         Fill="Black" />
                                                 </StackPanel>
                                             </DataTemplate>

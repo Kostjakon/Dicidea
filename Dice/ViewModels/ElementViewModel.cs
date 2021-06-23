@@ -47,7 +47,7 @@ namespace DicePage.ViewModels
             get
             {
                 if (GroupedValuesView != null) return GroupedValuesView.CurrentItem as ValueViewModel;
-                else return null;
+                return null;
             }
             set => GroupedValuesView.MoveCurrentTo(value);
         }

@@ -22,7 +22,6 @@ namespace DicePage
         {
             containerRegistry.RegisterForNavigation<DiceOverview>();
             containerRegistry.RegisterForNavigation<DiceDetail>();
-            containerRegistry.RegisterForNavigation<DiceDetailList>();
         }
     }
 }

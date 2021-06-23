@@ -25,14 +25,14 @@ namespace DicePage.ViewModels
         private ListCollectionView _groupedCategoriesView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        private readonly object _lock = new object();
+        //private readonly object _lock = new object();
         public DiceViewModel(Dice dice, IDiceDataService diceDataService)
         {
             //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
             if(GroupedCategoriesView != null)
             {
                 Debug.WriteLine("Binding of GroupedCategoriesView in DiceViewModel");
-                System.Windows.Data.BindingOperations.EnableCollectionSynchronization(GroupedCategoriesView, _lock);
+                //System.Windows.Data.BindingOperations.EnableCollectionSynchronization(GroupedCategoriesView, _lock);
             }
             Dice = dice;
             
@@ -154,7 +154,7 @@ namespace DicePage.ViewModels
         public async Task DeleteCategoryAsync()
         {
             Debug.WriteLine("Delete Dice");
-            _categoryListViewModel.DeleteCategoryAsync(SelectedCategory);
+            await _categoryListViewModel.DeleteCategoryAsync(SelectedCategory);
             GroupedCategoriesView.Refresh();
         }
 

@@ -87,14 +87,24 @@
                             OverrideColor="{StaticResource IconColor}"
                             UriSource="../Icons/dice-five-solid.svg" />
                         <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                            <Label
+                            <TextBlock
+                                Width="200"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Content="{Binding Dice.Name}"
-                                FontSize="{StaticResource HeaderM}" />
-                            <Label
+                                FontSize="{StaticResource HeaderM}"
+                                Text="{Binding Dice.Name}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Width="148"
+                                MaxHeight="30"
+                                Margin="{StaticResource MarginTop4}"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Content="{Binding Dice.Description}"
-                                FontSize="{StaticResource FontSizeS}" />
+                                FontSize="{StaticResource FontSizeS}"
+                                Text="{Binding Dice.Description}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
@@ -120,9 +130,9 @@
         <Button
             Grid.Row="0"
             Grid.Column="1"
+            Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right"
             Command="{Binding SaveCommand}"
-            Margin="{StaticResource MarginHorizontal20}"
             Style="{StaticResource ContentEditorButton}">
             <svg:SVGImage
                 Width="28"
@@ -144,7 +154,7 @@
             ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="Padding" Value="0" />
                     <Setter Property="Margin" Value="0" />
                 </Style>
             </ListView.ItemContainerStyle>
@@ -165,79 +175,81 @@
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <TextBlock
+                                    <StackPanel
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        Margin="{StaticResource MarginBottom20}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{StaticResource HeaderL}"
-                                        Text="{Binding Path=Category.Name}" 
-                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
-                                    <TextBox
-                                        Grid.Row="0"
+                                        Orientation="Vertical">
+                                        <TextBlock
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource HeaderL}"
+                                            Text="{Binding Path=Category.Name}"
+                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                        <TextBox
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource HeaderL}"
+                                            Style="{StaticResource DiceTextBox}"
+                                            Text="{Binding Path=Category.Name}"
+                                            Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="1"
                                         Grid.Column="0"
-                                        Margin="{StaticResource MarginBottom20}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{StaticResource HeaderL}"
-                                        Style="{StaticResource DiceTextBox}"
-                                        Text="{Binding Path=Category.Name}" 
-                                        Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}"/>
+                                        Grid.ColumnSpan="2"
+                                        Margin="{StaticResource MarginLeft2}">
+                                        <TextBlock
+                                            Margin="{StaticResource MarginBottom20}"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource FontSizeL}"
+                                            Text="{Binding Path=Category.Description}"
+                                            TextWrapping="Wrap"
+                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                        <TextBox
+                                            Margin="{StaticResource MarginBottom20}"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource FontSizeL}"
+                                            Style="{StaticResource DiceTextBox}"
+                                            Text="{Binding Path=Category.Description}"
+                                            TextWrapping="Wrap"
+                                            Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                    </StackPanel>
                                     <StackPanel
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="{StaticResource MarginBottom20}"
+                                        Margin="{StaticResource MarginBottom14}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
                                         Orientation="Horizontal">
                                         <Button
-                                            Width="40"
-                                            Height="40"
+                                            Width="28"
+                                            Height="28"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Center"
                                             Command="{Binding EditCommand}"
                                             Style="{StaticResource DiceViewEditButton}">
                                             <svg:SVGImage
-                                                Width="28"
-                                                Height="28"
+                                                Width="20"
+                                                Height="20"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 OverrideColor="{StaticResource IconColor}"
                                                 UriSource="../Icons/pen-solid.svg" />
                                         </Button>
                                         <Button
-                                            Width="80"
-                                            Height="40"
+                                            Width="60"
+                                            Height="28"
                                             Margin="{StaticResource MarginLeft10}"
                                             HorizontalAlignment="Right"
-                                            VerticalAlignment="Center"
+                                            VerticalAlignment="Top"
                                             Background="{StaticResource DiceBrush}"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             Content="Flip" />
                                     </StackPanel>
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="2"
-                                        Margin="{StaticResource MarginBottom20}"
-                                        VerticalAlignment="Top"
-                                        FontSize="{StaticResource HeaderM}"
-                                        Text="{Binding Path=Category.Description}"
-                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"
-                                        TextWrapping="Wrap" />
-                                    <TextBox
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="2"
-                                        Margin="{StaticResource MarginBottom20}"
-                                        VerticalAlignment="Top"
-                                        FontSize="{StaticResource HeaderM}"
-                                        Text="{Binding Path=Category.Description}"
-                                        Style="{StaticResource DiceTextBox}"
-                                        Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}"
-                                        TextWrapping="Wrap" />
                                     <ListView
-                                        Grid.Row="1"
+                                        Grid.Row="2"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
                                         Focusable="True"
@@ -299,13 +311,13 @@
                                                         <TextBlock
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
-                                                            Text="{Binding Path=Element.Name}" 
-                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
+                                                            Text="{Binding Path=Element.Name}"
+                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                         <TextBox
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
-                                                            Text="{Binding Path=Element.Name}"
                                                             Style="{StaticResource DiceTextBox}"
+                                                            Text="{Binding Path=Element.Name}"
                                                             Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                                     </StackPanel>
                                                 </StackPanel>
@@ -313,7 +325,7 @@
                                         </ListView.ItemTemplate>
                                     </ListView>
                                     <Button
-                                        Grid.Row="2"
+                                        Grid.Row="3"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
                                         Width="350"
@@ -351,17 +363,17 @@
                                         VerticalAlignment="Center">
                                         <Run FontSize="{StaticResource HeaderL}" Text="{Binding Path=Category.Name}" />
                                         <LineBreak />
-                                        <Run FontSize="{StaticResource HeaderM}" Text="Element - " />
-                                        <Run FontSize="{StaticResource HeaderM}" Text="{Binding Path=SelectedElement.Element.Name}" />
+                                        <Run FontSize="{StaticResource FontSizeL}" Text="Element - " />
+                                        <Run FontSize="{StaticResource FontSizeL}" Text="{Binding Path=SelectedElement.Element.Name}" />
                                     </TextBlock>
                                     <Button
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Width="80"
-                                        Height="40"
+                                        Width="60"
+                                        Height="28"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
+                                        VerticalAlignment="Top"
                                         Background="{StaticResource DiceBrush}"
                                         Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                         Content="Flip" />
@@ -423,8 +435,8 @@
                                                     <TextBox
                                                         Margin="{StaticResource MarginHorizontal20Vertical10}"
                                                         FontSize="{StaticResource HeaderM}"
-                                                        Text="{Binding Path=Value.Name}"
                                                         Style="{StaticResource DiceTextBox}"
+                                                        Text="{Binding Path=Value.Name}"
                                                         Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                                 </StackPanel>
                                             </DataTemplate>

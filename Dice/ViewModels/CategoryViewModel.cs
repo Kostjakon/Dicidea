@@ -19,21 +19,20 @@ namespace DicePage.ViewModels
 {
     public class CategoryViewModel : NotifyPropertyChanges
     {
-        private ElementListViewModel _elementListViewModel;
+        private readonly ElementListViewModel _elementListViewModel;
+        private readonly DiceViewModel _diceViewModel;
         private ListCollectionView _groupedElementsView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
 
-        public CategoryViewModel(Dice dice, Category category, IDiceDataService diceDataService)
+        public CategoryViewModel(DiceViewModel dice, Category category, IDiceDataService diceDataService)
         {
-            FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
+            DeleteCommand = new DelegateCommand<object>(DeleteExecute);
+            _diceViewModel = dice;
             Category = category;
             // TODO: SendMailCommand is not needed, because dice doesn't have an email
-            CategoryViewModel self = this;
-            if (_elementListViewModel == null)
-            {
-                _elementListViewModel = new ElementListViewModel(dice, self, diceDataService);
-            }
+            var self = this;
+            _elementListViewModel ??= new ElementListViewModel(dice.Dice, self, diceDataService);
             EditCommand = new DelegateCommand(EditExecute);
             CreateGroupedView();
         }
@@ -52,7 +51,7 @@ namespace DicePage.ViewModels
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
 
-        public void EditExecute()
+        public async void EditExecute()
         {
             Debug.WriteLine("Edit Dice");
             IsEditEnabled = !IsEditEnabled;
@@ -110,16 +109,13 @@ namespace DicePage.ViewModels
 
         public Category Category { get; }
 
-        public ICommand FlipCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+        
 
-        private bool CanFlip(object obj)
+        private async void DeleteExecute(object obj)
         {
-            return true;
-        }
-
-        private void Flip(object obj)
-        {
-            Debug.WriteLine("Flip Category: " + Category.Name);
+            _diceViewModel.SelectedCategory = this;
+            await _diceViewModel.DeleteCategoryAsync();
         }
     }
 }
