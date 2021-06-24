@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reactive;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using DicePage.Views;
@@ -34,6 +35,7 @@ namespace DicePage.ViewModels
             var self = this;
             _elementListViewModel ??= new ElementListViewModel(dice.Dice, self, diceDataService);
             EditCommand = new DelegateCommand(EditExecute);
+            AddCommand = new DelegateCommand(AddExecute);
             CreateGroupedView();
         }
 
@@ -51,12 +53,16 @@ namespace DicePage.ViewModels
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
 
-        public async void EditExecute()
+        public void EditExecute()
         {
             Debug.WriteLine("Edit Dice");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
 
+        }
+        public async void AddExecute()
+        {
+            await AddElementAsync();
         }
 
         public ListCollectionView GroupedElementsView
@@ -116,6 +122,18 @@ namespace DicePage.ViewModels
         {
             _diceViewModel.SelectedCategory = this;
             await _diceViewModel.DeleteCategoryAsync();
+        }
+        public async Task DeleteElementAsync()
+        {
+            Debug.WriteLine("Delete Element");
+            await _elementListViewModel.DeleteElementAsync(SelectedElement);
+            GroupedElementsView.Refresh();
+        }
+        public async Task AddElementAsync()
+        {
+            Debug.WriteLine("Add Category");
+            await _elementListViewModel.AddElementAsync();
+            //GroupedCategoriesView.Refresh();
         }
     }
 }

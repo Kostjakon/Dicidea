@@ -169,7 +169,7 @@
                                 <Grid Width="350">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -182,17 +182,24 @@
                                         Grid.Column="0"
                                         Orientation="Vertical">
                                         <TextBlock
+                                            Width="220"
+                                            Height="40"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
                                             FontSize="{StaticResource HeaderL}"
                                             Text="{Binding Path=Category.Name}"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap"
                                             Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                         <TextBox
+                                            Width="220"
+                                            MaxHeight="80"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
                                             FontSize="{StaticResource HeaderL}"
                                             Style="{StaticResource DiceTextBox}"
                                             Text="{Binding Path=Category.Name}"
+                                            TextWrapping="Wrap"
                                             Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                     </StackPanel>
                                     <StackPanel
@@ -299,6 +306,7 @@
                                                             Height="28"
                                                             Margin="{StaticResource MarginLeft10}"
                                                             Background="Transparent"
+                                                            Command="{Binding DeleteCommand}"
                                                             Style="{StaticResource ContentEditorButton}">
                                                             <svg:SVGImage
                                                                 Width="20"
@@ -309,15 +317,22 @@
                                                                 UriSource="../Icons/trash-solid.svg" />
                                                         </Button>
                                                         <TextBlock
+                                                            Width="180"
+                                                            MaxHeight="20"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
                                                             Text="{Binding Path=Element.Name}"
+                                                            TextTrimming="WordEllipsis"
+                                                            TextWrapping="Wrap"
                                                             Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                         <TextBox
+                                                            Width="180"
+                                                            MaxHeight="48"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
                                                             Style="{StaticResource DiceTextBox}"
                                                             Text="{Binding Path=Element.Name}"
+                                                            TextWrapping="Wrap"
                                                             Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                                     </StackPanel>
                                                 </StackPanel>
@@ -333,7 +348,8 @@
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Background="{StaticResource DiceBrush}">
+                                        Background="{StaticResource DiceBrush}"
+                                        Command="{Binding AddCommand}">
                                         <svg:SVGImage
                                             Width="28"
                                             Height="28"
@@ -395,6 +411,7 @@
                                             <DataTemplate>
                                                 <StackPanel
                                                     Width="350"
+                                                    Margin="{StaticResource PaddingBottom10}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     Background="{StaticResource CategoryBrush}"
@@ -418,6 +435,7 @@
                                                         Height="28"
                                                         Margin="{StaticResource MarginLeft10}"
                                                         Background="Transparent"
+                                                        Command="{Binding DeleteCommand}"
                                                         Style="{StaticResource ContentEditorButton}">
                                                         <svg:SVGImage
                                                             Width="20"
@@ -428,22 +446,29 @@
                                                             UriSource="../Icons/trash-solid.svg" />
                                                     </Button>
                                                     <TextBlock
+                                                        Width="220"
+                                                        MaxHeight="20"
                                                         Margin="{StaticResource MarginHorizontal20Vertical10}"
                                                         FontSize="{StaticResource HeaderM}"
                                                         Text="{Binding Path=Value.Name}"
+                                                        TextTrimming="WordEllipsis"
+                                                        TextWrapping="Wrap"
                                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                     <TextBox
+                                                        Width="220"
+                                                        MaxHeight="44"
                                                         Margin="{StaticResource MarginHorizontal20Vertical10}"
                                                         FontSize="{StaticResource HeaderM}"
                                                         Style="{StaticResource DiceTextBox}"
                                                         Text="{Binding Path=Value.Name}"
+                                                        TextWrapping="Wrap"
                                                         Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
                                     <Button
-                                        Grid.Row="3"
+                                        Grid.Row="2"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
                                         Width="350"
@@ -451,7 +476,8 @@
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Background="{StaticResource DiceBrush}">
+                                        Background="{StaticResource DiceBrush}"
+                                        Command="{Binding SelectedElement.AddCommand}">
                                         <svg:SVGImage
                                             Width="20"
                                             Height="20"

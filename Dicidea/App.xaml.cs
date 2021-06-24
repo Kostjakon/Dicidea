@@ -7,7 +7,7 @@ using OverviewPage;
 using Prism.Modularity;
 using RollEmSpacePage;
 using Dicidea.Core.Services;
-using Navigation;
+using IdeaPage;
 
 namespace Dicidea
 {
@@ -30,8 +30,9 @@ namespace Dicidea
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             moduleCatalog.AddModule<MenuModule>();
-            moduleCatalog.AddModule<RollEmSpaceModule>();
             moduleCatalog.AddModule<DiceModule>();
+            moduleCatalog.AddModule<RollEmSpaceModule>();
+            moduleCatalog.AddModule<IdeaPageModule>();
             moduleCatalog.AddModule<OverviewModule>();
         }
     }

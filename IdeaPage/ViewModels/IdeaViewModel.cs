@@ -3,44 +3,43 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reactive;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
-using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
-using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
+using Prism.Mvvm;
 
-namespace DicePage.ViewModels
+namespace IdeaPage.ViewModels
 {
-    public class DiceViewModel : NotifyPropertyChanges
+    public class IdeaViewModel : NotifyPropertyChanges
     {
-        private CategoryListViewModel _categoryListViewModel;
-        private ListCollectionView _groupedCategoriesView;
+        private IdeaCategoryListViewModel _ideaCategoryListViewModel;
+        private ListCollectionView _groupedIdeaCategoriesView;
         private bool _isEditEnabled;
+
         private bool _isEditDisabled = true;
+
         //private readonly object _lock = new object();
-        public DiceViewModel(Dice dice, IDiceDataService diceDataService)
+        public IdeaViewModel(Idea idea, IIdeaDataService ideaDataService)
         {
             //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
-            if(GroupedCategoriesView != null)
+            if (GroupedIdeaCategoriesView != null)
             {
                 Debug.WriteLine("Binding of GroupedCategoriesView in DiceViewModel");
                 //System.Windows.Data.BindingOperations.EnableCollectionSynchronization(GroupedCategoriesView, _lock);
             }
-            Dice = dice;
-            
-            DiceViewModel self = this;
-            if (_categoryListViewModel == null)
+
+            Idea = idea;
+
+            IdeaViewModel self = this;
+            if (_ideaCategoryListViewModel == null)
             {
-                _categoryListViewModel = new CategoryListViewModel(self, diceDataService);
+                _ideaCategoryListViewModel = new IdeaCategoryListViewModel(self, ideaDataService);
             }
+
             CreateGroupedView();
             AddCommand = new DelegateCommand(AddExecute);
             EditCommand = new DelegateCommand(EditExecute);
@@ -51,6 +50,7 @@ namespace DicePage.ViewModels
             get => _isEditEnabled;
             set => SetProperty(ref _isEditEnabled, value);
         }
+
         public bool IsEditDisabled
         {
             get => _isEditDisabled;
@@ -58,26 +58,19 @@ namespace DicePage.ViewModels
         }
 
 
-        public ListCollectionView GroupedCategoriesView
+        public ListCollectionView GroupedIdeaCategoriesView
         {
-            get => _groupedCategoriesView;
-            set => SetProperty(ref _groupedCategoriesView, value);
+            get => _groupedIdeaCategoriesView;
+            set => SetProperty(ref _groupedIdeaCategoriesView, value);
         }
+
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
+
         private async void AddExecute()
         {
-            Debug.WriteLine("Add Category");
-            //await Application.Current.Dispatcher.BeginInvoke(() => Task.Run(_categoryListViewModel.AddCategoryAsync));
-            /*
-            Thread thread = new Thread(delegate()
-            {
-                AddCategory();
-            });
-            thread.IsBackground = true;
-            thread.Start();
-            */
-            await _categoryListViewModel.AddCategoryAsync();
+            Debug.WriteLine("Add IdeaCategory");
+            await _ideaCategoryListViewModel.AddIdeaCategoryAsync();
             //GroupedCategoriesView.Refresh();
 
         }
@@ -94,25 +87,26 @@ namespace DicePage.ViewModels
 
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Dice");
+            Debug.WriteLine("Edit Idea");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
 
         }
 
-        public CategoryViewModel SelectedCategory
+        public IdeaCategoryViewModel SelectedIdeaCategory
         {
             get
             {
-                if (GroupedCategoriesView != null) return GroupedCategoriesView.CurrentItem as CategoryViewModel;
+                if (GroupedIdeaCategoriesView != null)
+                    return GroupedIdeaCategoriesView.CurrentItem as IdeaCategoryViewModel;
                 else return null;
             }
-            set => GroupedCategoriesView.MoveCurrentTo(value);
+            set => GroupedIdeaCategoriesView.MoveCurrentTo(value);
         }
 
         private void OnNext(string propertyName)
         {
-            if (propertyName == nameof(Category.Name))
+            if (propertyName == nameof(IdeaCategory.Name))
             {
                 //GroupedCategoriesView.Refresh(); <- Hier ist das Problem
             }
@@ -120,42 +114,44 @@ namespace DicePage.ViewModels
 
         private void CreateGroupedView()
         {
-            ObservableCollection<CategoryViewModel> categoryViewModels = _categoryListViewModel.Categories;
+            ObservableCollection<IdeaCategoryViewModel> ideaCategoryViewModels =
+                _ideaCategoryListViewModel.IdeaCategories;
             //foreach (var categoryViewModel in categoryViewModels)
             //{
             //    categoryViewModel.Category.WhenPropertyChanged.Subscribe(OnNext);
             //}
 
-            var propertyName = "Category.Name";
-            GroupedCategoriesView = new ListCollectionView(categoryViewModels)
+            var propertyName = "IdeaCategory.Name";
+            GroupedIdeaCategoriesView = new ListCollectionView(ideaCategoryViewModels)
             {
                 IsLiveSorting = true,
-                SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
+                SortDescriptions = {new SortDescription(propertyName, ListSortDirection.Ascending)}
             };
             //GroupedCategoriesView.GroupDescriptions.Add(new PropertyGroupDescription
             //{
             //    PropertyName = propertyName,
             //    Converter = new NameToInitialConverter()
             //});
-            
-            GroupedCategoriesView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedCategory));
+
+            GroupedIdeaCategoriesView.CurrentChanged +=
+                (sender, args) => OnPropertyChanged(nameof(SelectedIdeaCategory));
         }
 
-        public async Task AddCategoryAsync()
+        public async Task AddIdeaCategoryAsync()
         {
-            Debug.WriteLine("Add Category");
-            await _categoryListViewModel.AddCategoryAsync();
+            Debug.WriteLine("Add Idea Category");
+            await _ideaCategoryListViewModel.AddIdeaCategoryAsync();
             //GroupedCategoriesView.Refresh();
         }
-        public async Task DeleteCategoryAsync()
+
+        public async Task DeleteIdeaCategoryAsync()
         {
             Debug.WriteLine("Delete Dice");
-            await _categoryListViewModel.DeleteCategoryAsync(SelectedCategory);
-            GroupedCategoriesView.Refresh();
+            await _ideaCategoryListViewModel.DeleteIdeaCategoryAsync(SelectedIdeaCategory);
+            GroupedIdeaCategoriesView.Refresh();
         }
 
 
-        public Dice Dice { get; }
-
+        public Idea Idea { get; }
     }
 }

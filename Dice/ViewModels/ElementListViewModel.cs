@@ -39,7 +39,7 @@ namespace DicePage.ViewModels
 
         public async Task<ElementViewModel> AddElementAsync()
         {
-            var elementModel = new Element();
+            var elementModel = new Element(true);
             await _diceDataService.AddElementAsync(_selectedDice, _selectedCategory.Category, elementModel);
 
             var newElement = new ElementViewModel(elementModel, _selectedCategory, _selectedDice, _diceDataService);

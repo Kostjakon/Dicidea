@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Prism.Commands;
+using Prism.Mvvm;
 
-namespace DicePage.ViewModels
+namespace IdeaPage.ViewModels
 {
-    public class ValueViewModel : NotifyPropertyChanges
+    public class IdeaValueViewModel : BindableBase
     {
-        private readonly ElementViewModel _elementViewModel;
+        private readonly IdeaElementViewModel _ideaElementViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public ValueViewModel(Value value, ElementViewModel elementViewModel)
+        public IdeaValueViewModel(IdeaValue ideaValue, IdeaElementViewModel ideaElementViewModel)
         {
-            _elementViewModel = elementViewModel;
-            Value = value;
+            _ideaElementViewModel = ideaElementViewModel;
+            IdeaValue = ideaValue;
             EditCommand = new DelegateCommand(EditExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
         }
@@ -31,10 +31,11 @@ namespace DicePage.ViewModels
             get => _isEditDisabled;
             set => SetProperty(ref _isEditDisabled, value);
         }
-        
+
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
+        // TODO: Edit to change value from the active one to anotherone from the dice
         public void EditExecute()
         {
             Debug.WriteLine("Edit Value");
@@ -44,21 +45,20 @@ namespace DicePage.ViewModels
         }
         public async void DeleteExecute()
         {
-            _elementViewModel.SelectedValue = this;
-            await _elementViewModel.DeleteValueAsync();
+            _ideaElementViewModel.SelectedIdeaValue = this;
+            await _ideaElementViewModel.DeleteIdeaValueAsync();
         }
 
         public bool IsSelected
         {
-            get => _elementViewModel.SelectedValue == this;
+            get => _ideaElementViewModel.SelectedIdeaValue == this;
         }
 
-        public Element Element
+        public IdeaElement IdeaElement
         {
-            get => _elementViewModel.Element;
+            get => _ideaElementViewModel.IdeaElement;
         }
 
-        public Value Value { get; }
-        
+        public IdeaValue IdeaValue { get; }
     }
 }

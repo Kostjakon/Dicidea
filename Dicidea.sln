@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RollEmSpacePage", "RollEmSp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuPage", "Menu\MenuPage.csproj", "{F63A31A3-188F-4357-8EB2-EE610B92DAC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Navigation", "Navigation\Navigation.csproj", "{44E80BDC-E0C4-443B-A1AF-43C287305CF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Navigation", "Navigation\Navigation.csproj", "{44E80BDC-E0C4-443B-A1AF-43C287305CF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdeaPage", "IdeaPage\IdeaPage.csproj", "{CD5E657C-7775-44B0-9676-EAFD587C3238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{44E80BDC-E0C4-443B-A1AF-43C287305CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44E80BDC-E0C4-443B-A1AF-43C287305CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44E80BDC-E0C4-443B-A1AF-43C287305CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD5E657C-7775-44B0-9676-EAFD587C3238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD5E657C-7775-44B0-9676-EAFD587C3238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD5E657C-7775-44B0-9676-EAFD587C3238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD5E657C-7775-44B0-9676-EAFD587C3238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{FC192F24-6A2C-4F65-A144-B3D5CBCDC559} = {1F6482AA-91A6-43EA-AE99-DB34B84B0516}
 		{F63A31A3-188F-4357-8EB2-EE610B92DAC4} = {1F6482AA-91A6-43EA-AE99-DB34B84B0516}
 		{44E80BDC-E0C4-443B-A1AF-43C287305CF1} = {1F6482AA-91A6-43EA-AE99-DB34B84B0516}
+		{CD5E657C-7775-44B0-9676-EAFD587C3238} = {1F6482AA-91A6-43EA-AE99-DB34B84B0516}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4EBA24C-8ADD-4138-99B2-F27FFDA73D42}

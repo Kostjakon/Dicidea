@@ -41,7 +41,7 @@ namespace DicePage.ViewModels
 
         public async Task<ValueViewModel> AddValueAsync()
         {
-            var valueModel = new Value();
+            var valueModel = new Value(true);
             await _diceDataService.AddValueAsync(_selectedDice, _selectedCategory, _selectedElement.Element, valueModel);
 
             var newValue = new ValueViewModel(valueModel, _selectedElement);

@@ -12,51 +12,52 @@ using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
+using Prism.Mvvm;
 
-namespace DicePage.ViewModels
+namespace IdeaPage.ViewModels
 {
-    public class ElementViewModel : NotifyPropertyChanges
+    public class IdeaElementViewModel : NotifyPropertyChanges
     {
-        private readonly CategoryViewModel _categoryViewModel;
-        private ValueListViewModel _valueListViewModel;
-        private ListCollectionView _groupedValuesView;
-        private IDiceDataService _diceDataService;
+        private readonly IdeaCategoryViewModel _ideaCategoryViewModel;
+        private IdeaValueListViewModel _ideaValueListViewModel;
+        private ListCollectionView _groupedIdeaValuesView;
+        private IIdeaDataService _ideaDataService;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public ElementViewModel(Element element, CategoryViewModel categoryViewModel, Dice dice, IDiceDataService diceDataService)
+        public IdeaElementViewModel(IdeaElement ideaElement, IdeaCategoryViewModel ideaCategoryViewModel, Idea idea, IIdeaDataService ideaDataService)
         {
-            _categoryViewModel = categoryViewModel;
+            _ideaCategoryViewModel = ideaCategoryViewModel;
             FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
-            Element = element;
+            IdeaElement = ideaElement;
             EditCommand = new DelegateCommand(EditExecute);
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
-            ElementViewModel self = this;
-            if (_valueListViewModel == null)
+            IdeaElementViewModel self = this;
+            if (_ideaValueListViewModel == null)
             {
-                _valueListViewModel = new ValueListViewModel(dice, _categoryViewModel.Category, self, diceDataService);
+                _ideaValueListViewModel = new IdeaValueListViewModel(idea, _ideaCategoryViewModel.IdeaCategory, self, ideaDataService);
             }
             CreateGroupedView();
         }
 
-        public ListCollectionView GroupedValuesView
+        public ListCollectionView GroupedIdeaValuesView
         {
-            get => _groupedValuesView;
-            set => SetProperty(ref _groupedValuesView, value);
+            get => _groupedIdeaValuesView;
+            set => SetProperty(ref _groupedIdeaValuesView, value);
         }
 
-        public ValueViewModel SelectedValue
+        public IdeaValueViewModel SelectedIdeaValue
         {
             get
             {
-                if (GroupedValuesView != null) return GroupedValuesView.CurrentItem as ValueViewModel;
+                if (GroupedIdeaValuesView != null) return GroupedIdeaValuesView.CurrentItem as IdeaValueViewModel;
                 return null;
             }
-            set => GroupedValuesView.MoveCurrentTo(value);
+            set => GroupedIdeaValuesView.MoveCurrentTo(value);
         }
         private void OnNext(string propertyName)
         {
-            if (propertyName == nameof(Element.Name))
+            if (propertyName == nameof(IdeaElement.Name))
             {
                 //GroupedElementsView.Refresh();
             }
@@ -64,25 +65,25 @@ namespace DicePage.ViewModels
 
         private void CreateGroupedView()
         {
-            ObservableCollection<ValueViewModel> valueViewModels = _valueListViewModel.Values;
-            foreach (var valueViewModel in valueViewModels)
+            ObservableCollection<IdeaValueViewModel> ideaValueViewModels = _ideaValueListViewModel.IdeaValues;
+            foreach (var ideaValueViewModel in ideaValueViewModels)
             {
-                valueViewModel.Value.WhenPropertyChanged.Subscribe(OnNext);
+                ideaValueViewModel.IdeaValue.WhenPropertyChanged.Subscribe(OnNext);
             }
 
-            var propertyName = "Element.Name";
-            GroupedValuesView = new ListCollectionView(valueViewModels)
+            var propertyName = "IdeaElement.Name";
+            GroupedIdeaValuesView = new ListCollectionView(ideaValueViewModels)
             {
                 IsLiveSorting = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            if (GroupedValuesView.GroupDescriptions != null)
-                GroupedValuesView.GroupDescriptions.Add(new PropertyGroupDescription
+            if (GroupedIdeaValuesView.GroupDescriptions != null)
+                GroupedIdeaValuesView.GroupDescriptions.Add(new PropertyGroupDescription
                 {
                     PropertyName = propertyName,
                     Converter = new NameToInitialConverter()
                 });
-            GroupedValuesView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedValue));
+            GroupedIdeaValuesView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedIdeaValue));
         }
 
         public bool IsEditEnabled
@@ -102,7 +103,7 @@ namespace DicePage.ViewModels
 
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Dice");
+            Debug.WriteLine("Edit Idea Element");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
         }
@@ -112,21 +113,21 @@ namespace DicePage.ViewModels
         }
         public async void DeleteExecute()
         {
-            _categoryViewModel.SelectedElement = this;
-            await _categoryViewModel.DeleteElementAsync();
+            _ideaCategoryViewModel.SelectedIdeaElement = this;
+            await _ideaCategoryViewModel.DeleteIdeaElementAsync();
         }
 
         public bool IsSelected
         {
-            get => _categoryViewModel.SelectedElement == this;
+            get => _ideaCategoryViewModel.SelectedIdeaElement == this;
         }
 
-        public Category Category
+        public IdeaCategory IdeaCategory
         {
-            get => _categoryViewModel.Category;
+            get => _ideaCategoryViewModel.IdeaCategory;
         }
 
-        public Element Element { get; }
+        public IdeaElement IdeaElement { get; }
         public ICommand FlipCommand { get; set; }
 
         private bool CanFlip(object obj)
@@ -134,25 +135,22 @@ namespace DicePage.ViewModels
             return true;
         }
 
-        public async Task AddValueAsync()
+        public async Task AddIdeaValueAsync()
         {
             Debug.WriteLine("Add Category");
-            await _valueListViewModel.AddValueAsync();
+            await _ideaValueListViewModel.AddIdeaValueAsync();
             //GroupedCategoriesView.Refresh();
         }
-        public async Task DeleteValueAsync()
+        public async Task DeleteIdeaValueAsync()
         {
             Debug.WriteLine("Delete Value");
-            await _valueListViewModel.DeleteValueAsync(SelectedValue);
-            GroupedValuesView.Refresh();
+            await _ideaValueListViewModel.DeleteIdeaValueAsync(SelectedIdeaValue);
+            GroupedIdeaValuesView.Refresh();
         }
 
         private void Flip(object obj)
         {
-            _categoryViewModel.SelectedElement = this;
-            Debug.WriteLine("Flip Element: " + Element.Name);
-            Debug.WriteLine("Is selected: "+IsSelected);
-            Debug.WriteLine(_categoryViewModel.Category.Id);
+            _ideaCategoryViewModel.SelectedIdeaElement = this;
         }
     }
 }
