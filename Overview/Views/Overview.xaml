@@ -91,7 +91,7 @@
                         UriSource="../Icons/dice-solid.svg" />
                     <Label
                         HorizontalAlignment="Center"
-                        Content="Roll'em spaces"
+                        Content="Roll'em space"
                         FontSize="{StaticResource HeaderM}" />
                 </StackPanel>
             </Button>
@@ -125,7 +125,7 @@
                             UriSource="../Icons/dice-solid.svg" />
                         <Label
                             HorizontalAlignment="Center"
-                            Content="Roll'em spaces"
+                            Content="Roll'em space"
                             FontSize="{StaticResource HeaderM}" />
                     </StackPanel>
                     <StackPanel
@@ -133,19 +133,34 @@
                         Grid.Column="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        <Label
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            Text="Last rolled dice:"
+                            FontSize="{StaticResource HeaderM}"
+                            TextTrimming="WordEllipsis"
+                                Width="{StaticResource OverviewTileHeight}"/>
+                        <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             Padding="{StaticResource PaddingBottom10}"
                             HorizontalAlignment="Center"
-                            Content="Last used Roll 'em space"
-                            FontSize="{StaticResource HeaderM}" />
+                            Text="{Binding LastRolledDice.Name}"
+                            FontSize="{StaticResource HeaderM}"
+                            TextTrimming="WordEllipsis"/>
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
+                            MaxHeight="72"
+                            TextWrapping="Wrap"
+                            TextTrimming="WordEllipsis"
                             HorizontalAlignment="Center"
+                            Margin="{StaticResource PaddingBottom10}"
                             FontSize="{StaticResource FontSizeM}"
-                            TextWrapping="Wrap">
-                            Last used Roll 'em space Beschreibung, das hier ist ein Platzhalter und muss später ersetzt werden.
-                        </TextBlock>
+                            Text="{Binding LastRolledDice.Description}"/>
+                        <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
+                            HorizontalAlignment="Left"
+                            Text="{Binding LastRolledDice.LastUsed, StringFormat= d}"
+                            FontSize="{StaticResource FontSizeM}"
+                            TextTrimming="WordEllipsis"/>
                     </StackPanel>
                 </Grid>
             </Button>
@@ -231,17 +246,22 @@
                         Grid.Column="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        <Label
+                        <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             Padding="{StaticResource PaddingBottom10}"
+                            MaxHeight="88"
+                            TextWrapping="Wrap"
+                            TextTrimming="WordEllipsis"
                             HorizontalAlignment="Center"
-                            Content="Last rolled ideas"
+                            Text="Last rolled ideas"
                             FontSize="{StaticResource HeaderM}" />
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             HorizontalAlignment="Center"
                             FontSize="{StaticResource FontSizeM}"
-                            TextWrapping="Wrap">
+                            TextWrapping="Wrap"
+                            MaxHeight="88"
+                            TextTrimming="WordEllipsis">
                             Anzahl der Ideen: x<LineBreak />
                             Verwendeter Roll 'em space:<LineBreak />
                             xy<LineBreak />

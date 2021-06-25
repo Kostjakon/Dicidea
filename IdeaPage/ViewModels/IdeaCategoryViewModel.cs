@@ -35,6 +35,7 @@ namespace IdeaPage.ViewModels
             AddCommand = new DelegateCommand(AddExecute);
             CreateGroupedView();
         }
+        
 
         public bool IsEditEnabled
         {

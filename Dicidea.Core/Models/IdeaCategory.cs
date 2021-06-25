@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dicidea.Core.Helper;
 using Newtonsoft.Json;
 using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
-    public class IdeaCategory : BindableBase
+    public class IdeaCategory : NotifyDataErrorInfo<IdeaCategory>
     {
         public IdeaCategory(bool newIdea)
         {
+            Rules.Add(new DelegateRule<IdeaCategory>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Id = Guid.NewGuid().ToString("N");
         }
 
-        public IdeaCategory() { }
+        public IdeaCategory()
+        {
+            Rules.Add(new DelegateRule<IdeaCategory>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
+        }
 
         [JsonProperty(PropertyName = "IdeaCategoryId", Required = Required.Always)]
         public string Id

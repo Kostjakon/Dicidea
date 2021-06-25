@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using DicePage.ViewModels;
 using DicePage.Views;
 using Dicidea.Core.Constants;
+using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using MenuPage.Views;
 using OverviewPage.Views;
@@ -21,23 +23,35 @@ namespace OverviewPage.ViewModels
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
         private DiceListViewModel _diceListViewModel;
-        //private IDiceDataService _diceDataService;
+        private IDiceDataService _diceDataService;
         private IRollEmSpaceDataService _rollEmSpaceDataService;
         private bool _firstInitialisation = true;
+        private Dice _lastRolledDice;
 
         public OverviewViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
-            IDiceDataService diceDataService = new DiceDataServiceJson();
-            _rollEmSpaceDataService = new RollEmSpaceDataServiceJson(diceDataService);
-            _diceListViewModel = new DiceListViewModel(diceDataService);
+            _diceDataService = new DiceDataServiceJson();
+            _rollEmSpaceDataService = new RollEmSpaceDataServiceJson(_diceDataService);
+            _diceListViewModel = new DiceListViewModel(_diceDataService);
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);
+            getLastRolledDice();
             _parameters = new NavigationParameters
             {
                 { "diceListViewModel", _diceListViewModel }
             };
         }
 
+        public Dice LastRolledDice
+        {
+            get => _lastRolledDice;
+            set => SetProperty(ref _lastRolledDice, value);
+        }
+
+        private async Task getLastRolledDice()
+        {
+            LastRolledDice = await _diceDataService.GetLastRolledDiceAsync();
+        }
         //public DiceListViewModel DiceListViewModel { get => _diceListViewModel; }
 
         public ICommand GoToDiceCommand { get; private set; }
@@ -67,7 +81,7 @@ namespace OverviewPage.ViewModels
                 });
 
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        public async void OnNavigatedTo(NavigationContext navigationContext)
         {
             Debug.WriteLine("Navigated to Overview");
             if (navigationContext != null && !_firstInitialisation)
@@ -91,6 +105,7 @@ namespace OverviewPage.ViewModels
             {
                 //Message = $"Dice Active from your Prism Module, Dice Anzahl: {AllDice.Count}! Es wurde kein Würfel ausgewählt";
             }
+            await getLastRolledDice();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

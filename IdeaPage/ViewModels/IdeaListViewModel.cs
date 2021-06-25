@@ -28,7 +28,7 @@ namespace IdeaPage.ViewModels
             private set => SetProperty(ref _allIdeas, value);
         }
 
-        public async Task DeleteDiceAsync(IdeaViewModel idea)
+        public async Task DeleteIdeaAsync(IdeaViewModel idea)
         {
             AllIdeas.Remove(idea);
             await _ideaDataService.DeleteIdeaAsync(idea.Idea);

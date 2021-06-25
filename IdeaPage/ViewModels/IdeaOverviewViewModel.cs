@@ -164,7 +164,7 @@ namespace IdeaPage.ViewModels
         }
         private async void SaveExecute()
         {
-            await _ideaListViewModel.SaveIdeaAsync();
+            await _ideaListViewModel.SaveIdeasAsync();
         }
 
         private async void DeleteExecute()

@@ -122,28 +122,34 @@
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Style="{StaticResource MaterialDesignCardFlipper}">
                             <materialDesign:Flipper.FrontContent>
-                                <Grid Width="300">
+                                <Grid Width="400">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="0"
+                                        Width="240"
+                                        MaxHeight="40"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        TextTrimming="WordEllipsis"
                                         FontSize="{StaticResource HeaderL}"
                                         Text="{Binding Path=Dice.Name}"
                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                     <TextBox
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        MinWidth="40"
+                                        Width="240"
+                                        MaxHeight="68"
+                                        TextWrapping="Wrap"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -155,7 +161,9 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Margin="{StaticResource MarginBottom20}"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top">
                                         <Button
                                             Width="40"
                                             Height="40"
@@ -175,7 +183,7 @@
                                             Width="80"
                                             Height="40"
                                             HorizontalAlignment="Right"
-                                            VerticalAlignment="Center"
+                                            VerticalAlignment="Top"
                                             Style="{StaticResource FlipButton}"
                                             Background="{StaticResource DiceBrush}"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
@@ -186,16 +194,23 @@
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
+                                        Width="400"
+                                        MaxHeight="60"
+                                        HorizontalAlignment="Left"
                                         Margin="{StaticResource MarginBottom20}"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource HeaderM}"
                                         Text="{Binding Path=Dice.Description}"
                                         TextWrapping="Wrap"
+                                        TextTrimming="WordEllipsis"
                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                     <TextBox
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
+                                        Width="400"
+                                        MaxHeight="60"
+                                        HorizontalAlignment="Left"
                                         Margin="{StaticResource MarginBottom20}"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource HeaderM}"
@@ -206,10 +221,10 @@
                                 </Grid>
                             </materialDesign:Flipper.FrontContent>
                             <materialDesign:Flipper.BackContent>
-                                <Grid Width="300">
+                                <Grid Width="400">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -219,6 +234,10 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="0"
+                                        Width="288"
+                                        MaxHeight="40"
+                                        TextWrapping="Wrap"
+                                        TextTrimming="WordEllipsis"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -253,7 +272,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel
-                                                    Width="300"
+                                                    Width="400"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     Background="{StaticResource CategoryBrush}">
@@ -291,9 +310,8 @@
                                                                 UriSource="../Icons/pen-solid.svg" />
                                                         </Button>
                                                         <TextBlock
-                                                            MinWidth="160"
-                                                            MaxWidth="172"
-                                                            MaxHeight="40"
+                                                            Width="260"
+                                                            MaxHeight="20"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
                                                             Text="{Binding Path=Category.Name}"
@@ -301,8 +319,8 @@
                                                             TextTrimming="WordEllipsis"
                                                             Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
                                                         <TextBox
-                                                            MinWidth="160"
-                                                            MaxWidth="160"
+                                                            Width="260"
+                                                            MaxHeight="40"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             VerticalAlignment="Top"
                                                             FontSize="{StaticResource HeaderM}"
@@ -312,7 +330,7 @@
                                                             Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                                     </StackPanel>
                                                     <Rectangle
-                                                        Width="250"
+                                                        Width="350"
                                                         Height="2"
                                                         HorizontalAlignment="Center"
                                                         Fill="Black" />

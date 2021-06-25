@@ -10,6 +10,7 @@ namespace Dicidea.Core.Models
     {
         private string _name;
         private string _description;
+        private DateTime _lastUsed;
 
         public Dice(bool newDice)
         {
@@ -18,6 +19,8 @@ namespace Dicidea.Core.Models
             Debug.WriteLine("New dice");
             Name = "";
             Description = "";
+            LastUsed = DateTime.Now;
+            Debug.WriteLine(LastUsed.Date);
             Categories = new List<Category>
             {
                 new Category(true)
@@ -45,6 +48,13 @@ namespace Dicidea.Core.Models
             get => _description; 
             set => SetProperty(ref _description, value);
         }
+
+        public DateTime LastUsed
+        {
+            get => _lastUsed;
+            set => SetProperty(ref _lastUsed, value);
+        }
+        
 
         public List<Category> Categories { get; set; }
 

@@ -58,6 +58,12 @@ namespace Dicidea.Core.Services
             await Task.CompletedTask;
             return _allDice.Find(d => d.Id == id);
         }
+        public virtual async Task<Dice> GetLastRolledDiceAsync()
+        {
+            await Task.CompletedTask;
+
+            return _allDice.OrderByDescending(d => d.LastUsed).First();
+        }
 
         public virtual async Task SaveDiceAsync()
         {
@@ -111,13 +117,9 @@ namespace Dicidea.Core.Services
 
                 if (!File.Exists(FileName)) return LoadSampleDice();
 
-                Debug.WriteLine("Dice are loaded from File");
                 string data = File.ReadAllText(FileName);
-                Debug.WriteLine("Deserialize loaded dice");
-                List<Dice> loadedDice = JsonConvert.DeserializeObject<List<Dice>>(data);
-                Debug.WriteLine("All dice to list");
-                List<Dice> allDice = loadedDice.OrderBy(d => d.Name).ToList();
-                return allDice?.Count > 0 ? allDice : LoadSampleDice();
+                List<Dice> allDice = JsonConvert.DeserializeObject<List<Dice>>(data);
+                return allDice;
             }
             catch (Exception e)
             {
@@ -128,100 +130,137 @@ namespace Dicidea.Core.Services
 
         private List<Dice> LoadSampleDice()
         {
-            Dice dice1 = new Dice(true);
-            dice1.Name = "Sims";
-            dice1.Description = "This is a dice to roll Sims";
-            Category category1 = new Category(true);
-            category1.Name = "Genetics";
-            Element element1 = new Element(true);
-            element1.Name = "Eyecolor";
-            Value value1 = new Value(true);
-            value1.Name = "Green";
-            Value value2 = new Value(true);
-            value2.Name = "Brown";
-            Value value3 = new Value(true);
-            value3.Name = "Blue";
-            Element element2 = new Element(true);
-            element2.Name = "Haircolor";
-            Value value4 = new Value(true);
-            value4.Name = "Blonde";
-            Value value5 = new Value(true);
-            value5.Name = "Brown";
-            Value value6 = new Value(true);
-            value6.Name = "Black";
+            Debug.WriteLine("Load Sample Dice");
+            List<Dice> tmp = new List<Dice>()
+            {
+                new Dice()
+                {
+                    Id = Guid.NewGuid().ToString("N"),
+                    Name = "Sims",
+                    Description = "This is a dice to roll Sims",
+                    LastUsed = DateTime.Today,
+                    Categories = new List<Category>()
+                    {
+                        new Category(){
+                            Id = Guid.NewGuid().ToString("N"),
+                            Name = "Genetics",
+                            Description = "Genetics of a sim",
+                            Elements = new List<Element>()
+                            {
+                                new Element()
+                                {
+                                    Id = Guid.NewGuid().ToString("N"),
+                                    Name = "Eyecolor",
+                                    Values = new List<Value>()
+                                    {
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Green"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Blue"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Brown"
+                                        }
+                                    }
+                                },new Element()
+                                {
+                                    Id = Guid.NewGuid().ToString("N"),
+                                    Name = "Haircolor",
+                                    Values = new List<Value>()
+                                    {
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Blonde"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Red"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Brunette"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Black"
+                                        }
+                                    }
+                                },
+                            }
+                        },new Category(){
+                            Id = Guid.NewGuid().ToString("N"),
+                            Name = "Style",
+                            Description = "Style of a sim",
+                            Elements = new List<Element>()
+                            {
+                                new Element()
+                                {
+                                    Id = Guid.NewGuid().ToString("N"),
+                                    Name = "Hairstyle",
+                                    Values = new List<Value>()
+                                    {
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Short"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Middle"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Long"
+                                        }
+                                    }
+                                },new Element()
+                                {
+                                    Id = Guid.NewGuid().ToString("N"),
+                                    Name = "Clothing Style",
+                                    Values = new List<Value>()
+                                    {
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Elegant"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Casual"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Sporty"
+                                        },
+                                        new Value()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Name = "Daring"
+                                        }
+                                    }
+                                },
+                            }
+                        },
+                    }
+                }
+            };
 
-            element1.Values.Add(value1);
-            element1.Values.Add(value2);
-            element1.Values.Add(value3);
-            element2.Values.Add(value4);
-            element2.Values.Add(value5);
-            element2.Values.Add(value6);
-
-            category1.Elements.Add(element1);
-            category1.Elements.Add(element2);
-
-
-            Category category2 = new Category(true);
-            category2.Name = "Style";
-            category2.Elements = new List<Element>();
-            Element element3 = new Element(true);
-            element3.Name = "Hairstyle";
-            element3.Values = new List<Value>();
-            Value value7 = new Value(true);
-            value7.Name = "Short";
-            Value value8 = new Value(true);
-            value8.Name = "Long";
-            Value value9 = new Value(true);
-            value9.Name = "Middle";
-            element3.Values.Add(value7);
-            element3.Values.Add(value8);
-            element3.Values.Add(value9);
-            Element element4 = new Element(true);
-            element4.Name = "Clothing Style";
-            element4.Values = new List<Value>();
-            Value value10 = new Value(true);
-            value10.Name = "Elegant";
-            Value value11 = new Value(true);
-            value11.Name = "Casual";
-            Value value12 = new Value(true);
-            value12.Name = "Sporty";
-
-            element4.Values.Add(value10);
-            element4.Values.Add(value11);
-            element4.Values.Add(value12);
-
-            category2.Elements.Add(element3);
-            category2.Elements.Add(element4);
-
-
-            dice1.Categories.Add(category1);
-            dice1.Categories.Add(category2);
-
-            Dice dice2 = new Dice(true);
-
-            List<Dice> tmp = new List<Dice>();
-            dice2.Name = "Empty Dice";
-            dice2.Description = "This is an empty dice for testing purposes. Also the description is extra long.";
-            Category category3 = new Category(true);
-            category3.Name = "Empty Category";
-            Element element5 = new Element(true);
-            element5.Name = "Empty Element";
-            Value value13 = new Value(true);
-            value7.Name = "Empty Value";
-
-            element5.Values.Add(value13);
-            category3.Elements.Add(element5);
-            dice2.Categories.Add(category3);
-
-
-            tmp.Add(dice1);
-            tmp.Add(dice2);
-
-            List<Dice> sortedTmp = tmp.OrderBy(d => d.Name).ToList();
-
-            Console.WriteLine("Load Sample Data");
-
-            return sortedTmp;
+            return tmp;
         }
 
         private async Task SaveDiceAsync(IEnumerable<Dice> dice)

@@ -77,7 +77,8 @@
             </ListView.GroupStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
+                                Margin="{StaticResource MarginRight20}">
                         <svg:SVGImage
                             Width="40"
                             Height="40"
@@ -88,7 +89,8 @@
                             UriSource="../Icons/dice-five-solid.svg" />
                         <StackPanel VerticalAlignment="Center" Orientation="Vertical">
                             <TextBlock
-                                Width="200"
+                                Width="160"
+                                MaxHeight="28"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource HeaderM}"
@@ -96,8 +98,8 @@
                                 TextTrimming="WordEllipsis"
                                 TextWrapping="Wrap" />
                             <TextBlock
-                                Width="148"
-                                MaxHeight="30"
+                                Width="160"
+                                MaxHeight="20"
                                 Margin="{StaticResource MarginTop4}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -166,7 +168,7 @@
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Style="{StaticResource MaterialDesignCardFlipper}">
                             <materialDesign:Flipper.FrontContent>
-                                <Grid Width="350">
+                                <Grid Width="400">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
@@ -182,7 +184,7 @@
                                         Grid.Column="0"
                                         Orientation="Vertical">
                                         <TextBlock
-                                            Width="220"
+                                            Width="270"
                                             Height="40"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
@@ -192,7 +194,7 @@
                                             TextWrapping="Wrap"
                                             Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                         <TextBox
-                                            Width="220"
+                                            Width="270"
                                             MaxHeight="80"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
@@ -273,7 +275,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel
-                                                    Width="350"
+                                                    Width="400"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     Background="{StaticResource CategoryBrush}">
@@ -317,7 +319,7 @@
                                                                 UriSource="../Icons/trash-solid.svg" />
                                                         </Button>
                                                         <TextBlock
-                                                            Width="180"
+                                                            Width="230"
                                                             MaxHeight="20"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
@@ -326,7 +328,7 @@
                                                             TextWrapping="Wrap"
                                                             Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                         <TextBox
-                                                            Width="180"
+                                                            Width="230"
                                                             MaxHeight="48"
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
@@ -343,7 +345,7 @@
                                         Grid.Row="3"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
-                                        Width="350"
+                                        Width="400"
                                         Height="40"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Center"
@@ -361,12 +363,13 @@
                                 </Grid>
                             </materialDesign:Flipper.FrontContent>
                             <materialDesign:Flipper.BackContent>
-                                <Grid Width="350">
+                                <Grid Width="400">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
@@ -374,11 +377,24 @@
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        Margin="{StaticResource MarginBottom20}"
+                                        Height="40"
+                                        Margin="{StaticResource MarginBottom4}"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center">
-                                        <Run FontSize="{StaticResource HeaderL}" Text="{Binding Path=Category.Name}" />
-                                        <LineBreak />
+                                        VerticalAlignment="Center"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap"
+                                        FontSize="{StaticResource HeaderL}" 
+                                        Text="{Binding Path=Category.Name}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Column="0"
+                                        Height="24"
+                                        Margin="{StaticResource MarginLeft6Bottom20}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap">
                                         <Run FontSize="{StaticResource FontSizeL}" Text="Element - " />
                                         <Run FontSize="{StaticResource FontSizeL}" Text="{Binding Path=SelectedElement.Element.Name}" />
                                     </TextBlock>
@@ -394,7 +410,7 @@
                                         Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                         Content="Flip" />
                                     <ListView
-                                        Grid.Row="1"
+                                        Grid.Row="2"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
                                         ItemsSource="{Binding SelectedElement.GroupedValuesView}"
@@ -410,7 +426,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel
-                                                    Width="350"
+                                                    Width="400"
                                                     Margin="{StaticResource PaddingBottom10}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
@@ -446,7 +462,7 @@
                                                             UriSource="../Icons/trash-solid.svg" />
                                                     </Button>
                                                     <TextBlock
-                                                        Width="220"
+                                                        Width="270"
                                                         MaxHeight="20"
                                                         Margin="{StaticResource MarginHorizontal20Vertical10}"
                                                         FontSize="{StaticResource HeaderM}"
@@ -455,7 +471,7 @@
                                                         TextWrapping="Wrap"
                                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                     <TextBox
-                                                        Width="220"
+                                                        Width="270"
                                                         MaxHeight="44"
                                                         Margin="{StaticResource MarginHorizontal20Vertical10}"
                                                         FontSize="{StaticResource HeaderM}"
@@ -468,10 +484,10 @@
                                         </ListView.ItemTemplate>
                                     </ListView>
                                     <Button
-                                        Grid.Row="2"
+                                        Grid.Row="3"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
-                                        Width="350"
+                                        Width="400"
                                         Height="32"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Center"

@@ -109,7 +109,7 @@ namespace IdeaPage.ViewModels
         }
         public async void AddExecute()
         {
-            await AddValueAsync();
+            await AddIdeaValueAsync();
         }
         public async void DeleteExecute()
         {
