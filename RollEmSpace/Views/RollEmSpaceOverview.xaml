@@ -35,6 +35,7 @@
             VerticalAlignment="Stretch"
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding GroupedDiceView}"
+            MouseDoubleClick="SelectDice_OnMouseDoubleClick"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.GroupStyle>

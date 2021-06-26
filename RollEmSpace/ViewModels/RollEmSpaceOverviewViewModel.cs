@@ -9,6 +9,7 @@ using DicePage.ViewModels;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
+using Dicidea.Core.Services;
 using IdeaPage.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -22,7 +23,7 @@ namespace RollEmSpacePage.ViewModels
         private SortOrder _sortOrder = SortOrder.Unsorted;
         private ListCollectionView _groupedDiceView;
         private DiceListViewModel _diceListViewModel;
-        private IdeaListViewModel _ideaListViewModel;
+        private IIdeaDataService _ideaDataService;
         private readonly IRegionManager _regionManager;
 
         public RollEmSpaceOverviewViewModel(IRegionManager regionManager)
@@ -75,9 +76,6 @@ namespace RollEmSpacePage.ViewModels
         }
 
         public DelegateCommand SortCommand { get; set; }
-        public DelegateCommand AddCommand { get; set; }
-        public DelegateCommand DeleteCommand { get; set; }
-        public DelegateCommand SaveCommand { get; set; }
 
         public ListCollectionView DiceView { get; private set; }
 
@@ -93,6 +91,11 @@ namespace RollEmSpacePage.ViewModels
             }
         }
 
+        public IIdeaDataService IdeaDataService
+        {
+            get => _ideaDataService;
+            set => SetProperty(ref _ideaDataService, value);
+        }
 
         public DiceViewModel SelectedDice
         {
@@ -209,9 +212,9 @@ namespace RollEmSpacePage.ViewModels
                     CreateGroupedDiceView();
                     Debug.WriteLine(_diceListViewModel.AllDice.First().Dice.Name);
                 }
-                if (navigationContext.Parameters["ideaListViewModel"] != null)
+                if (navigationContext.Parameters["ideaDataService"] != null)
                 {
-                    _ideaListViewModel = navigationContext.Parameters["ideaListViewModel"] as IdeaListViewModel;
+                    _ideaDataService = navigationContext.Parameters["ideaDataService"] as IIdeaDataService;
                 }
                 SortCommand = new DelegateCommand(SortExecute);
             }

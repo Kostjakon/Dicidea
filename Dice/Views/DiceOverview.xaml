@@ -80,8 +80,8 @@
             ItemsSource="{Binding GroupedDiceView}"
             MouseDoubleClick="DiceOverview_MouseDoubleClick"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            ScrollViewer.ScrollChanged="DiceScrollViewer_OnScrollChanged">
+            ScrollViewer.ScrollChanged="DiceScrollViewer_OnScrollChanged"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
@@ -139,38 +139,38 @@
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        TextWrapping="Wrap"
-                                        TextTrimming="WordEllipsis"
                                         FontSize="{StaticResource HeaderL}"
                                         Text="{Binding Path=Dice.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap"
                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                     <TextBox
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         Width="240"
                                         MaxHeight="68"
-                                        TextWrapping="Wrap"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         FontSize="{StaticResource HeaderL}"
                                         Style="{StaticResource DiceTextBox}"
                                         Text="{Binding Path=Dice.Name}"
+                                        TextWrapping="Wrap"
                                         Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
                                     <StackPanel
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Margin="{StaticResource MarginBottom20}"
-                                        Orientation="Horizontal"
                                         HorizontalAlignment="Right"
-                                        VerticalAlignment="Top">
+                                        VerticalAlignment="Top"
+                                        Orientation="Horizontal">
                                         <Button
                                             Width="40"
                                             Height="40"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Center"
                                             Command="{Binding EditCommand}"
-                                            Style="{StaticResource DiceViewEditButton}" >
+                                            Style="{StaticResource DiceViewEditButton}">
                                             <svg:SVGImage
                                                 Width="28"
                                                 Height="28"
@@ -182,13 +182,13 @@
                                         <Button
                                             Width="80"
                                             Height="40"
+                                            Margin="{StaticResource MarginLeft10}"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
-                                            Style="{StaticResource FlipButton}"
                                             Background="{StaticResource DiceBrush}"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             Content="Flip"
-                                            Margin="{StaticResource MarginLeft10}" />
+                                            Style="{StaticResource FlipButton}" />
                                     </StackPanel>
                                     <TextBlock
                                         Grid.Row="1"
@@ -196,13 +196,13 @@
                                         Grid.ColumnSpan="2"
                                         Width="400"
                                         MaxHeight="60"
-                                        HorizontalAlignment="Left"
                                         Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource HeaderM}"
                                         Text="{Binding Path=Dice.Description}"
-                                        TextWrapping="Wrap"
                                         TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap"
                                         Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                     <TextBox
                                         Grid.Row="1"
@@ -210,8 +210,8 @@
                                         Grid.ColumnSpan="2"
                                         Width="400"
                                         MaxHeight="60"
-                                        HorizontalAlignment="Left"
                                         Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource HeaderM}"
                                         Style="{StaticResource DiceTextBox}"
@@ -236,13 +236,13 @@
                                         Grid.Column="0"
                                         Width="288"
                                         MaxHeight="40"
-                                        TextWrapping="Wrap"
-                                        TextTrimming="WordEllipsis"
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         FontSize="{StaticResource HeaderL}"
-                                        Text="{Binding Path=Dice.Name}" />
+                                        Text="{Binding Path=Dice.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
                                     <Button
                                         Grid.Row="0"
                                         Grid.Column="1"
@@ -258,10 +258,10 @@
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
+                                        Focusable="False"
                                         ItemsSource="{Binding GroupedCategoriesView}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                        Focusable="False">
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="Padding" Value="0" />
@@ -280,11 +280,11 @@
                                                         <Button
                                                             Width="32"
                                                             Height="32"
+                                                            Margin="{StaticResource MarginLeft20}"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Center"
-                                                            Margin="{StaticResource MarginLeft20}"
                                                             Command="{Binding DeleteCommand}"
-                                                            Style="{StaticResource DiceViewDeleteButton}" >
+                                                            Style="{StaticResource DiceViewDeleteButton}">
                                                             <svg:SVGImage
                                                                 Width="20"
                                                                 Height="20"
@@ -296,11 +296,11 @@
                                                         <Button
                                                             Width="32"
                                                             Height="32"
+                                                            Margin="{StaticResource MarginLeft10}"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Center"
-                                                            Margin="{StaticResource MarginLeft10}"
                                                             Command="{Binding EditCommand}"
-                                                            Style="{StaticResource DiceViewEditButton}" >
+                                                            Style="{StaticResource DiceViewEditButton}">
                                                             <svg:SVGImage
                                                                 Width="20"
                                                                 Height="20"
@@ -315,9 +315,9 @@
                                                             Margin="{StaticResource MarginAllSides20}"
                                                             FontSize="{StaticResource HeaderM}"
                                                             Text="{Binding Path=Category.Name}"
-                                                            TextWrapping="Wrap"
                                                             TextTrimming="WordEllipsis"
-                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}"/>
+                                                            TextWrapping="Wrap"
+                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
                                                         <TextBox
                                                             Width="260"
                                                             MaxHeight="40"
