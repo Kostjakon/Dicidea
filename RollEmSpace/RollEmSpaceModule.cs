@@ -20,6 +20,8 @@ namespace RollEmSpacePage
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterForNavigation<RollEmSpaceIdeasList>();
+            containerRegistry.RegisterForNavigation<RollEmSpaceDetail>();
             containerRegistry.RegisterForNavigation<RollEmSpaceOverview>();
             //containerRegistry.RegisterForNavigation<RollEmSpaceActive>();
         }

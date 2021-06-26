@@ -21,20 +21,23 @@ namespace DicePage.ViewModels
         private ValueListViewModel _valueListViewModel;
         private ListCollectionView _groupedValuesView;
         private IDiceDataService _diceDataService;
+        private DiceViewModel _diceViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public ElementViewModel(Element element, CategoryViewModel categoryViewModel, Dice dice, IDiceDataService diceDataService)
+        public ElementViewModel(Element element, CategoryViewModel categoryViewModel, DiceViewModel diceViewModel, IDiceDataService diceDataService)
         {
             _categoryViewModel = categoryViewModel;
+            _diceViewModel = diceViewModel;
             FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
             Element = element;
             EditCommand = new DelegateCommand(EditExecute);
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
+            ActivateCommand = new DelegateCommand(ActivateExecute);
             ElementViewModel self = this;
             if (_valueListViewModel == null)
             {
-                _valueListViewModel = new ValueListViewModel(dice, _categoryViewModel.Category, self, diceDataService);
+                _valueListViewModel = new ValueListViewModel(diceViewModel.Dice, _categoryViewModel.Category, self, diceDataService);
             }
             CreateGroupedView();
         }
@@ -99,6 +102,12 @@ namespace DicePage.ViewModels
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
+        public DelegateCommand ActivateCommand { get; set; }
+
+        public void ActivateExecute()
+        {
+            Element.Active = !Element.Active;
+        }
 
         public void EditExecute()
         {
@@ -125,6 +134,10 @@ namespace DicePage.ViewModels
         {
             get => _categoryViewModel.Category;
         }
+        public Dice Dice
+        {
+            get => _diceViewModel.Dice;
+        }
 
         public Element Element { get; }
         public ICommand FlipCommand { get; set; }
@@ -149,10 +162,11 @@ namespace DicePage.ViewModels
 
         private void Flip(object obj)
         {
-            _categoryViewModel.SelectedElement = this;
+            _diceViewModel.SelectedElement = this;
+            _diceViewModel.SelectedCategory = _categoryViewModel;
             Debug.WriteLine("Flip Element: " + Element.Name);
             Debug.WriteLine("Is selected: "+IsSelected);
-            Debug.WriteLine(_categoryViewModel.Category.Id);
+            Debug.WriteLine(_categoryViewModel.Category.Name);
         }
     }
 }

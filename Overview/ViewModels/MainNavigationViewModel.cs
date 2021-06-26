@@ -46,20 +46,20 @@ namespace OverviewPage.ViewModels
         public DelegateCommand GoToOverview =>
             new DelegateCommand(() =>
             {
-                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(Overview));
+                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(Overview), _parameters);
                 _regionManager.Regions[RegionNames.LeftContentRegion].RemoveAll();
                 _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
             });
         public DelegateCommand GoToRollEmSpace =>
             new DelegateCommand(() =>
             {
-                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview));
+                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview), _parameters);
                 _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
             });
         public DelegateCommand GoToMenu =>
             new DelegateCommand(() =>
             {
-                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(MenuOverview));
+                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(MenuOverview), _parameters);
                 _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
             });
 

@@ -12,7 +12,7 @@
     MinHeight="840"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="Black"
-    FontFamily="{materialDesign:MaterialDesignFont}"
+    FontFamily="../Resources/#Short Stack"
     Icon="../Icons/iconmonstr-paintbrush-6.ico"
     StateChanged="WindowStateChanged"
     TextElement.FontSize="12"

@@ -19,6 +19,7 @@ namespace DicePage.ViewModels
             Value = value;
             EditCommand = new DelegateCommand(EditExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
+            ActivateCommand = new DelegateCommand(ActivateExecute);
         }
 
         public bool IsEditEnabled
@@ -34,6 +35,12 @@ namespace DicePage.ViewModels
         
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
+        public DelegateCommand ActivateCommand { get; set; }
+
+        public void ActivateExecute()
+        {
+            Value.Active = !Value.Active;
+        }
 
         public void EditExecute()
         {

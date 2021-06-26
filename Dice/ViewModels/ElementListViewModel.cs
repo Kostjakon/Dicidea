@@ -13,14 +13,14 @@ namespace DicePage.ViewModels
     public class ElementListViewModel : NotifyPropertyChanges
     {
         private ObservableCollection<ElementViewModel> _elements;
-        private Dice _selectedDice;
+        private DiceViewModel _selectedDice;
         private CategoryViewModel _selectedCategory;
         private readonly IDiceDataService _diceDataService;
 
-        public ElementListViewModel(Dice dice, CategoryViewModel category, IDiceDataService diceDataService)
+        public ElementListViewModel(DiceViewModel diceViewModel, CategoryViewModel category, IDiceDataService diceDataService)
         {
             _diceDataService = diceDataService;
-            _selectedDice = dice;
+            _selectedDice = diceViewModel;
             _selectedCategory = category;
             LoadElements();
         }
@@ -34,13 +34,13 @@ namespace DicePage.ViewModels
         public async Task DeleteElementAsync(ElementViewModel element)
         {
             Elements.Remove(element);
-            await _diceDataService.DeleteElementAsync(_selectedDice, _selectedCategory.Category, element.Element);
+            await _diceDataService.DeleteElementAsync(_selectedDice.Dice, _selectedCategory.Category, element.Element);
         }
 
         public async Task<ElementViewModel> AddElementAsync()
         {
             var elementModel = new Element(true);
-            await _diceDataService.AddElementAsync(_selectedDice, _selectedCategory.Category, elementModel);
+            await _diceDataService.AddElementAsync(_selectedDice.Dice, _selectedCategory.Category, elementModel);
 
             var newElement = new ElementViewModel(elementModel, _selectedCategory, _selectedDice, _diceDataService);
             // DICEVIEWMODEL!

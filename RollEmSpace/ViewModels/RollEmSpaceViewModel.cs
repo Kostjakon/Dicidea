@@ -20,13 +20,12 @@ namespace RollEmSpacePage.ViewModels
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
         private IdeaListViewModel _ideaListViewModel;
+        private RollEmSpaceListViewModel _rollEmSpaceListViewModel;
         private ListCollectionView _groupedIdeaView;
-
-        private Dice _selectedDice;
         //private readonly object _lock = new object();
-        public RollEmSpaceViewModel(Dice dice, Idea idea, IIdeaDataService ideaDataService)
+        public RollEmSpaceViewModel(RollEmSpaceListViewModel rollEmSpaceListViewModel, Idea idea, IIdeaDataService ideaDataService)
         {
-            _selectedDice = dice;
+            _rollEmSpaceListViewModel = rollEmSpaceListViewModel;
             //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
             if (GroupedIdeaView != null)
             {
@@ -37,7 +36,7 @@ namespace RollEmSpacePage.ViewModels
 
             RollEmSpaceViewModel self = this;
             CreateGroupedView();
-            AddCommand = new DelegateCommand(AddExecute);
+            RollCommand = new DelegateCommand(RollExecute);
             EditCommand = new DelegateCommand(EditExecute);
         }
 
@@ -58,34 +57,19 @@ namespace RollEmSpacePage.ViewModels
             get => _groupedIdeaView;
             set => SetProperty(ref _groupedIdeaView, value);
         }
-        public DelegateCommand AddCommand { get; set; }
+        public DelegateCommand RollCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
-        private async void AddExecute()
+        private async void RollExecute()
         {
             Debug.WriteLine("Add Idea");
-            //await Application.Current.Dispatcher.BeginInvoke(() => Task.Run(_categoryListViewModel.AddCategoryAsync));
-            /*
-            Thread thread = new Thread(delegate()
-            {
-                AddCategory();
-            });
-            thread.IsBackground = true;
-            thread.Start();
-            */
+            // TODO: Roll Ideas
+
+            // Hier Schleife mit selectedDice
+
             await _ideaListViewModel.AddIdeaAsync();
-            //GroupedCategoriesView.Refresh();
+            GroupedIdeaView.Refresh();
 
         }
-
-        /*
-        public void AddCategory()
-        {
-            Dispatcher.BeginInvoke((Action) (async () =>
-            {
-                await Task.Run(_categoryListViewModel.AddCategoryAsync);
-            }));
-        }
-        */
 
         public void EditExecute()
         {

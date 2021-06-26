@@ -9,12 +9,16 @@ namespace Dicidea.Core.Models
     public sealed class Element : NotifyDataErrorInfo<Element>
     {
         private string _name;
+        private int _amount;
+        private bool _active;
 
         public Element(bool newElement)
         {
             Rules.Add(new DelegateRule<Element>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Id = Guid.NewGuid().ToString("N"); 
             Name = "";
+            Amount = 1;
+            Active = true;
             Values = new List<Value>
             {
                 new Value(true)
@@ -31,9 +35,16 @@ namespace Dicidea.Core.Models
         public string Name { get => _name; set => SetProperty(ref _name, value); }
 
         public List<Value> Values { get; set; }
-        [JsonIgnore]
-        public int Amount { get; set; }
-        [JsonIgnore]
-        public bool Active { get; set; }
+        public int Amount
+        {
+            get => _amount;
+            set => SetProperty(ref _amount, value);
+        }
+
+        public bool Active
+        {
+            get => _active;
+            set => SetProperty(ref _active, value);
+        }
     }
 }

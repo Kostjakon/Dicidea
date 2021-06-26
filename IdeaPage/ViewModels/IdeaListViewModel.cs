@@ -36,7 +36,8 @@ namespace IdeaPage.ViewModels
 
         public async Task<IdeaViewModel> AddIdeaAsync()
         {
-            var ideaModel = new Idea(true);
+            // TODO: Idea Konstruktor füllen
+            var ideaModel = new Idea();
             await _ideaDataService.AddIdeaAsync(ideaModel);
 
             var newIdea = new IdeaViewModel(ideaModel, _ideaDataService);

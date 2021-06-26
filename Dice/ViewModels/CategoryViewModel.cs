@@ -33,8 +33,9 @@ namespace DicePage.ViewModels
             Category = category;
             // TODO: SendMailCommand is not needed, because dice doesn't have an email
             var self = this;
-            _elementListViewModel ??= new ElementListViewModel(dice.Dice, self, diceDataService);
+            _elementListViewModel ??= new ElementListViewModel(dice, self, diceDataService);
             EditCommand = new DelegateCommand(EditExecute);
+            ActivateCommand = new DelegateCommand(ActivateExecute);
             AddCommand = new DelegateCommand(AddExecute);
             CreateGroupedView();
         }
@@ -52,7 +53,12 @@ namespace DicePage.ViewModels
 
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
+        public DelegateCommand ActivateCommand { get; set; }
 
+        public void ActivateExecute()
+        {
+            Category.Active = !Category.Active;
+        }
         public void EditExecute()
         {
             Debug.WriteLine("Edit Dice");

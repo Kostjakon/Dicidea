@@ -11,6 +11,8 @@ namespace Dicidea.Core.Models
         private string _name;
         private string _description;
         private DateTime _lastUsed;
+        private int _amount;
+        private bool _active;
 
         public Dice(bool newDice)
         {
@@ -19,6 +21,8 @@ namespace Dicidea.Core.Models
             Debug.WriteLine("New dice");
             Name = "";
             Description = "";
+            Amount = 1;
+            Active = true;
             LastUsed = DateTime.Now;
             Debug.WriteLine(LastUsed.Date);
             Categories = new List<Category>
@@ -57,10 +61,16 @@ namespace Dicidea.Core.Models
         
 
         public List<Category> Categories { get; set; }
+        
+        public int Amount { 
+            get => _amount; 
+            set => SetProperty(ref _amount, value);
+        }
 
-        [JsonIgnore]
-        public int Amount { get; set; }
-        [JsonIgnore]
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active; 
+            set => SetProperty(ref _active, value);
+        }
     }
 }

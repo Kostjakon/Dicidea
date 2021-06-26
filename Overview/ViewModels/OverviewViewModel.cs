@@ -35,6 +35,7 @@ namespace OverviewPage.ViewModels
             _rollEmSpaceDataService = new RollEmSpaceDataServiceJson(_diceDataService);
             _diceListViewModel = new DiceListViewModel(_diceDataService);
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);
+            GoToRollEmSpaceCommand = new DelegateCommand<object>(GoToRollEmSpace);
             getLastRolledDice();
             _parameters = new NavigationParameters
             {
@@ -55,6 +56,7 @@ namespace OverviewPage.ViewModels
         //public DiceListViewModel DiceListViewModel { get => _diceListViewModel; }
 
         public ICommand GoToDiceCommand { get; private set; }
+        public ICommand GoToRollEmSpaceCommand { get; private set; }
 
         private bool CanGoToDice(object obj)
         {
@@ -67,16 +69,15 @@ namespace OverviewPage.ViewModels
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
 
-        public DelegateCommand GoToRollEmSpace =>
-            new DelegateCommand(() =>
-                {
-                    _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview));
-                    _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
-                });
+        public void GoToRollEmSpace(object obj)
+        {
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview), _parameters);
+            _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
+        }
         public DelegateCommand GoToMenu =>
             new DelegateCommand(() =>
                 {
-                    _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(MenuOverview));
+                    _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(MenuOverview), _parameters);
                     _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
                 });
 

@@ -25,6 +25,7 @@ namespace DicePage.ViewModels
         private ListCollectionView _groupedCategoriesView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
+        private ElementViewModel _selectedElement;
         //private readonly object _lock = new object();
         public DiceViewModel(Dice dice, IDiceDataService diceDataService)
         {
@@ -45,6 +46,13 @@ namespace DicePage.ViewModels
             AddCommand = new DelegateCommand(AddExecute);
             EditCommand = new DelegateCommand(EditExecute);
         }
+
+        public ElementViewModel SelectedElement
+        {
+            get => _selectedElement;
+            set => SetProperty(ref _selectedElement, value);
+        }
+
 
         public bool IsEditEnabled
         {

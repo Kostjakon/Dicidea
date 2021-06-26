@@ -208,7 +208,7 @@
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
-                                        Margin="{StaticResource MarginLeft2}">
+                                        Margin="{StaticResource MarginHorizontal10}">
                                         <TextBlock
                                             Margin="{StaticResource MarginBottom20}"
                                             VerticalAlignment="Top"
@@ -390,7 +390,7 @@
                                         Grid.ColumnSpan="2"
                                         Grid.Column="0"
                                         Height="24"
-                                        Margin="{StaticResource MarginLeft6Bottom20}"
+                                        Margin="{StaticResource MarginLeft10Bottom20}"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
                                         TextTrimming="WordEllipsis"

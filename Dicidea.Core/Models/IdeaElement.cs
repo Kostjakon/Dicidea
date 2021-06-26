@@ -7,13 +7,16 @@ using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
-    public class IdeaElement : NotifyDataErrorInfo<IdeaElement>
+    public sealed class IdeaElement : NotifyDataErrorInfo<IdeaElement>
     {
         private string _name;
-        public IdeaElement(bool newIdea)
+        private List<IdeaValue> _ideaValues;
+        public IdeaElement(string name)
         {
             Rules.Add(new DelegateRule<IdeaElement>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Id = Guid.NewGuid().ToString("N");
+            Name = name;
+            IdeaValues = new List<IdeaValue>();
         }
 
         public IdeaElement()
@@ -32,6 +35,11 @@ namespace Dicidea.Core.Models
             get => _name; 
             set => SetProperty(ref _name, value);
         }
-        public virtual List<IdeaValue> IdeaValues { get; set; }
+
+        public List<IdeaValue> IdeaValues
+        {
+            get => _ideaValues; 
+            set => SetProperty(ref _ideaValues, value);
+        }
     }
 }

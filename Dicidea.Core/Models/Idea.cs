@@ -6,14 +6,20 @@ using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
-    public class Idea : NotifyDataErrorInfo<Idea>
+    public sealed class Idea : NotifyDataErrorInfo<Idea>
     {
         private string _name;
         private string _description;
-        public Idea(bool newIdea)
+        private List<IdeaCategory> _ideaCategories;
+        private DateTime _rolledDate;
+        public Idea(string name, string description)
         {
+            Name = name;
+            Description = description;
+            IdeaCategories = new List<IdeaCategory>();
             Id = Guid.NewGuid().ToString("N");
             Rules.Add(new DelegateRule<Idea>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
+            RolledDate = DateTime.Now;
         }
 
         public Idea()
@@ -39,6 +45,17 @@ namespace Dicidea.Core.Models
             get => _description;
             set => SetProperty(ref _description, value);
         }
-        public virtual List<IdeaCategory> IdeaCategories { get; set; }
+
+        public DateTime RolledDate
+        {
+            get => _rolledDate;
+            set => SetProperty(ref _rolledDate, value);
+        }
+
+        public List<IdeaCategory> IdeaCategories
+        {
+            get => _ideaCategories; 
+            set => SetProperty(ref _ideaCategories, value);
+        }
     }
 }

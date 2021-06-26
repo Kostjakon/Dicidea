@@ -4,16 +4,340 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:RollEmSpacePage.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    d:DesignHeight="788"
+    d:DesignWidth="920"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid>
-        <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="{Binding Message}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides20}">
+            <Label
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Roll'em Space"
+                FontSize="{StaticResource HeaderXL}" />
+        </Grid>
+        <ListView
+            Grid.Row="1"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding GroupedDiceView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Rectangle
+                                    Grid.Row="0"
+                                    Height="80"
+                                    HorizontalAlignment="Stretch"
+                                    Fill="Black"
+                                    Opacity="0.5" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="{StaticResource MarginAllSides20}"
+                                    FontSize="{StaticResource HeaderXL}"
+                                    FontWeight="SemiBold"
+                                    Foreground="{StaticResource DiceBrush}"
+                                    Text="{Binding Path=Name, Converter={StaticResource NameToInitialConverter}}" />
+                            </Grid>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center">
+                        <materialDesign:Flipper
+                            Margin="{StaticResource MarginAllSides20}"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Style="{StaticResource MaterialDesignCardFlipper}">
+                            <materialDesign:Flipper.FrontContent>
+                                <Grid Width="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="{StaticResource PaddingBottom10}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource FontSizeM}"
+                                            Text="Last rolled: "
+                                            TextTrimming="WordEllipsis" />
+                                        <TextBlock
+                                            Margin="{StaticResource MarginHorizontal20}"
+                                            VerticalAlignment="Top"
+                                            FontSize="{StaticResource FontSizeM}"
+                                            Text="{Binding Dice.LastUsed, StringFormat=d}"
+                                            TextAlignment="Left"
+                                            TextTrimming="WordEllipsis" />
+                                    </StackPanel>
+                                    <Button
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        Width="60"
+                                        Height="28"
+                                        Margin="{StaticResource MarginLeft10}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Background="{StaticResource DiceBrush}"
+                                        Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                        Content="Flip"
+                                        FontSize="{StaticResource FontSizeM}"
+                                        Style="{StaticResource FlipButton}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Width="400"
+                                        MaxHeight="40"
+                                        Margin="{StaticResource MarginBottom4}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding Path=Dice.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Width="400"
+                                        MaxHeight="60"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource HeaderM}"
+                                        Text="{Binding Path=Dice.Description}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                    <ListView
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Focusable="False"
+                                        ItemsSource="{Binding GroupedCategoriesView}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel
+                                                    Width="400"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource CategoryBrush}">
+
+                                                    <StackPanel
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        Orientation="Vertical">
+                                                        <TextBlock
+                                                            Width="260"
+                                                            MaxHeight="20"
+                                                            Margin="{StaticResource MarginAllSides20}"
+                                                            HorizontalAlignment="Left"
+                                                            FontSize="{StaticResource HeaderM}"
+                                                            Text="{Binding Path=Category.Name}"
+                                                            TextAlignment="Left"
+                                                            TextTrimming="WordEllipsis"
+                                                            TextWrapping="Wrap" />
+                                                        <Rectangle
+                                                            Width="400"
+                                                            Height="2"
+                                                            HorizontalAlignment="Center"
+                                                            Fill="Black" />
+                                                    </StackPanel>
+                                                    <ListView
+                                                        Focusable="True"
+                                                        ItemsSource="{Binding GroupedElementsView}"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="ListViewItem">
+                                                                <Setter Property="Padding" Value="0" />
+                                                                <Setter Property="Margin" Value="0" />
+                                                                <Setter Property="BorderThickness" Value="0" />
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel
+                                                                    Width="400"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center">
+                                                                    <StackPanel
+                                                                        HorizontalAlignment="Left"
+                                                                        VerticalAlignment="Center"
+                                                                        Orientation="Horizontal">
+                                                                        <RadioButton
+                                                                            Margin="{StaticResource MarginLeft20}"
+                                                                            Command="{Binding FlipCommand}"
+                                                                            GroupName="{Binding Dice.Id}"
+                                                                            IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                                                                        <TextBlock
+                                                                            Width="230"
+                                                                            MaxHeight="20"
+                                                                            Margin="{StaticResource MarginAllSides10}"
+                                                                            FontSize="{StaticResource FontSizeM}"
+                                                                            Text="{Binding Path=Element.Name}"
+                                                                            TextTrimming="WordEllipsis"
+                                                                            TextWrapping="Wrap" />
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                    <Rectangle
+                                                        Width="400"
+                                                        Height="10"
+                                                        HorizontalAlignment="Center"
+                                                        Fill="Black" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </materialDesign:Flipper.FrontContent>
+                            <materialDesign:Flipper.BackContent>
+                                <Grid Width="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Height="40"
+                                        Margin="{StaticResource MarginBottom4}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding Path=SelectedCategory.Category.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Height="24"
+                                        Margin="{StaticResource MarginLeft10Bottom20}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap">
+                                        <Run FontSize="{StaticResource FontSizeL}" Text="Element - " />
+                                        <Run FontSize="{StaticResource FontSizeL}" Text="{Binding SelectedElement.Element.Name}" />
+                                    </TextBlock>
+                                    <Button
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Width="60"
+                                        Height="28"
+                                        Margin="{StaticResource MarginBottom20}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Background="{StaticResource DiceBrush}"
+                                        Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                        Content="Flip"
+                                        FontSize="{StaticResource FontSizeM}" />
+                                    <ListView
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        ItemsSource="{Binding SelectedElement.GroupedValuesView}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel
+                                                    Width="400"
+                                                    Margin="{StaticResource PaddingBottom10}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource CategoryBrush}"
+                                                    Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="270"
+                                                        MaxHeight="20"
+                                                        Margin="{StaticResource MarginHorizontal20Vertical10}"
+                                                        FontSize="{StaticResource HeaderM}"
+                                                        Text="{Binding Path=Value.Name}"
+                                                        TextTrimming="WordEllipsis"
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </materialDesign:Flipper.BackContent>
+                        </materialDesign:Flipper>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
     </Grid>
 </UserControl>

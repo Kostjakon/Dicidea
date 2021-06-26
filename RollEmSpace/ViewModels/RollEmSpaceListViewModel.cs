@@ -1,10 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using DicePage.ViewModels;
+using Dicidea.Core.Helper;
+using Dicidea.Core.Models;
+using Dicidea.Core.Services;
 
 namespace RollEmSpacePage.ViewModels
 {
-    class RollEmSpaceListViewModel
+    public class RollEmSpaceListViewModel : NotifyPropertyChanges
     {
+        private readonly IDiceDataService _diceDataService;
+        private ObservableCollection<DiceViewModel> _allDice;
+
+        public RollEmSpaceListViewModel(IDiceDataService diceDataService)
+        {
+            _diceDataService = diceDataService;
+            LoadDiceAsync();
+        }
+
+        public ObservableCollection<DiceViewModel> AllDice
+        {
+            get => _allDice;
+            private set => SetProperty(ref _allDice, value);
+        }
+
+        public async Task DeleteDiceAsync(DiceViewModel dice)
+        {
+            AllDice.Remove(dice);
+            await _diceDataService.DeleteDiceAsync(dice.Dice);
+        }
+
+        public async Task<DiceViewModel> AddDiceAsync()
+        {
+            var diceModel = new Dice(true);
+            await _diceDataService.AddDiceAsync(diceModel);
+
+            var newDice = new DiceViewModel(diceModel, _diceDataService);
+            AllDice.Add(newDice);
+            return newDice;
+        }
+
+        public async Task SaveDiceAsync()
+        {
+            await _diceDataService.SaveDiceAsync();
+        }
+
+        private async Task LoadDiceAsync()
+        {
+            AllDice = new ObservableCollection<DiceViewModel>();
+            List<Dice> dice = await _diceDataService.GetAllDiceAsync();
+            dice.ToList().ForEach(d => AllDice.Add(new DiceViewModel(d, _diceDataService)));
+        }
     }
 }

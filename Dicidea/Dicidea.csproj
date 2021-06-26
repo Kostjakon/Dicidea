@@ -41,6 +41,14 @@
     <None Remove="Icons\window-restore-solid.svg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Gaegu-Regular.ttf" />
+    <Resource Include="Resources\ArchitectsDaughter-Regular.ttf" />
+    <Resource Include="Resources\AnnieUseYourTelescope-Regular.ttf" />
+    <Resource Include="Resources\ComingSoon-Regular.ttf" />
+    <Resource Include="Resources\PatrickHandSC-Regular.ttf" />
+    <Resource Include="Resources\ShortStack-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="DotNetProjects.SVGImage" Version="4.1.92" />
     <PackageReference Include="MahApps.Metro" Version="2.4.5" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />

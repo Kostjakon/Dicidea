@@ -41,7 +41,8 @@ namespace IdeaPage.ViewModels
 
         public async Task<IdeaValueViewModel> AddIdeaValueAsync()
         {
-            var ideaValueModel = new IdeaValue(true);
+            // TODO: IdeaValue Konstruktor füllen
+            var ideaValueModel = new IdeaValue();
             await _ideaDataService.AddIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValueModel);
 
             var newIdeaValue = new IdeaValueViewModel(ideaValueModel, _selectedIdeaElement);

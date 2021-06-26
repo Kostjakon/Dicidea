@@ -80,7 +80,7 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Background="{StaticResource RollEmBrush}"
-                Command="{Binding GoToRollEmSpace}">
+                Command="{Binding GoToRollEmSpaceCommand}">
                 <StackPanel Orientation="Vertical">
                     <svg1:SVGImage
                         Width="{StaticResource OverviewIconSize}"

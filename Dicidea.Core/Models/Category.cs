@@ -9,6 +9,8 @@ namespace Dicidea.Core.Models
     {
         private string _name;
         private string _description;
+        private int _amount;
+        private bool _active;
 
         public Category(bool newCategory)
         {
@@ -16,6 +18,8 @@ namespace Dicidea.Core.Models
             Id = Guid.NewGuid().ToString("N");
             Name = " ";
             Description = " ";
+            Amount = 1;
+            Active = true;
             Elements = new List<Element>
             {
                 new Element(true)
@@ -33,10 +37,17 @@ namespace Dicidea.Core.Models
         public string Description { get => _description; set => SetProperty(ref _description, value); }
 
         public List<Element> Elements { get; set; }
-        [JsonIgnore]
-        public int Amount { get; set; }
-        [JsonIgnore]
-        public bool Active { get; set; }
-        
+        public int Amount
+        {
+            get => _amount;
+            set => SetProperty(ref _amount, value);
+        }
+
+        public bool Active
+        {
+            get => _active;
+            set => SetProperty(ref _active, value);
+        }
+
     }
 }

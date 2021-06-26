@@ -40,7 +40,8 @@ namespace IdeaPage.ViewModels
 
         public async Task<IdeaElementViewModel> AddIdeaElementAsync()
         {
-            var ideaElementModel = new IdeaElement(true);
+            // TODO: IdeaElement Konstruktor füllen
+            var ideaElementModel = new IdeaElement();
             await _ideaDataService.AddIdeaElementAsync(_selectedIdea, _selectedIdeaCategory.IdeaCategory, ideaElementModel);
 
             var newIdeaElement = new IdeaElementViewModel(ideaElementModel, _selectedIdeaCategory, _selectedIdea, _ideaDataService);

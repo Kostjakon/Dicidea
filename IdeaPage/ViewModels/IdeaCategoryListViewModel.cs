@@ -39,7 +39,8 @@ namespace IdeaPage.ViewModels
 
         public async Task<IdeaCategoryViewModel> AddIdeaCategoryAsync()
         {
-            var ideaCategoryModel = new IdeaCategory(true);
+            // TODO: IdeaCategory Konstruktor füllen
+            var ideaCategoryModel = new IdeaCategory();
             await _ideaDataService.AddIdeaCategoryAsync(_selectedIdea.Idea, ideaCategoryModel);
             
             var newIdeaCategory = new IdeaCategoryViewModel(_selectedIdea, ideaCategoryModel, _ideaDataService);
