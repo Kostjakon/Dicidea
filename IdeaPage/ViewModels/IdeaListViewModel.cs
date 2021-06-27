@@ -21,6 +21,12 @@ namespace IdeaPage.ViewModels
             _ideaDataService = ideaDataService;
             LoadIdeasAsync();
         }
+        public IdeaListViewModel(List<Idea> ideas)
+        {
+            AllIdeas = new ObservableCollection<IdeaViewModel>();
+            List<Idea> idea = ideas;
+            idea.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService)));
+        }
 
         public ObservableCollection<IdeaViewModel> AllIdeas
         {
@@ -53,8 +59,8 @@ namespace IdeaPage.ViewModels
         private async Task LoadIdeasAsync()
         {
             AllIdeas = new ObservableCollection<IdeaViewModel>();
-            List<Idea> idea = await _ideaDataService.GetAllIdeasAsync();
-            idea.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService)));
+            //List<Idea> idea = await _ideaDataService.GetAllIdeasAsync();
+            //idea.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService)));
         }
     }
 }

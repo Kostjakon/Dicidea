@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace RollEmSpacePage.Views
 {
@@ -11,5 +13,6 @@ namespace RollEmSpacePage.Views
         {
             InitializeComponent();
         }
+        
     }
 }

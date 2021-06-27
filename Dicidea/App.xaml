@@ -7,10 +7,12 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+
                 <materialDesign:BundledTheme
                     BaseTheme="Dark"
                     PrimaryColor="DeepPurple"
@@ -25,16 +27,24 @@
                     <Thickness x:Key="MarginBottom14">0 0 0 14</Thickness>
                     <Thickness x:Key="MarginBottom4">0 0 0 4</Thickness>
                     <Thickness x:Key="MarginLeft2">2 0 0 0</Thickness>
+                    <Thickness x:Key="MarginHorizontal8">8 0 0 0</Thickness>
                     <Thickness x:Key="MarginLeft20">20 0 0 0</Thickness>
+                    <Thickness x:Key="MarginLeftBottom10">10 0 0 10</Thickness>
                     <Thickness x:Key="MarginRight20">0 0 20 0</Thickness>
+                    <Thickness x:Key="MarginRight10">0 0 10 0</Thickness>
                     <Thickness x:Key="MarginHorizontalBottom20">20 0 20 20</Thickness>
+                    <Thickness x:Key="MarginHorizontalBottom10">10 0 10 10</Thickness>
+                    <Thickness x:Key="MarginHorizontalTop20">20 20 20 0</Thickness>
                     <Thickness x:Key="MarginHorizontal20Bottom10">20 0 20 10</Thickness>
+                    <Thickness x:Key="MarginRight40Top10">0 10 40 0</Thickness>
+                    <Thickness x:Key="MarginLeft20Top10">20 10 0 0</Thickness>
                     <Thickness x:Key="MarginLeft10Bottom20">10 0 0 20</Thickness>
                     <Thickness x:Key="MarginHorizontal10">10 0</Thickness>
                     <Thickness x:Key="MarginAllSides10">10</Thickness>
                     <Thickness x:Key="PaddingBottom10">0 0 0 10</Thickness>
                     <Thickness x:Key="MarginTop10">0 10 0 0</Thickness>
                     <Thickness x:Key="MarginTop4">0 4 0 0</Thickness>
+                    <Thickness x:Key="MarginTop4Left6">6 4 0 0</Thickness>
                     <Thickness x:Key="MarginLeft10">10 0 0 0</Thickness>
                     <system:Double x:Key="HeaderXL">32</system:Double>
                     <system:Double x:Key="HeaderL">24</system:Double>
@@ -63,6 +73,20 @@
                         TargetType="{x:Type RadioButton}">
                         <Setter Property="Background" Value="{DynamicResource DiceBrush}" />
                         <Setter Property="BorderBrush" Value="{DynamicResource DiceBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="MaterialDesignRollEmRadioButton"
+                        BasedOn="{StaticResource MaterialDesignRadioButton}"
+                        TargetType="{x:Type RadioButton}">
+                        <Setter Property="Background" Value="{DynamicResource RollEmBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource RollEmBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="MaterialDesignRollEmCheckbox"
+                        BasedOn="{StaticResource MaterialDesignCheckBox}"
+                        TargetType="{x:Type CheckBox}">
+                        <Setter Property="Background" Value="{DynamicResource RollEmBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource RollEmBrush}" />
                     </Style>
 
                     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -254,6 +278,41 @@
                         </Setter>
                     </Style>
 
+
+
+                    <Style x:Key="MaterialDesignDiscreteHorizontalSlider" TargetType="{x:Type Slider}">
+                        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                        <Setter Property="Orientation" Value="Horizontal" />
+                        <Setter Property="Background" Value="{x:Null}"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="IsMoveToPointEnabled" Value="True" />
+                        <Setter Property="IsSnapToTickEnabled" Value="True"/>
+                        <Setter Property="Foreground" Value="{StaticResource RollEmBrush}" />
+                        <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1" />
+                        <Setter Property="SnapsToDevicePixels" Value="False" />
+                        <Setter Property="UseLayoutRounding" Value="False" />
+                        <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignCheckBoxDisabled}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style x:Key="MaterialDesignDiscreteSlider" TargetType="{x:Type Slider}" BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignCheckBoxDisabled}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}"/>
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderVertical}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
                     <Style
                         x:Key="DiceTextBox"
                         BasedOn="{StaticResource MaterialDesignTextBoxBase}"
@@ -262,6 +321,15 @@
                         <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DiceBrush}" />
                         <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource DiceBrush}" />
                         <Setter Property="CaretBrush" Value="{DynamicResource DiceBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="RollEmTextBox"
+                        BasedOn="{StaticResource MaterialDesignTextBoxBase}"
+                        TargetType="{x:Type TextBox}">
+                        <Setter Property="TextAlignment" Value="Left" />
+                        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource RollEmBrush}" />
+                        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource RollEmBrush}" />
+                        <Setter Property="CaretBrush" Value="{DynamicResource RollEmBrush}" />
                     </Style>
 
                     <converters:ConverterVisibility x:Key="ConverterVisibility" />

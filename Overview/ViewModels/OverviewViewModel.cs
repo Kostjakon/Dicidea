@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DicePage.ViewModels;
@@ -36,11 +37,12 @@ namespace OverviewPage.ViewModels
             _diceListViewModel = new DiceListViewModel(_diceDataService);
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);
             GoToRollEmSpaceCommand = new DelegateCommand<object>(GoToRollEmSpace);
-            getLastRolledDice();
+            GoToLastRolledRollEmSpaceCommand = new DelegateCommand<object>(GoToLastRolledRollEmSpace);
             _parameters = new NavigationParameters
             {
                 { "diceListViewModel", _diceListViewModel }
             };
+            getLastRolledDice();
         }
 
         public Dice LastRolledDice
@@ -57,6 +59,7 @@ namespace OverviewPage.ViewModels
 
         public ICommand GoToDiceCommand { get; private set; }
         public ICommand GoToRollEmSpaceCommand { get; private set; }
+        public ICommand GoToLastRolledRollEmSpaceCommand { get; private set; }
 
         private bool CanGoToDice(object obj)
         {
@@ -72,6 +75,14 @@ namespace OverviewPage.ViewModels
         public void GoToRollEmSpace(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview), _parameters);
+            _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
+        }
+        public void GoToLastRolledRollEmSpace(object obj)
+        {
+            DiceViewModel selectedDice = _diceListViewModel.AllDice.First(d => d.Dice == LastRolledDice);
+            _parameters.Add("selectedDice", selectedDice);
+            _regionManager.Regions[RegionNames.MainContentRegion].RemoveAll();
+            _regionManager.RequestNavigate(RegionNames.LeftBottomContentRegion, nameof(RollEmSpaceDetail), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
         public DelegateCommand GoToMenu =>

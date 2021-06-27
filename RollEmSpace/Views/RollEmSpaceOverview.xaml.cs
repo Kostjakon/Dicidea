@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
 using DicePage.ViewModels;
 using Dicidea.Core.Constants;
@@ -23,13 +24,16 @@ namespace RollEmSpacePage.Views
 
         private void SelectDice_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var parameters = _rollEmSpaceOverviewViewModel.Parameters;
-            var dice = (sender as ListView).SelectedItem;
+            //var parameters = _rollEmSpaceOverviewViewModel.Parameters;
+            var parameters = new NavigationParameters();
+            parameters.Add("diceListViewModel", _rollEmSpaceOverviewViewModel.Parameters.GetValue<DiceListViewModel>("diceListViewModel"));
+            var dice = (sender as ListView).SelectedItem as DiceViewModel;
+            if (dice != null) Debug.WriteLine(dice.Dice.Name);
             //DialogCoordinator.Instance),selectedContact
             if (dice != null)
             {
                 //DiceViewModel toAdd = (DiceViewModel) dice;
-                parameters.Add("selectedDice", (DiceViewModel)dice);
+                parameters.Add("selectedDice", dice);
                 //parameters.Add("diceListViewModel", _diceOverviewViewModel.DiceListViewModel);
                 parameters.Add("groupedDiceView", _rollEmSpaceOverviewViewModel.GroupedDiceView);
                 parameters.Add("regionManager", _rollEmSpaceOverviewViewModel.RegionManager);

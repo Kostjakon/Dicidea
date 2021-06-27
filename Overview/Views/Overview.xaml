@@ -91,7 +91,7 @@
                         UriSource="../Icons/dice-solid.svg" />
                     <Label
                         HorizontalAlignment="Center"
-                        Content="Roll'em space"
+                        Content="Roll'em"
                         FontSize="{StaticResource HeaderM}" />
                 </StackPanel>
             </Button>
@@ -102,7 +102,8 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Padding="0"
-                Background="{StaticResource RollEmBrush}">
+                Background="{StaticResource RollEmBrush}"
+                Command="{Binding GoToLastRolledRollEmSpaceCommand}">
                 <Grid Width="{StaticResource DoubleOverviewTileHeight}" Height="{StaticResource OverviewTileHeight}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -125,7 +126,7 @@
                             UriSource="../Icons/dice-solid.svg" />
                         <Label
                             HorizontalAlignment="Center"
-                            Content="Roll'em space"
+                            Content="Roll'em"
                             FontSize="{StaticResource HeaderM}" />
                     </StackPanel>
                     <StackPanel

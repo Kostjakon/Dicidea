@@ -163,6 +163,7 @@ namespace DicePage.ViewModels
         private void Flip(object obj)
         {
             _diceViewModel.SelectedElement = this;
+            _categoryViewModel.SelectedElement = this;
             _diceViewModel.SelectedCategory = _categoryViewModel;
             Debug.WriteLine("Flip Element: " + Element.Name);
             Debug.WriteLine("Is selected: "+IsSelected);

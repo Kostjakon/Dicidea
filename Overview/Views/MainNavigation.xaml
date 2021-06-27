@@ -63,7 +63,7 @@
                     UriSource="../Icons/dice-solid.svg" />
                 <Label
                     VerticalAlignment="Center"
-                    Content="Roll 'em Spaces"
+                    Content="Roll 'em"
                     FontSize="{StaticResource HeaderL}" />
             </StackPanel>
         </Button>

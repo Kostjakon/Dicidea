@@ -36,7 +36,7 @@ namespace IdeaPage.ViewModels
         public async Task DeleteIdeaValueAsync(IdeaValueViewModel ideaValue)
         {
             IdeaValues.Remove(ideaValue);
-            await _ideaDataService.DeleteIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValue.IdeaValue);
+            //await _ideaDataService.DeleteIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValue.IdeaValue);
         }
 
         public async Task<IdeaValueViewModel> AddIdeaValueAsync()

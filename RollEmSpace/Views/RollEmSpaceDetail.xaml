@@ -2,7 +2,662 @@
     x:Class="RollEmSpacePage.Views.RollEmSpaceDetail"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid />
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    av:DesignHeight="1093.923"
+    av:DesignWidth="1557"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="av">
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Rectangle
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Grid.Column="0"
+            Width="280"
+            Fill="Black" />
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalContentAlignment="Left"
+            Command="{Binding GoToRollEmSpaceOverviewCommand}"
+            Style="{StaticResource NavigationButton}">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <svg:SVGImage
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource MarginHorizontal20}"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/iconmonstr-redo-3.svg" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Roll'em"
+                    FontSize="{StaticResource HeaderL}" />
+            </StackPanel>
+        </Button>
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="{StaticResource MarginHorizontalTop20}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="{StaticResource HeaderL}"
+                FontWeight="SemiBold"
+                Foreground="{StaticResource RollEmBrush}"
+                Text="{Binding SelectedDice.Dice.Name}"
+                TextTrimming="WordEllipsis" />
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="{StaticResource MarginRight20}"
+                HorizontalAlignment="Right"
+                Background="{StaticResource RollEmBrush}"
+                Command="{Binding GoToDiceCommand}"
+                Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="20"
+                    Height="20"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/share-square-solid.svg" />
+            </Button>
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="{StaticResource MarginHorizontal20}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="{StaticResource FontSizeM}"
+                Text="Amount of ideas:"
+                TextTrimming="WordEllipsis" />
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="{StaticResource MarginRight40Top10}"
+                Orientation="Horizontal">
+                <Slider
+                    Width="48"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Maximum="10"
+                    Minimum="1"
+                    TickFrequency="1"
+                    TickPlacement="BottomRight"
+                    Value="{Binding SelectedDice.Dice.Amount}" />
+                <TextBlock
+                    MaxHeight="20"
+                    Width="18"
+                    Margin="{StaticResource MarginLeft10}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource FontSizeM}"
+                    Text="{Binding SelectedDice.Dice.Amount}"
+                    TextTrimming="WordEllipsis"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+        <ListView
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            Focusable="False"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding SelectedDice.GroupedCategoriesView}"
+            ScrollViewer.CanContentScroll="False"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="20,10,20,0" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Background="Black">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            IsChecked="{Binding Category.Active}"
+                            Style="{StaticResource MaterialDesignRollEmCheckbox}" />
+                        <Grid
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="{StaticResource MarginAllSides10}"
+                            HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                MaxHeight="28"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource HeaderM}"
+                                Text="{Binding Category.Name}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Grid.Row="1"
+                                MaxHeight="20"
+                                Margin="{StaticResource MarginTop4Left6}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource FontSizeS}"
+                                Text="{Binding Category.Description}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                        </Grid>
+
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="{StaticResource MarginAllSides10}"
+                            Orientation="Horizontal">
+                            <Slider
+                                Width="48"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Maximum="10"
+                                Minimum="1"
+                                TickFrequency="1"
+                                TickPlacement="BottomRight"
+                                Value="{Binding Category.Amount}" />
+                            <TextBlock
+                                MaxHeight="20"
+                                Width="14"
+                                Margin="{StaticResource MarginLeft10}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource FontSizeM}"
+                                Text="{Binding Category.Amount}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ListView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Focusable="False"
+                            ItemsSource="{Binding GroupedElementsView}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0,0,10,0" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Background="{StaticResource CategoryBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <CheckBox
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Margin="{StaticResource MarginLeft10}"
+                                            HorizontalAlignment="Left"
+                                            IsChecked="{Binding Element.Active}"
+                                            Style="{StaticResource MaterialDesignRollEmCheckbox}" />
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            MaxHeight="20"
+                                            Margin="{StaticResource MarginAllSides10}"
+                                            HorizontalAlignment="Left"
+                                            FontSize="{StaticResource FontSizeM}"
+                                            Text="{Binding Element.Name}"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <StackPanel
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Margin="{StaticResource MarginAllSides10}"
+                                            Orientation="Horizontal">
+                                            <Slider
+                                                Width="48"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Maximum="10"
+                                                Minimum="1"
+                                                TickFrequency="1"
+                                                TickPlacement="BottomRight"
+                                                Value="{Binding Element.Amount}" />
+                                            <TextBlock
+                                                MaxHeight="20"
+                                                Width="12"
+                                                Margin="{StaticResource MarginLeft10}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="{StaticResource FontSizeS}"
+                                                Text="{Binding Element.Amount}"
+                                                TextTrimming="WordEllipsis"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            MaxHeight="20"
+                                            Margin="{StaticResource MarginHorizontalBottom10}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{StaticResource FontSizeS}"
+                                            Text="Amount of Values:"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <StackPanel
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="{StaticResource MarginHorizontalBottom10}"
+                                            Orientation="Horizontal">
+                                            <Slider
+                                                Width="48"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Maximum="10"
+                                                Minimum="1"
+                                                TickFrequency="1"
+                                                TickPlacement="BottomRight"
+                                                Value="{Binding Element.ValueAmount}" />
+                                            <TextBlock
+                                                MaxHeight="20"
+                                                Width="12"
+                                                Margin="{StaticResource MarginLeft10}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="{StaticResource FontSizeS}"
+                                                Text="{Binding Element.ValueAmount}"
+                                                TextTrimming="WordEllipsis"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <ListView
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="3"
+                                            Focusable="False"
+                                            ItemsSource="{Binding GroupedValuesView}"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListViewItem}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Margin" Value="10,0,10,4" />
+                                                    <Setter Property="BorderThickness" Value="0" />
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Center"
+                                                        Background="Black">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <StackPanel
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center"
+                                                            Orientation="Horizontal">
+                                                            <CheckBox
+                                                                Margin="{StaticResource MarginLeft10}"
+                                                                IsChecked="{Binding Value.Active}"
+                                                                Style="{StaticResource MaterialDesignRollEmCheckbox}" />
+                                                            <TextBlock
+                                                                MaxHeight="20"
+                                                                Margin="{StaticResource MarginAllSides10}"
+                                                                VerticalAlignment="Center"
+                                                                FontSize="{StaticResource FontSizeS}"
+                                                                Text="{Binding Value.Name}"
+                                                                TextTrimming="WordEllipsis"
+                                                                TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedDice.Dice.Name}"
+                FontSize="{StaticResource HeaderL}" />
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedDice.Dice.Description}"
+                FontSize="{StaticResource FontSizeM}" />
+        </StackPanel>
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="{StaticResource MarginHorizontal20}"
+            HorizontalAlignment="Right"
+            Command="{Binding RollCommand}"
+            Style="{StaticResource ContentEditorButton}">
+            <svg:SVGImage
+                Width="28"
+                Height="28"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                OverrideColor="{StaticResource IconColor}"
+                UriSource="../Icons/dice-solid.svg" />
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding GroupedIdeasView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="20" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center" Background="Black">
+                        <WrapPanel Margin="{StaticResource MarginAllSides20}">
+                            <Grid Width="400">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Orientation="Vertical">
+                                    <TextBlock
+                                        Width="270"
+                                        Height="40"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding Idea.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="{StaticResource MarginHorizontal10}">
+                                    <TextBlock
+                                        Margin="{StaticResource MarginBottom20}"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource FontSizeL}"
+                                        Text="{Binding Idea.Description}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ListView
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Focusable="False"
+                                    ItemsSource="{Binding GroupedIdeaCategoriesView}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListViewItem}">
+                                            <Setter Property="Padding" Value="0" />
+                                            <Setter Property="Margin" Value="0" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Width="400"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                                <StackPanel
+                                                    Width="400"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource RollEmBrush}"
+                                                    Orientation="Horizontal">
+                                                    <Button
+                                                        Width="28"
+                                                        Height="28"
+                                                        Margin="{StaticResource MarginLeft10}"
+                                                        Background="Transparent"
+                                                        Command="{Binding DeleteCommand}"
+                                                        Style="{StaticResource ContentEditorButton}">
+                                                        <svg:SVGImage
+                                                            Width="20"
+                                                            Height="20"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            OverrideColor="{StaticResource IconColor}"
+                                                            UriSource="../Icons/trash-solid.svg" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Width="230"
+                                                        MaxHeight="20"
+                                                        Margin="{StaticResource MarginAllSides20}"
+                                                        FontSize="{StaticResource HeaderM}"
+                                                        Text="{Binding IdeaCategory.Name}"
+                                                        TextTrimming="WordEllipsis"
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <WrapPanel Width="400" VerticalAlignment="Top">
+                                                    <ListView
+                                                        Focusable="True"
+                                                        ItemsSource="{Binding GroupedIdeaElementsView}"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Width="400" />
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                <Setter Property="Padding" Value="4,4,4,20" />
+                                                                <Setter Property="Margin" Value="0" />
+                                                                <Setter Property="BorderThickness" Value="0" />
+                                                                <Setter Property="VerticalAlignment" Value="Top" />
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <WrapPanel
+                                                                    Width="192"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Top"
+                                                                    Background="{StaticResource CategoryBrush}">
+                                                                    <StackPanel
+                                                                        Width="192"
+                                                                        HorizontalAlignment="Left"
+                                                                        VerticalAlignment="Top"
+                                                                        Background="{StaticResource CategoryBrush}"
+                                                                        Orientation="Horizontal">
+                                                                        <Button
+                                                                            Width="28"
+                                                                            Height="28"
+                                                                            Margin="{StaticResource MarginLeft20}"
+                                                                            Background="Transparent"
+                                                                            Command="{Binding DeleteCommand}"
+                                                                            Style="{StaticResource ContentEditorButton}">
+                                                                            <svg:SVGImage
+                                                                                Width="20"
+                                                                                Height="20"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                VerticalContentAlignment="Center"
+                                                                                OverrideColor="{StaticResource IconColor}"
+                                                                                UriSource="../Icons/trash-solid.svg" />
+                                                                        </Button>
+                                                                        <TextBlock
+                                                                            MaxHeight="20"
+                                                                            Margin="{StaticResource MarginAllSides20}"
+                                                                            FontSize="{StaticResource FontSizeM}"
+                                                                            Text="{Binding IdeaElement.Name}"
+                                                                            TextTrimming="WordEllipsis"
+                                                                            TextWrapping="Wrap" />
+                                                                    </StackPanel>
+                                                                    <StackPanel Width="192">
+                                                                        <ListView
+                                                                            Focusable="True"
+                                                                            ItemsSource="{Binding GroupedIdeaValuesView}"
+                                                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                                            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                                            <ListView.ItemContainerStyle>
+                                                                                <Style TargetType="{x:Type ListViewItem}">
+                                                                                    <Setter Property="Padding" Value="0" />
+                                                                                    <Setter Property="Margin" Value="0" />
+                                                                                    <Setter Property="BorderThickness" Value="0" />
+                                                                                </Style>
+                                                                            </ListView.ItemContainerStyle>
+                                                                            <ListView.ItemTemplate>
+                                                                                <DataTemplate>
+                                                                                    <StackPanel
+                                                                                        Width="192"
+                                                                                        HorizontalAlignment="Left"
+                                                                                        VerticalAlignment="Center"
+                                                                                        Background="Black"
+                                                                                        Orientation="Horizontal">
+                                                                                        <Button
+                                                                                            Width="28"
+                                                                                            Height="28"
+                                                                                            Margin="{StaticResource MarginLeft20}"
+                                                                                            Background="Transparent"
+                                                                                            Command="{Binding DeleteCommand}"
+                                                                                            Style="{StaticResource ContentEditorButton}">
+                                                                                            <svg:SVGImage
+                                                                                                Width="16"
+                                                                                                Height="16"
+                                                                                                HorizontalContentAlignment="Center"
+                                                                                                VerticalContentAlignment="Center"
+                                                                                                OverrideColor="{StaticResource IconColor}"
+                                                                                                UriSource="../Icons/trash-solid.svg" />
+                                                                                        </Button>
+                                                                                        <TextBlock
+                                                                                            MaxHeight="20"
+                                                                                            Margin="{StaticResource MarginHorizontal20}"
+                                                                                            VerticalAlignment="Center"
+                                                                                            FontSize="{StaticResource FontSizeS}"
+                                                                                            Text="{Binding IdeaValue.Name}"
+                                                                                            TextTrimming="WordEllipsis"
+                                                                                            TextWrapping="Wrap" />
+                                                                                    </StackPanel>
+                                                                                </DataTemplate>
+                                                                            </ListView.ItemTemplate>
+                                                                        </ListView>
+                                                                    </StackPanel>
+                                                                </WrapPanel>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </WrapPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
 </UserControl>

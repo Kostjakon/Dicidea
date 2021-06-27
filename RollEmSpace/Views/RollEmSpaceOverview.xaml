@@ -57,7 +57,7 @@
                                     Margin="{StaticResource MarginAllSides20}"
                                     FontSize="{StaticResource HeaderXL}"
                                     FontWeight="SemiBold"
-                                    Foreground="{StaticResource DiceBrush}"
+                                    Foreground="{StaticResource RollEmBrush}"
                                     Text="{Binding Path=Name, Converter={StaticResource NameToInitialConverter}}" />
                             </Grid>
                         </DataTemplate>
@@ -119,7 +119,7 @@
                                         Margin="{StaticResource MarginLeft10}"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
-                                        Background="{StaticResource DiceBrush}"
+                                        Background="{StaticResource RollEmBrush}"
                                         Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                         Content="Flip"
                                         FontSize="{StaticResource FontSizeM}"
@@ -289,7 +289,7 @@
                                         Margin="{StaticResource MarginBottom20}"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
-                                        Background="{StaticResource DiceBrush}"
+                                        Background="{StaticResource RollEmBrush}"
                                         Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                         Content="Flip"
                                         FontSize="{StaticResource FontSizeM}" />

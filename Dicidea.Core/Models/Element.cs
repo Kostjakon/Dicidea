@@ -11,6 +11,7 @@ namespace Dicidea.Core.Models
         private string _name;
         private int _amount;
         private bool _active;
+        private int _valueAmount;
 
         public Element(bool newElement)
         {
@@ -18,6 +19,7 @@ namespace Dicidea.Core.Models
             Id = Guid.NewGuid().ToString("N"); 
             Name = "";
             Amount = 1;
+            ValueAmount = 1;
             Active = true;
             Values = new List<Value>
             {
@@ -39,6 +41,11 @@ namespace Dicidea.Core.Models
         {
             get => _amount;
             set => SetProperty(ref _amount, value);
+        }
+        public int ValueAmount
+        {
+            get => _valueAmount;
+            set => SetProperty(ref _valueAmount, value);
         }
 
         public bool Active
