@@ -13,6 +13,7 @@ using MenuPage.Views;
 using OverviewPage.Views;
 using Prism.Regions;
 using RollEmSpacePage.Views;
+using IdeaPage.Views;
 
 namespace OverviewPage.ViewModels
 {
@@ -60,6 +61,12 @@ namespace OverviewPage.ViewModels
             new DelegateCommand(() =>
             {
                 _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(MenuOverview), _parameters);
+                _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
+            });
+        public DelegateCommand GoToIdeas =>
+            new DelegateCommand(() =>
+            {
+                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(IdeaOverview), _parameters);
                 _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
             });
 

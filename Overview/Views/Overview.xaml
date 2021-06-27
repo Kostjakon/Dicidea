@@ -58,6 +58,7 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Background="{StaticResource MenuBrush}"
+                IsEnabled="False"
                 Command="{Binding GoToMenu}">
                 <StackPanel Orientation="Vertical">
                     <svg1:SVGImage

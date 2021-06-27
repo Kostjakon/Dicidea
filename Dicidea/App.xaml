@@ -139,6 +139,27 @@
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Width" Value="280" />
                         <Setter Property="Height" Value="80" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter
+                                            x:Name="MyContentPresenter"
+                                            Margin="{StaticResource MarginAllSides10}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding Content}" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="{StaticResource CategoryBrush}" />
+                                <Setter Property="Opacity" Value="0.3" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                     <Style x:Key="DiceCard" TargetType="materialDesign:Flipper">
                         <Setter Property="materialDesign:Flipper.Background" Value="Black" />
@@ -281,17 +302,17 @@
 
 
                     <Style x:Key="MaterialDesignDiscreteHorizontalSlider" TargetType="{x:Type Slider}">
-                        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
                         <Setter Property="Orientation" Value="Horizontal" />
-                        <Setter Property="Background" Value="{x:Null}"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Background" Value="{x:Null}" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="IsMoveToPointEnabled" Value="True" />
-                        <Setter Property="IsSnapToTickEnabled" Value="True"/>
+                        <Setter Property="IsSnapToTickEnabled" Value="True" />
                         <Setter Property="Foreground" Value="{StaticResource RollEmBrush}" />
                         <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1" />
                         <Setter Property="SnapsToDevicePixels" Value="False" />
                         <Setter Property="UseLayoutRounding" Value="False" />
-                        <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}"/>
+                        <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}" />
                         <Style.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignCheckBoxDisabled}" />
@@ -299,16 +320,19 @@
                         </Style.Triggers>
                     </Style>
 
-                    <Style x:Key="MaterialDesignDiscreteSlider" TargetType="{x:Type Slider}" BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+                    <Style
+                        x:Key="MaterialDesignDiscreteSlider"
+                        BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}"
+                        TargetType="{x:Type Slider}">
                         <Style.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignCheckBoxDisabled}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Horizontal">
-                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}"/>
+                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderHorizontal}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderVertical}"/>
+                                <Setter Property="Template" Value="{StaticResource MaterialDesignDiscreteSliderVertical}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>

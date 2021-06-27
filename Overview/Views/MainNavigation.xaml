@@ -13,7 +13,8 @@
         <Button
             HorizontalContentAlignment="Left"
             Command="{Binding GoToMenu}"
-            Style="{StaticResource NavigationButton}">
+            Style="{StaticResource NavigationButton}"
+            IsEnabled="False">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                 <svg:SVGImage
                     Width="40"
@@ -83,6 +84,26 @@
                 <Label
                     VerticalAlignment="Center"
                     Content="Dice"
+                    FontSize="{StaticResource HeaderL}" />
+            </StackPanel>
+        </Button>
+        <Button
+            HorizontalContentAlignment="Left"
+            Command="{Binding GoToIdeas}"
+            Style="{StaticResource NavigationButton}"
+            IsEnabled="False">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <svg:SVGImage
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource MarginHorizontal20}"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/iconmonstr-paintbrush-6.svg" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Ideas"
                     FontSize="{StaticResource HeaderL}" />
             </StackPanel>
         </Button>

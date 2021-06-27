@@ -73,6 +73,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Dice\DicePage.csproj" />
     <ProjectReference Include="..\Dicidea.Core\Dicidea.Core.csproj" />
+    <ProjectReference Include="..\IdeaPage\IdeaPage.csproj" />
     <ProjectReference Include="..\Menu\MenuPage.csproj" />
     <ProjectReference Include="..\RollEmSpace\RollEmSpacePage.csproj" />
   </ItemGroup>
