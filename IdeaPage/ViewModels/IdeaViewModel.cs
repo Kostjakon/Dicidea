@@ -11,20 +11,23 @@ using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
     public class IdeaViewModel : NotifyPropertyChanges
     {
-        private IdeaCategoryListViewModel _ideaCategoryListViewModel;
+        private readonly IdeaCategoryListViewModel _ideaCategoryListViewModel;
         private ListCollectionView _groupedIdeaCategoriesView;
         private bool _isEditEnabled;
+        private readonly IDialogService _dialogService;
 
         private bool _isEditDisabled = true;
 
         //private readonly object _lock = new object();
-        public IdeaViewModel(Idea idea, IIdeaDataService ideaDataService)
+        public IdeaViewModel(Idea idea, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
             if (GroupedIdeaCategoriesView != null)
             {
@@ -37,11 +40,10 @@ namespace IdeaPage.ViewModels
             IdeaViewModel self = this;
             if (_ideaCategoryListViewModel == null)
             {
-                _ideaCategoryListViewModel = new IdeaCategoryListViewModel(self, ideaDataService);
+                _ideaCategoryListViewModel = new IdeaCategoryListViewModel(self, ideaDataService, _dialogService);
             }
 
             CreateGroupedView();
-            AddCommand = new DelegateCommand(AddExecute);
             EditCommand = new DelegateCommand(EditExecute);
         }
 
@@ -66,24 +68,7 @@ namespace IdeaPage.ViewModels
 
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
-
-        private async void AddExecute()
-        {
-            Debug.WriteLine("Add IdeaCategory");
-            await _ideaCategoryListViewModel.AddIdeaCategoryAsync();
-            //GroupedCategoriesView.Refresh();
-
-        }
-
-        /*
-        public void AddCategory()
-        {
-            Dispatcher.BeginInvoke((Action) (async () =>
-            {
-                await Task.Run(_categoryListViewModel.AddCategoryAsync);
-            }));
-        }
-        */
+        
 
         public void EditExecute()
         {
@@ -108,7 +93,7 @@ namespace IdeaPage.ViewModels
         {
             if (propertyName == nameof(IdeaCategory.Name))
             {
-                //GroupedCategoriesView.Refresh(); <- Hier ist das Problem
+                GroupedIdeaCategoriesView.Refresh();
             }
         }
 
@@ -116,10 +101,10 @@ namespace IdeaPage.ViewModels
         {
             ObservableCollection<IdeaCategoryViewModel> ideaCategoryViewModels =
                 _ideaCategoryListViewModel.IdeaCategories;
-            //foreach (var categoryViewModel in categoryViewModels)
-            //{
-            //    categoryViewModel.Category.WhenPropertyChanged.Subscribe(OnNext);
-            //}
+            foreach (var ideaCategoryViewModel in ideaCategoryViewModels)
+            {
+                ideaCategoryViewModel.IdeaCategory.WhenPropertyChanged.Subscribe(OnNext);
+            }
 
             var propertyName = "IdeaCategory.Name";
             GroupedIdeaCategoriesView = new ListCollectionView(ideaCategoryViewModels)
@@ -127,7 +112,7 @@ namespace IdeaPage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = {new SortDescription(propertyName, ListSortDirection.Ascending)}
             };
-            //GroupedCategoriesView.GroupDescriptions.Add(new PropertyGroupDescription
+            //GroupedIdeaCategoriesView.GroupDescriptions.Add(new PropertyGroupDescription
             //{
             //    PropertyName = propertyName,
             //    Converter = new NameToInitialConverter()
@@ -137,17 +122,10 @@ namespace IdeaPage.ViewModels
                 (sender, args) => OnPropertyChanged(nameof(SelectedIdeaCategory));
         }
 
-        public async Task AddIdeaCategoryAsync()
-        {
-            Debug.WriteLine("Add Idea Category");
-            await _ideaCategoryListViewModel.AddIdeaCategoryAsync();
-            //GroupedCategoriesView.Refresh();
-        }
-
         public async Task DeleteIdeaCategoryAsync()
         {
-            Debug.WriteLine("Delete Dice");
-            await _ideaCategoryListViewModel.DeleteIdeaCategoryAsync(SelectedIdeaCategory);
+            var selectedIdeaCategory = SelectedIdeaCategory;
+            await _ideaCategoryListViewModel.DeleteIdeaCategoryAsync(selectedIdeaCategory);
             GroupedIdeaCategoriesView.Refresh();
         }
 

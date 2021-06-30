@@ -21,15 +21,13 @@ namespace OverviewPage.ViewModels
     {
         private IRegionManager _regionManager;
         private NavigationParameters _parameters;
-        private DiceListViewModel _diceListViewModel;
         public MainNavigationViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);
             
         }
-
-        public DiceListViewModel DiceListViewModel { get => _diceListViewModel; }
+        
 
         public ICommand GoToDiceCommand { get; private set; }
 
@@ -72,25 +70,8 @@ namespace OverviewPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Debug.WriteLine("Navigated to Dice Overview");
-            if (navigationContext != null)
-            {
-                Debug.WriteLine("Navigation Context is not null");
-                if (navigationContext.Parameters["diceListViewModel"] != null)
-                {
-                    Debug.WriteLine("diceListViewModel is not null");
-                    _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
-                }
-
-                if (navigationContext.Parameters != null)
-                {
-                    _parameters = navigationContext.Parameters;
-                }
-            }
-            else
-            {
-                //Message = $"Dice Active from your Prism Module, Dice Anzahl: {AllDice.Count}! Es wurde kein Würfel ausgewählt";
-            }
+            Debug.WriteLine("Main Navigation");
+            _parameters = navigationContext.Parameters;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

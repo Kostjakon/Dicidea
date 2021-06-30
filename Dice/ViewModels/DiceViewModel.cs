@@ -15,6 +15,7 @@ using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
+using Prism.Services.Dialogs;
 using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
 
 namespace DicePage.ViewModels
@@ -26,9 +27,12 @@ namespace DicePage.ViewModels
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
         private ElementViewModel _selectedElement;
+
+        private readonly IDialogService _dialogService;
         //private readonly object _lock = new object();
-        public DiceViewModel(Dice dice, IDiceDataService diceDataService)
+        public DiceViewModel(Dice dice, IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
             if(GroupedCategoriesView != null)
             {
@@ -40,7 +44,7 @@ namespace DicePage.ViewModels
             DiceViewModel self = this;
             if (_categoryListViewModel == null)
             {
-                _categoryListViewModel = new CategoryListViewModel(self, diceDataService);
+                _categoryListViewModel = new CategoryListViewModel(self, diceDataService, _dialogService);
             }
             CreateGroupedView();
             AddCommand = new DelegateCommand(AddExecute);
@@ -157,7 +161,6 @@ namespace DicePage.ViewModels
         }
         public async Task DeleteCategoryAsync()
         {
-            Debug.WriteLine("Delete Dice");
             await _categoryListViewModel.DeleteCategoryAsync(SelectedCategory);
             GroupedCategoriesView.Refresh();
         }

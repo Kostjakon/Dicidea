@@ -6,30 +6,30 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using Dicidea.Core.Constants;
-using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
+using Dicidea.Core.Services;
 using IdeaPage.Views;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
-    public class IdeaOverviewViewModel : NotifyPropertyChanges, INavigationAware
+    public class IdeaDetailViewModel : NotifyPropertyChanges, INavigationAware
     {
         private string _filterText;
         private SortOrder _sortOrder = SortOrder.Unsorted;
         private ListCollectionView _groupedIdeaView;
         private IdeaListViewModel _ideaListViewModel;
         private readonly IRegionManager _regionManager;
+        private NavigationParameters _parameters;
         private readonly IDialogService _dialogService;
 
-        public IdeaOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
+        public IdeaDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
+
             _dialogService = dialogService;
             _regionManager = regionManager;
             if (IdeaView != null)
@@ -46,12 +46,6 @@ namespace IdeaPage.ViewModels
         {
             get;
             private set;
-        }
-
-        public NavigationParameters Parameters
-        {
-            get;
-            set;
         }
 
         public IdeaListViewModel IdeaListViewModel
@@ -84,11 +78,10 @@ namespace IdeaPage.ViewModels
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
-        public DelegateCommand GoToOverview =>
+        public DelegateCommand GoToIdeaOverview =>
             new DelegateCommand(() =>
             {
-                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(IdeaOverview), Parameters);
-                _regionManager.Regions[RegionNames.LeftContentRegion].RemoveAll();
+                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(IdeaOverview), _parameters);
                 _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
             });
 
@@ -172,7 +165,6 @@ namespace IdeaPage.ViewModels
 
         private async void DeleteExecute()
         {
-            Debug.WriteLine("Delete Idea");
             var selectedIdea = SelectedIdea;
             bool delete = false;
             if (selectedIdea == null) return;
@@ -184,11 +176,10 @@ namespace IdeaPage.ViewModels
                 },
                 r =>
                 {
-                    if(r.Result == ButtonResult.None) return;
-                    if(r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
                     if (r.Result == ButtonResult.Yes) delete = true;
                 });
-
             if(!delete) return;
             await _ideaListViewModel.DeleteIdeaAsync(SelectedIdea);
             GroupedIdeaView.Refresh();
@@ -238,21 +229,32 @@ namespace IdeaPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Parameters = navigationContext.Parameters;
+            _parameters = navigationContext.Parameters;
             if (navigationContext != null)
             {
+                Debug.WriteLine("Navigated to IdeaDetailView");
                 if (navigationContext.Parameters["ideaListViewModel"] != null)
                 {
-                    Debug.WriteLine("Idea List View is not null");
-                    _ideaListViewModel = navigationContext.Parameters["ideaListViewModel"] as IdeaListViewModel;
-                    foreach (IdeaViewModel ideaViewModel in _ideaListViewModel.AllIdeas)
-                    {
-                        Debug.WriteLine(ideaViewModel.Idea.Name);
-                    }
+                    Debug.WriteLine("Set ideaListViewModel");
+                    _ideaListViewModel = navigationContext.Parameters.GetValue<IdeaListViewModel>("ideaListViewModel");
+                        //new IdeaListViewModel(navigationContext.Parameters.GetValue<IIdeaDataService>("ideaDataService"));
                     CreateGroupedView();
+                    if (navigationContext.Parameters["selectedIdea"] != null)
+                    {
+                        IdeaViewModel selectedIdea = navigationContext.Parameters["selectedIdea"] as IdeaViewModel;
+                        Debug.WriteLine("Selected Idea is: " + selectedIdea.Idea.Id);
+                        GroupedIdeaView.MoveCurrentTo(selectedIdea);
+                        GroupedIdeaView.Refresh();
+                        IdeaViewModel idea = GroupedIdeaView.CurrentItem as IdeaViewModel;
+                        Debug.WriteLine(idea == selectedIdea);
+                    }
+                    else
+                    {
+                        GroupedIdeaView.MoveCurrentToFirst();
+                        if (GroupedIdeaView.Count > 0) _parameters.Add("selectedIdea", GroupedIdeaView.GetItemAt(0));
+                    }
                 }
                 SortCommand = new DelegateCommand(SortExecute);
-                //_dialogCoordinator = navigationContext.Parameters.GetValue<IDialogCoordinator>("dialogCoordinator");
             }
         }
 

@@ -12,20 +12,23 @@ using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
     public class ElementViewModel : NotifyPropertyChanges
     {
         private readonly CategoryViewModel _categoryViewModel;
+        private readonly IDialogService _dialogService;
         private ValueListViewModel _valueListViewModel;
         private ListCollectionView _groupedValuesView;
         private IDiceDataService _diceDataService;
         private DiceViewModel _diceViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public ElementViewModel(Element element, CategoryViewModel categoryViewModel, DiceViewModel diceViewModel, IDiceDataService diceDataService)
+        public ElementViewModel(Element element, CategoryViewModel categoryViewModel, DiceViewModel diceViewModel, IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _categoryViewModel = categoryViewModel;
             _diceViewModel = diceViewModel;
             FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
@@ -37,7 +40,7 @@ namespace DicePage.ViewModels
             ElementViewModel self = this;
             if (_valueListViewModel == null)
             {
-                _valueListViewModel = new ValueListViewModel(diceViewModel.Dice, _categoryViewModel.Category, self, diceDataService);
+                _valueListViewModel = new ValueListViewModel(diceViewModel.Dice, _categoryViewModel.Category, self, diceDataService, _dialogService);
             }
             CreateGroupedView();
         }
@@ -121,7 +124,22 @@ namespace DicePage.ViewModels
         }
         public async void DeleteExecute()
         {
-            _categoryViewModel.SelectedElement = this;
+            var selectedElement = this;
+            bool delete = false;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete element?" },
+                    { "message", $"Do you really want to delete the element '{selectedElement.Element.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if (!delete) return;
+            _categoryViewModel.SelectedElement = selectedElement;
             await _categoryViewModel.DeleteElementAsync();
         }
 
@@ -155,7 +173,6 @@ namespace DicePage.ViewModels
         }
         public async Task DeleteValueAsync()
         {
-            Debug.WriteLine("Delete Value");
             await _valueListViewModel.DeleteValueAsync(SelectedValue);
             GroupedValuesView.Refresh();
         }

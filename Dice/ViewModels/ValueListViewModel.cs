@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -17,9 +18,11 @@ namespace DicePage.ViewModels
         private Category _selectedCategory;
         private ElementViewModel _selectedElement;
         private readonly IDiceDataService _diceDataService;
+        private readonly IDialogService _dialogService;
 
-        public ValueListViewModel(Dice dice, Category category, ElementViewModel element, IDiceDataService diceDataService)
+        public ValueListViewModel(Dice dice, Category category, ElementViewModel element, IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _diceDataService = diceDataService;
             _selectedDice = dice;
             _selectedCategory = category;
@@ -44,7 +47,7 @@ namespace DicePage.ViewModels
             var valueModel = new Value(true);
             await _diceDataService.AddValueAsync(_selectedDice, _selectedCategory, _selectedElement.Element, valueModel);
 
-            var newValue = new ValueViewModel(valueModel, _selectedElement);
+            var newValue = new ValueViewModel(valueModel, _selectedElement, _dialogService);
             // DICEVIEWMODEL!
             Values.Add(newValue);
             return newValue;
@@ -55,7 +58,7 @@ namespace DicePage.ViewModels
             Values = new ObservableCollection<ValueViewModel>();
             List<Value> values = _selectedElement.Element.Values;
             //Debug.WriteLine(categories != null);
-            if (values != null) values.ToList().ForEach(v => Values.Add(new ValueViewModel(v, _selectedElement)));
+            if (values != null) values.ToList().ForEach(v => Values.Add(new ValueViewModel(v, _selectedElement, _dialogService)));
         }
     }
 }

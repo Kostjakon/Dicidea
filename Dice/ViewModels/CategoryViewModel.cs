@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using DicePage.Views;
-using Dicidea.Core.Constants;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -23,17 +19,19 @@ namespace DicePage.ViewModels
         private readonly ElementListViewModel _elementListViewModel;
         private readonly DiceViewModel _diceViewModel;
         private ListCollectionView _groupedElementsView;
+        private readonly IDialogService _dialogService;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
 
-        public CategoryViewModel(DiceViewModel dice, Category category, IDiceDataService diceDataService)
+        public CategoryViewModel(DiceViewModel dice, Category category, IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             DeleteCommand = new DelegateCommand<object>(DeleteExecute);
             _diceViewModel = dice;
             Category = category;
             // TODO: SendMailCommand is not needed, because dice doesn't have an email
             var self = this;
-            _elementListViewModel ??= new ElementListViewModel(dice, self, diceDataService);
+            _elementListViewModel ??= new ElementListViewModel(dice, self, diceDataService, _dialogService);
             EditCommand = new DelegateCommand(EditExecute);
             ActivateCommand = new DelegateCommand(ActivateExecute);
             AddCommand = new DelegateCommand(AddExecute);
@@ -126,12 +124,27 @@ namespace DicePage.ViewModels
 
         private async void DeleteExecute(object obj)
         {
+            var selectedCategory = this;
+            bool delete = false;
+            if (selectedCategory == null) return;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete category?" },
+                    { "message", $"Do you really want to delete the category '{selectedCategory.Category.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if (!delete) return;
             _diceViewModel.SelectedCategory = this;
             await _diceViewModel.DeleteCategoryAsync();
         }
         public async Task DeleteElementAsync()
         {
-            Debug.WriteLine("Delete Element");
             await _elementListViewModel.DeleteElementAsync(SelectedElement);
             GroupedElementsView.Refresh();
         }

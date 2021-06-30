@@ -6,6 +6,7 @@ using OverviewPage.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 
 namespace OverviewPage
 {
@@ -14,15 +15,14 @@ namespace OverviewPage
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
 
-        public OverviewModule(IRegionManager regionManager)
+        public OverviewModule(IRegionManager regionManager, IDialogService dialogService)
         {
             _regionManager = regionManager;
             _regionManager = regionManager;
 
             DiceDataService = new DiceDataServiceJson();
-            RollEmSpaceDataService = new RollEmSpaceDataServiceJson(DiceDataService);
 
-            DiceListViewModel = new DiceListViewModel(DiceDataService);
+            DiceListViewModel = new DiceListViewModel(DiceDataService, dialogService);
 
             _parameters = new NavigationParameters();
             _parameters.Add("DiceListViewModel", DiceListViewModel);
@@ -33,7 +33,6 @@ namespace OverviewPage
         public IDiceDataService DiceDataService { get; }
 
         public DiceListViewModel DiceListViewModel { get; }
-        public IRollEmSpaceDataService RollEmSpaceDataService { get; }
 
         public void OnInitialized(IContainerProvider containerProvider)
         {

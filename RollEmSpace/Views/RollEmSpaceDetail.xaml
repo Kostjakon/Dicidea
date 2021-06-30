@@ -114,8 +114,8 @@
                     TickPlacement="BottomRight"
                     Value="{Binding SelectedDice.Dice.Amount}" />
                 <TextBlock
-                    MaxHeight="20"
                     Width="18"
+                    MaxHeight="20"
                     Margin="{StaticResource MarginLeft10}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -214,8 +214,8 @@
                                 TickPlacement="BottomRight"
                                 Value="{Binding Category.Amount}" />
                             <TextBlock
-                                MaxHeight="20"
                                 Width="14"
+                                MaxHeight="20"
                                 Margin="{StaticResource MarginLeft10}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -288,8 +288,8 @@
                                                 TickPlacement="BottomRight"
                                                 Value="{Binding Element.Amount}" />
                                             <TextBlock
-                                                MaxHeight="20"
                                                 Width="12"
+                                                MaxHeight="20"
                                                 Margin="{StaticResource MarginLeft10}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
@@ -325,8 +325,8 @@
                                                 TickPlacement="BottomRight"
                                                 Value="{Binding Element.ValueAmount}" />
                                             <TextBlock
-                                                MaxHeight="20"
                                                 Width="12"
+                                                MaxHeight="20"
                                                 Margin="{StaticResource MarginLeft10}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
@@ -412,21 +412,35 @@
                 Content="{Binding SelectedDice.Dice.Description}"
                 FontSize="{StaticResource FontSizeM}" />
         </StackPanel>
-        <Button
+        <StackPanel
             Grid.Row="0"
             Grid.Column="1"
             Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right"
-            Command="{Binding RollCommand}"
-            Style="{StaticResource ContentEditorButton}">
-            <svg:SVGImage
-                Width="28"
-                Height="28"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                OverrideColor="{StaticResource IconColor}"
-                UriSource="../Icons/dice-solid.svg" />
-        </Button>
+            Orientation="Horizontal">
+            <Button Command="{Binding RollCommand}" Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="28"
+                    Height="28"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/dice-solid.svg" />
+            </Button>
+            <Button
+                Margin="{StaticResource MarginHorizontal10}"
+                HorizontalAlignment="Right"
+                Command="{Binding SaveCommand}"
+                Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="28"
+                    Height="28"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/save-solid.svg" />
+            </Button>
+        </StackPanel>
         <ListView
             Grid.Row="1"
             Grid.RowSpan="3"
@@ -461,14 +475,50 @@
                                 <StackPanel
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Orientation="Vertical">
+                                    Margin="{StaticResource MarginRight20Bottom10}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top"
+                                    Orientation="Horizontal">
                                     <TextBlock
-                                        Width="270"
-                                        Height="40"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
+                                        Width="248"
+                                        MaxHeight="60"
                                         FontSize="{StaticResource HeaderL}"
                                         Text="{Binding Idea.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Width="120"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Orientation="Vertical">
+                                    <StackPanel
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontSize="{StaticResource FontSizeS}"
+                                            Text="Save"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <CheckBox
+                                            Margin="4,0,0,0"
+                                            HorizontalAlignment="Right"
+                                            IsChecked="{Binding Idea.Save}"
+                                            Style="{StaticResource MaterialDesignRollEmCheckbox}" />
+                                    </StackPanel>
+                                    <TextBlock
+                                        Width="120"
+                                        Height="20"
+                                        Margin="0,4,2,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        FontSize="{StaticResource FontSizeS}"
+                                        Text="{Binding Idea.DiceName, StringFormat=Section: {0}}"
+                                        TextAlignment="Right"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -476,7 +526,7 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
-                                    Margin="{StaticResource MarginHorizontal10}">
+                                    HorizontalAlignment="Stretch">
                                     <TextBlock
                                         Margin="{StaticResource MarginBottom20}"
                                         VerticalAlignment="Top"

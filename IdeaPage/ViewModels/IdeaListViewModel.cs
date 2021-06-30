@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -15,17 +17,22 @@ namespace IdeaPage.ViewModels
     {
         private readonly IIdeaDataService _ideaDataService;
         private ObservableCollection<IdeaViewModel> _allIdeas;
+        private List<Idea> _ideas;
+        private readonly IDialogService _dialogService;
 
-        public IdeaListViewModel(IIdeaDataService ideaDataService)
+        public IdeaListViewModel(IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _ideaDataService = ideaDataService;
             LoadIdeasAsync();
         }
-        public IdeaListViewModel(List<Idea> ideas)
+        public IdeaListViewModel(List<Idea> ideas, IDialogService dialogService)//, IIdeaDataService ideaDataService
         {
+            _dialogService = dialogService;
+            //_ideaDataService = ideaDataService;
             AllIdeas = new ObservableCollection<IdeaViewModel>();
-            List<Idea> idea = ideas;
-            idea.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService)));
+            Ideas = ideas;
+            Ideas.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService, _dialogService)));
         }
 
         public ObservableCollection<IdeaViewModel> AllIdeas
@@ -34,21 +41,29 @@ namespace IdeaPage.ViewModels
             private set => SetProperty(ref _allIdeas, value);
         }
 
+        public List<Idea> Ideas
+        {
+            get => _ideas;
+            set => SetProperty(ref _ideas, value);
+        }
+
         public async Task DeleteIdeaAsync(IdeaViewModel idea)
         {
             AllIdeas.Remove(idea);
+            Ideas.Remove(idea.Idea);
             await _ideaDataService.DeleteIdeaAsync(idea.Idea);
         }
-
-        public async Task<IdeaViewModel> AddIdeaAsync()
+        
+        public async Task AddIdeasAsync(List<Idea> ideas)
         {
-            // TODO: Idea Konstruktor füllen
-            var ideaModel = new Idea();
-            await _ideaDataService.AddIdeaAsync(ideaModel);
-
-            var newIdea = new IdeaViewModel(ideaModel, _ideaDataService);
-            AllIdeas.Add(newIdea);
-            return newIdea;
+            foreach (Idea idea in ideas)
+            {
+                if (idea.Save)
+                {
+                    _allIdeas.Add(new IdeaViewModel(idea, _ideaDataService, _dialogService));
+                }
+            }
+            await _ideaDataService.AddIdeasAsync(ideas);
         }
 
         public async Task SaveIdeasAsync()
@@ -59,8 +74,9 @@ namespace IdeaPage.ViewModels
         private async Task LoadIdeasAsync()
         {
             AllIdeas = new ObservableCollection<IdeaViewModel>();
-            //List<Idea> idea = await _ideaDataService.GetAllIdeasAsync();
-            //idea.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService)));
+            Ideas = await _ideaDataService.GetAllIdeasAsync();
+            AllIdeas.Clear();
+            Ideas.ToList().ForEach(i => AllIdeas.Add(new IdeaViewModel(i, _ideaDataService, _dialogService)));
         }
     }
 }

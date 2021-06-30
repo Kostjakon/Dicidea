@@ -58,8 +58,8 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Background="{StaticResource MenuBrush}"
-                IsEnabled="False"
-                Command="{Binding GoToMenu}">
+                Command="{Binding GoToMenu}"
+                IsEnabled="False">
                 <StackPanel Orientation="Vertical">
                     <svg1:SVGImage
                         Width="{StaticResource OverviewIconSize}"
@@ -136,33 +136,33 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                         <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
                             HorizontalAlignment="Left"
-                            Text="Last rolled dice:"
                             FontSize="{StaticResource HeaderM}"
-                            TextTrimming="WordEllipsis"
-                                Width="{StaticResource OverviewTileHeight}"/>
+                            Text="Last rolled dice:"
+                            TextTrimming="WordEllipsis" />
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             Padding="{StaticResource PaddingBottom10}"
                             HorizontalAlignment="Center"
-                            Text="{Binding LastRolledDice.Name}"
                             FontSize="{StaticResource HeaderM}"
-                            TextTrimming="WordEllipsis"/>
+                            Text="{Binding LastRolledDice.Name}"
+                            TextTrimming="WordEllipsis" />
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             MaxHeight="72"
-                            TextWrapping="Wrap"
-                            TextTrimming="WordEllipsis"
-                            HorizontalAlignment="Center"
                             Margin="{StaticResource PaddingBottom10}"
+                            HorizontalAlignment="Center"
                             FontSize="{StaticResource FontSizeM}"
-                            Text="{Binding LastRolledDice.Description}"/>
+                            Text="{Binding LastRolledDice.Description}"
+                            TextTrimming="WordEllipsis"
+                            TextWrapping="Wrap" />
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
                             HorizontalAlignment="Left"
-                            Text="{Binding LastRolledDice.LastUsed, StringFormat= d}"
                             FontSize="{StaticResource FontSizeM}"
-                            TextTrimming="WordEllipsis"/>
+                            Text="{Binding LastRolledDice.LastUsed, StringFormat=d}"
+                            TextTrimming="WordEllipsis" />
                     </StackPanel>
                 </Grid>
             </Button>
@@ -195,7 +195,7 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Background="{StaticResource IdeasBrush}"
-                IsEnabled="False">
+                Command="{Binding GoToIdeaCommand}">
                 <StackPanel Orientation="Vertical">
                     <svg1:SVGImage
                         Width="{StaticResource OverviewIconSize}"
@@ -217,7 +217,7 @@
                 Height="{StaticResource OverviewTileHeight}"
                 Margin="{StaticResource MarginAllSides20}"
                 Background="{StaticResource IdeasBrush}"
-                IsEnabled="False">
+                Command="{Binding GoToLastRolledIdeaCommand}">
                 <Grid Width="{StaticResource DoubleOverviewTileHeight}" Height="{StaticResource OverviewTileHeight}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -250,24 +250,32 @@
                         VerticalAlignment="Center">
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
-                            Padding="{StaticResource PaddingBottom10}"
-                            MaxHeight="88"
-                            TextWrapping="Wrap"
-                            TextTrimming="WordEllipsis"
-                            HorizontalAlignment="Center"
-                            Text="Last rolled ideas"
-                            FontSize="{StaticResource HeaderM}" />
+                            HorizontalAlignment="Left"
+                            FontSize="{StaticResource HeaderM}"
+                            Text="Last rolled idea:"
+                            TextTrimming="WordEllipsis" />
                         <TextBlock
                             Width="{StaticResource OverviewTileHeight}"
+                            Padding="{StaticResource PaddingBottom10}"
+                            HorizontalAlignment="Center"
+                            FontSize="{StaticResource HeaderM}"
+                            Text="{Binding LastRolledIdea.Name}"
+                            TextTrimming="WordEllipsis" />
+                        <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
+                            MaxHeight="72"
+                            Margin="{StaticResource PaddingBottom10}"
                             HorizontalAlignment="Center"
                             FontSize="{StaticResource FontSizeM}"
-                            TextWrapping="Wrap"
-                            MaxHeight="88"
-                            TextTrimming="WordEllipsis">
-                            Anzahl der Ideen: x<LineBreak />
-                            Verwendeter Roll 'em space:<LineBreak />
-                            xy<LineBreak />
-                            Anzahl der Würfel: y</TextBlock>
+                            Text="{Binding LastRolledIdea.Description}"
+                            TextTrimming="WordEllipsis"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Width="{StaticResource OverviewTileHeight}"
+                            HorizontalAlignment="Left"
+                            FontSize="{StaticResource FontSizeM}"
+                            Text="{Binding LastRolledIdea.RolledDate, StringFormat=d}"
+                            TextTrimming="WordEllipsis" />
                     </StackPanel>
                 </Grid>
             </Button>

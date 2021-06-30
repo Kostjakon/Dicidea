@@ -5,6 +5,7 @@ using System.Text;
 using Dicidea.Core.Models;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -13,8 +14,10 @@ namespace IdeaPage.ViewModels
         private readonly IdeaElementViewModel _ideaElementViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public IdeaValueViewModel(IdeaValue ideaValue, IdeaElementViewModel ideaElementViewModel)
+        private readonly IDialogService _dialogService;
+        public IdeaValueViewModel(IdeaValue ideaValue, IdeaElementViewModel ideaElementViewModel, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _ideaElementViewModel = ideaElementViewModel;
             IdeaValue = ideaValue;
             EditCommand = new DelegateCommand(EditExecute);
@@ -45,7 +48,22 @@ namespace IdeaPage.ViewModels
         }
         public async void DeleteExecute()
         {
-            _ideaElementViewModel.SelectedIdeaValue = this;
+            var selectedIdeaValue = this;
+            bool delete = false;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete value?" },
+                    { "message", $"Do you really want to delete the value '{selectedIdeaValue.IdeaValue.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if(!delete) return;
+            _ideaElementViewModel.SelectedIdeaValue = selectedIdeaValue;
             await _ideaElementViewModel.DeleteIdeaValueAsync();
         }
 

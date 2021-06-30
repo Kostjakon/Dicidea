@@ -6,6 +6,7 @@ using System.Windows.Input;
 using DicePage.ViewModels;
 using Dicidea.Core.Constants;
 using Dicidea.Core.Models;
+using MahApps.Metro.Controls.Dialogs;
 using Prism.Regions;
 
 namespace DicePage.Views
@@ -26,7 +27,13 @@ namespace DicePage.Views
 
         private void DiceOverview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var parameters = _diceOverviewViewModel.Parameters;
+            var parameters = new NavigationParameters
+            {
+                { "diceListViewModel", _diceOverviewViewModel.Parameters["diceListViewModel"] },
+                { "ideaListViewModel", _diceOverviewViewModel.Parameters["ideaListViewModel"] },
+                { "ideaDataService", _diceOverviewViewModel.Parameters["ideaDataService"] },
+                { "diceDataService", _diceOverviewViewModel.Parameters["diceDataService"] }
+            };
             var dice = (sender as ListView).SelectedItem;
             //DialogCoordinator.Instance),selectedContact
             if (dice != null)

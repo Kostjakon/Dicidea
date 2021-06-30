@@ -23,6 +23,7 @@ namespace IdeaPage
         {
 
             containerRegistry.RegisterForNavigation<IdeaOverview>();
+            containerRegistry.RegisterForNavigation<IdeaDetail>();
         }
     }
 }

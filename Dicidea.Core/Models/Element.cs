@@ -25,6 +25,19 @@ namespace Dicidea.Core.Models
             {
                 new Value(true)
             };
+            Rules.Add(new DelegateRule<Element>(nameof(Values), "Everything has to have a name", e =>
+            {
+                bool hasNoErrors = true;
+                foreach (var value in e.Values)
+                {
+                    if (value.HasErrors)
+                    {
+                        hasNoErrors = false;
+                    }
+                }
+
+                return hasNoErrors;
+            }));
         }
         public Element()
         {

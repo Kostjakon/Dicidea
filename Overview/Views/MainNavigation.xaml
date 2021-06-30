@@ -90,8 +90,7 @@
         <Button
             HorizontalContentAlignment="Left"
             Command="{Binding GoToIdeas}"
-            Style="{StaticResource NavigationButton}"
-            IsEnabled="False">
+            Style="{StaticResource NavigationButton}">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                 <svg:SVGImage
                     Width="40"

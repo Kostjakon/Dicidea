@@ -7,6 +7,7 @@ using OverviewPage;
 using Prism.Modularity;
 using RollEmSpacePage;
 using Dicidea.Core.Services;
+using Dicidea.ViewModels;
 using IdeaPage;
 
 namespace Dicidea
@@ -24,7 +25,8 @@ namespace Dicidea
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IDiceDataService, DiceDataServiceJson>();
-            containerRegistry.Register<IRollEmSpaceDataService, RollEmSpaceDataServiceJson>();
+            containerRegistry.Register<IIdeaDataService, IdeaDataServiceJson>();
+            containerRegistry.RegisterDialog<ConfirmationDialog, ConfirmationDialogViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

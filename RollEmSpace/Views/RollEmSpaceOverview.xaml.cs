@@ -25,22 +25,19 @@ namespace RollEmSpacePage.Views
         private void SelectDice_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //var parameters = _rollEmSpaceOverviewViewModel.Parameters;
-            var parameters = new NavigationParameters();
-            parameters.Add("diceListViewModel", _rollEmSpaceOverviewViewModel.Parameters.GetValue<DiceListViewModel>("diceListViewModel"));
+            var parameters = new NavigationParameters
+            {
+                { "diceListViewModel", _rollEmSpaceOverviewViewModel.Parameters["diceListViewModel"] },
+                { "ideaListViewModel", _rollEmSpaceOverviewViewModel.Parameters["ideaListViewModel"] },
+                { "ideaDataService", _rollEmSpaceOverviewViewModel.Parameters["ideaDataService"] },
+                { "diceDataService", _rollEmSpaceOverviewViewModel.Parameters["diceDataService"] },
+            };
             var dice = (sender as ListView).SelectedItem as DiceViewModel;
             if (dice != null) Debug.WriteLine(dice.Dice.Name);
             //DialogCoordinator.Instance),selectedContact
             if (dice != null)
             {
-                //DiceViewModel toAdd = (DiceViewModel) dice;
                 parameters.Add("selectedDice", dice);
-                //parameters.Add("diceListViewModel", _diceOverviewViewModel.DiceListViewModel);
-                parameters.Add("groupedDiceView", _rollEmSpaceOverviewViewModel.GroupedDiceView);
-                parameters.Add("regionManager", _rollEmSpaceOverviewViewModel.RegionManager);
-                parameters.Add("ideaDataService", _rollEmSpaceOverviewViewModel.IdeaDataService);
-
-                //DiceListViewModel selectedDice = parameters["diceListViewModel"] as DiceListViewModel;
-                //_regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(DiceDetail), parameters);
                 _regionManager.Regions[RegionNames.MainContentRegion].RemoveAll();
                 _regionManager.RequestNavigate(RegionNames.LeftBottomContentRegion, nameof(RollEmSpaceDetail), parameters);
                 e.Handled = true;

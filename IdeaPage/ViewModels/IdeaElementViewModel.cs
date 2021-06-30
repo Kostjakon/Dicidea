@@ -13,6 +13,7 @@ using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -22,20 +23,21 @@ namespace IdeaPage.ViewModels
         private IdeaValueListViewModel _ideaValueListViewModel;
         private ListCollectionView _groupedIdeaValuesView;
         private IIdeaDataService _ideaDataService;
+        private readonly IDialogService _dialogService;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public IdeaElementViewModel(IdeaElement ideaElement, IdeaCategoryViewModel ideaCategoryViewModel, Idea idea, IIdeaDataService ideaDataService)
+        public IdeaElementViewModel(IdeaElement ideaElement, IdeaCategoryViewModel ideaCategoryViewModel, Idea idea, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _ideaCategoryViewModel = ideaCategoryViewModel;
             FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
             IdeaElement = ideaElement;
             EditCommand = new DelegateCommand(EditExecute);
-            AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             IdeaElementViewModel self = this;
             if (_ideaValueListViewModel == null)
             {
-                _ideaValueListViewModel = new IdeaValueListViewModel(idea, _ideaCategoryViewModel.IdeaCategory, self, ideaDataService);
+                _ideaValueListViewModel = new IdeaValueListViewModel(idea, _ideaCategoryViewModel.IdeaCategory, self, ideaDataService, _dialogService);
             }
             CreateGroupedView();
         }
@@ -96,8 +98,7 @@ namespace IdeaPage.ViewModels
             get => _isEditDisabled;
             set => SetProperty(ref _isEditDisabled, value);
         }
-
-        public DelegateCommand AddCommand { get; set; }
+        
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
@@ -107,13 +108,24 @@ namespace IdeaPage.ViewModels
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
         }
-        public async void AddExecute()
-        {
-            await AddIdeaValueAsync();
-        }
         public async void DeleteExecute()
         {
-            _ideaCategoryViewModel.SelectedIdeaElement = this;
+            var selectedIdeaElement = this;
+            bool delete = false;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete element?" },
+                    { "message", $"Do you really want to delete the element '{selectedIdeaElement.IdeaElement.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if(!delete) return;
+            _ideaCategoryViewModel.SelectedIdeaElement = selectedIdeaElement;
             await _ideaCategoryViewModel.DeleteIdeaElementAsync();
         }
 
@@ -134,16 +146,9 @@ namespace IdeaPage.ViewModels
         {
             return true;
         }
-
-        public async Task AddIdeaValueAsync()
-        {
-            Debug.WriteLine("Add Category");
-            await _ideaValueListViewModel.AddIdeaValueAsync();
-            //GroupedCategoriesView.Refresh();
-        }
+        
         public async Task DeleteIdeaValueAsync()
         {
-            Debug.WriteLine("Delete Value");
             await _ideaValueListViewModel.DeleteIdeaValueAsync(SelectedIdeaValue);
             GroupedIdeaValuesView.Refresh();
         }

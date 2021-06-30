@@ -13,6 +13,7 @@ using Dicidea.Core.Services;
 using MenuPage.Views;
 using OverviewPage.Views;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using RollEmSpacePage.Views;
 
 namespace Navigation.ViewModels
@@ -22,14 +23,13 @@ namespace Navigation.ViewModels
         
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
-        public NavigationViewModel(IRegionManager regionManager)
+        public NavigationViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             _regionManager = regionManager;
 
             DiceDataService = new DiceDataServiceJson();
-            RollEmSpaceDataService = new RollEmSpaceDataServiceJson(DiceDataService);
 
-            DiceListViewModel = new DiceListViewModel(DiceDataService);
+            DiceListViewModel = new DiceListViewModel(DiceDataService, dialogService);
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);
 
             _parameters = new NavigationParameters();
@@ -42,7 +42,6 @@ namespace Navigation.ViewModels
         public IDiceDataService DiceDataService { get; }
 
         public DiceListViewModel DiceListViewModel { get; }
-        public IRollEmSpaceDataService RollEmSpaceDataService { get; }
 
         public ICommand GoToDiceCommand { get; private set; }
 

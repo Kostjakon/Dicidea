@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -16,9 +17,11 @@ namespace DicePage.ViewModels
         private ObservableCollection<CategoryViewModel> _categories;
         private DiceViewModel _selectedDice;
         private readonly IDiceDataService _diceDataService;
+        private readonly IDialogService _dialogService;
 
-        public CategoryListViewModel(DiceViewModel dice, IDiceDataService diceDataService)
+        public CategoryListViewModel(DiceViewModel dice, IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _diceDataService = diceDataService;
             _selectedDice = dice;
             //Debug.WriteLine(dice.Dice.Name);
@@ -45,7 +48,7 @@ namespace DicePage.ViewModels
             await _diceDataService.AddCategoryAsync(_selectedDice.Dice, categoryModel);
 
             Debug.WriteLine("Add Category in CategoryListViewModel - After Adding to diceDataService");
-            var newCategory = new CategoryViewModel(_selectedDice, categoryModel, _diceDataService);
+            var newCategory = new CategoryViewModel(_selectedDice, categoryModel, _diceDataService, _dialogService);
             Debug.WriteLine("Add Category in CategoryListViewModel - After Creating new CategoryViewModel");
             // DICEVIEWMODEL!
             Categories.Add(newCategory);
@@ -59,7 +62,7 @@ namespace DicePage.ViewModels
             Categories = new ObservableCollection<CategoryViewModel>();
             List<Category> categories = _selectedDice.Dice.Categories;
             //Debug.WriteLine(categories != null);
-            if(categories!= null) categories.ToList().ForEach(c => Categories.Add(new CategoryViewModel(_selectedDice, c, _diceDataService)));
+            if(categories!= null) categories.ToList().ForEach(c => Categories.Add(new CategoryViewModel(_selectedDice, c, _diceDataService, _dialogService)));
         }
     }
 }

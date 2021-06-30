@@ -9,6 +9,7 @@ using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -17,9 +18,11 @@ namespace IdeaPage.ViewModels
         private ObservableCollection<IdeaCategoryViewModel> _ideaCategories;
         private IdeaViewModel _selectedIdea;
         private readonly IIdeaDataService _ideaDataService;
+        private readonly IDialogService _dialogService;
 
-        public IdeaCategoryListViewModel(IdeaViewModel idea, IIdeaDataService ideaDataService)
+        public IdeaCategoryListViewModel(IdeaViewModel idea, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _ideaDataService = ideaDataService;
             _selectedIdea = idea;
             LoadIdeaCategories();
@@ -37,25 +40,12 @@ namespace IdeaPage.ViewModels
             //await _ideaDataService.DeleteIdeaCategoryAsync(_selectedIdea.Idea, ideaCategory.IdeaCategory);
         }
 
-        public async Task<IdeaCategoryViewModel> AddIdeaCategoryAsync()
-        {
-            // TODO: IdeaCategory Konstruktor füllen
-            var ideaCategoryModel = new IdeaCategory();
-            await _ideaDataService.AddIdeaCategoryAsync(_selectedIdea.Idea, ideaCategoryModel);
-            
-            var newIdeaCategory = new IdeaCategoryViewModel(_selectedIdea, ideaCategoryModel, _ideaDataService);
-            // DICEVIEWMODEL!
-            IdeaCategories.Add(newIdeaCategory);
-
-            return newIdeaCategory;
-        }
-
         private void LoadIdeaCategories()
         {
             IdeaCategories = new ObservableCollection<IdeaCategoryViewModel>();
             List<IdeaCategory> ideaCategories = _selectedIdea.Idea.IdeaCategories;
             //Debug.WriteLine(categories != null);
-            if (ideaCategories != null) ideaCategories.ToList().ForEach(c => IdeaCategories.Add(new IdeaCategoryViewModel(_selectedIdea, c, _ideaDataService)));
+            if (ideaCategories != null) ideaCategories.ToList().ForEach(c => IdeaCategories.Add(new IdeaCategoryViewModel(_selectedIdea, c, _ideaDataService, _dialogService)));
         }
     }
 }

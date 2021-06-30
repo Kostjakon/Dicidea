@@ -2,20 +2,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
 using DicePage.Views;
 using Dicidea.Core.Constants;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Models;
 using Dicidea.Core.Helper;
-using MahApps.Metro.Controls.Dialogs;
 using Prism;
 using Prism.Commands;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -28,10 +25,12 @@ namespace DicePage.ViewModels
         private ListCollectionView _groupedDiceView;
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
+        private readonly IDialogService _dialogService;
 
 
-        public DiceDetailViewModel(IRegionManager regionManager)
+        public DiceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _regionManager = regionManager;
             GoToDiceOverviewCommand = new DelegateCommand<object>(GoToDiceOverview, CanGoToDiceOverview);
             AddCommand = new DelegateCommand(AddExecute);
@@ -46,9 +45,16 @@ namespace DicePage.ViewModels
             return true;
         }
 
+        public NavigationParameters Parameters
+        {
+            get;
+            set;
+        }
+
         private void GoToDiceOverview(object obj)
         {
-            _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(DiceOverview), _parameters);
+            Parameters.Add("diceListViewModel", _diceListViewModel);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(DiceOverview), Parameters);
             _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
         }
 
@@ -68,6 +74,22 @@ namespace DicePage.ViewModels
         }
         private async void DeleteExecute()
         {
+            var selectedCategory = SelectedDice.SelectedCategory;
+            bool delete = false;
+            if (selectedCategory == null) return;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete category?" },
+                    { "message", $"Do you really want to delete the category '{selectedCategory.Category.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if (!delete) return;
             await SelectedDice.DeleteCategoryAsync();
         }
         private async void SaveExecute()
@@ -97,22 +119,24 @@ namespace DicePage.ViewModels
         private async void DeleteExecute(object obj)
         {
             var selectedDice = SelectedDice;
-            if(selectedDice == null) return;
-            /*
-            var result = await _dialogCoordinator.ShowMessageAsync(this, "Delete dice?", $"Are you sure you want to delete '{selectedDice.Dice.Name}'?",
-                MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+            bool delete = false;
+            if (selectedDice == null) return;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
                 {
-                    AffirmativeButtonText = "Yes",
-                    NegativeButtonText = "No",
-                    AnimateHide = false,
-                    AnimateShow = false,
-                    DefaultButtonFocus = MessageDialogResult.Negative
+                    { "title", "Delete dice?" },
+                    { "message", $"Do you really want to delete the dice '{selectedDice.Dice.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
                 });
-            */
-            //if (result == MessageDialogResult.Affirmative)
-            //{
-                await _diceListViewModel.DeleteDiceAsync(selectedDice);
-            //}
+            if (!delete) return;
+            await _diceListViewModel.DeleteDiceAsync(selectedDice);
+            GroupedDiceView.Refresh();
+            
         }
 
         private async void NewExecute(object obj)
@@ -165,27 +189,22 @@ namespace DicePage.ViewModels
             Debug.WriteLine("Navigated to Detail Dice");
             if (navigationContext != null)
             {
-                _parameters = new NavigationParameters();
-                _parameters.Add("diceListViewModel", navigationContext.Parameters["diceListViewModel"] as DiceListViewModel);
-                    //navigationContext.Parameters;
+                Parameters = navigationContext.Parameters;
                 if(navigationContext.Parameters["diceListViewModel"] != null)
                 {
                     _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
                     CreateGroupedView();
                     if (navigationContext.Parameters["selectedDice"] != null)
                     {
-                        Debug.WriteLine("Selected dice is not null");
                         DiceViewModel selectedDice = navigationContext.Parameters["selectedDice"] as DiceViewModel;
-                        Debug.WriteLine("Selected Dice is: " + selectedDice.Dice.Name);
                         GroupedDiceView.MoveCurrentTo(selectedDice);
                         GroupedDiceView.Refresh();
-                        Debug.WriteLine(GroupedDiceView.CurrentItem == selectedDice);
                     }
                     else
                     {
-                        Debug.WriteLine("Selected dice is null");
                         GroupedDiceView.MoveCurrentToFirst();
-                        if(GroupedDiceView.Count > 0) _parameters.Add("selectedDice", GroupedDiceView.GetItemAt(0));
+                        GroupedDiceView.Refresh();
+                        if (GroupedDiceView.Count > 0) _parameters.Add("selectedDice", GroupedDiceView.GetItemAt(0));
                     }
                 }
 

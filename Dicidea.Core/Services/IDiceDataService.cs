@@ -10,7 +10,6 @@ namespace Dicidea.Core.Services
         Task AddDiceAsync(Dice dice);
         Task DeleteDiceAsync(Dice dice);
         Task SaveDiceAsync();
-        Task<Dice> GetDiceByIdAsync(string id);
         Task<Dice> GetLastRolledDiceAsync();
         Task AddCategoryAsync(Dice dice, Category category);
         Task DeleteCategoryAsync(Dice dice, Category category);

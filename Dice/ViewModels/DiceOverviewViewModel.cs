@@ -18,6 +18,7 @@ using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -28,10 +29,11 @@ namespace DicePage.ViewModels
         private ListCollectionView _groupedDiceView;
         private DiceListViewModel _diceListViewModel;
         private readonly IRegionManager _regionManager;
+        private readonly IDialogService _dialogService;
 
-        public DiceOverviewViewModel(IRegionManager regionManager)
+        public DiceOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
-            
+            _dialogService = dialogService;
             _regionManager = regionManager;
             if (DiceView != null)
             {
@@ -174,7 +176,22 @@ namespace DicePage.ViewModels
 
         private async void DeleteExecute()
         {
-            Debug.WriteLine("Delete Dice");
+            var selectedDice = SelectedDice;
+            bool delete = false;
+            if (selectedDice == null) return;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete dice?" },
+                    { "message", $"Do you really want to delete the dice '{selectedDice.Dice.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if (!delete) return;
             await _diceListViewModel.DeleteDiceAsync(SelectedDice);
             GroupedDiceView.Refresh();
         }

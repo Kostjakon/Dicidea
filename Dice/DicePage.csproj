@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dicidea.Core\Dicidea.Core.csproj" />
+    <ProjectReference Include="..\IdeaPage\IdeaPage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\caret-right-solid.svg">

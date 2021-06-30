@@ -1,0 +1,332 @@
+﻿<UserControl
+    x:Class="IdeaPage.Views.IdeaDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Rectangle
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Grid.Column="0"
+            Width="280"
+            Fill="Black" />
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalContentAlignment="Left"
+            Command="{Binding GoToIdeaOverview}"
+            Style="{StaticResource NavigationButton}">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <svg:SVGImage
+                    Width="40"
+                    Height="40"
+                    Margin="{StaticResource MarginHorizontal20}"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/iconmonstr-redo-3.svg" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Ideas"
+                    FontSize="{StaticResource HeaderL}" />
+            </StackPanel>
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding GroupedIdeaView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border Margin="{StaticResource MarginAllSides20}">
+                                <TextBlock
+                                    FontSize="{StaticResource HeaderL}"
+                                    FontWeight="SemiBold"
+                                    Foreground="{StaticResource IdeasBrush}"
+                                    Text="{Binding Path=Name}" />
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Margin="{StaticResource MarginRight20}"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <svg:SVGImage
+                            Width="40"
+                            Height="40"
+                            Margin="{StaticResource MarginHorizontal20}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            OverrideColor="{StaticResource IconColor}"
+                            UriSource="../Icons/iconmonstr-paintbrush-6.svg" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <TextBlock
+                                Width="160"
+                                MaxHeight="28"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource HeaderM}"
+                                Text="{Binding Idea.Name}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Width="160"
+                                MaxHeight="20"
+                                Margin="{StaticResource MarginTop4}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource FontSizeS}"
+                                Text="{Binding Idea.Description}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedIdea.Idea.Name}"
+                FontSize="{StaticResource HeaderL}" />
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding SelectedIdea.Idea.Description}"
+                FontSize="{StaticResource FontSizeM}" />
+        </StackPanel>
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="{StaticResource MarginHorizontal20}"
+            HorizontalAlignment="Right"
+            Command="{Binding SaveCommand}"
+            Style="{StaticResource ContentEditorButton}">
+            <svg:SVGImage
+                Width="28"
+                Height="28"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                OverrideColor="{StaticResource IconColor}"
+                UriSource="../Icons/save-solid.svg" />
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding SelectedIdea.GroupedIdeaCategoriesView}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="10" />
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center" Background="Black">
+                        <WrapPanel Margin="{StaticResource MarginAllSides20}">
+                            <Grid Width="400">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="{StaticResource MarginRight20Bottom10}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top"
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Width="28"
+                                        Height="28"
+                                        Margin="{StaticResource MarginLeft20}"
+                                        Background="Transparent"
+                                        Command="{Binding DeleteCommand}"
+                                        Style="{StaticResource ContentEditorButton}">
+                                        <svg:SVGImage
+                                            Width="20"
+                                            Height="20"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            OverrideColor="{StaticResource IconColor}"
+                                            UriSource="../Icons/trash-solid.svg" />
+                                    </Button>
+                                    <TextBlock
+                                        Width="248"
+                                        MaxHeight="60"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding IdeaCategory.Name}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap"
+                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                </StackPanel>
+                                <ListView
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Focusable="False"
+                                    ItemsSource="{Binding GroupedIdeaElementsView}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListViewItem}">
+                                            <Setter Property="Padding" Value="0" />
+                                            <Setter Property="Margin" Value="0" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Width="400"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                                <StackPanel
+                                                    Width="400"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Background="{StaticResource IdeasBrush}"
+                                                    Orientation="Horizontal">
+                                                    <Button
+                                                        Width="28"
+                                                        Height="28"
+                                                        Margin="{StaticResource MarginLeft20}"
+                                                        Background="Transparent"
+                                                        Command="{Binding DeleteCommand}"
+                                                        Style="{StaticResource ContentEditorButton}">
+                                                        <svg:SVGImage
+                                                            Width="20"
+                                                            Height="20"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            OverrideColor="{StaticResource IconColor}"
+                                                            UriSource="../Icons/trash-solid.svg" />
+                                                    </Button>
+                                                    <TextBlock
+                                                        Width="230"
+                                                        MaxHeight="20"
+                                                        Margin="{StaticResource MarginAllSides20}"
+                                                        FontSize="{StaticResource HeaderM}"
+                                                        Text="{Binding IdeaElement.Name}"
+                                                        TextTrimming="WordEllipsis"
+                                                        TextWrapping="Wrap"
+                                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                                </StackPanel>
+                                                <WrapPanel Width="400" VerticalAlignment="Top">
+                                                    <ListView
+                                                        Focusable="True"
+                                                        ItemsSource="{Binding GroupedIdeaValuesView}"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Width="400" />
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                <Setter Property="Padding" Value="0,0,0,4" />
+                                                                <Setter Property="Margin" Value="0" />
+                                                                <Setter Property="BorderThickness" Value="0" />
+                                                                <Setter Property="VerticalAlignment" Value="Top" />
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <WrapPanel
+                                                                    Width="200"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Top"
+                                                                    Background="{StaticResource CategoryBrush}">
+                                                                    <StackPanel
+                                                                        Width="200"
+                                                                        HorizontalAlignment="Left"
+                                                                        VerticalAlignment="Top"
+                                                                        Background="{StaticResource CategoryBrush}"
+                                                                        Orientation="Horizontal">
+                                                                        <Button
+                                                                            Width="28"
+                                                                            Height="28"
+                                                                            Margin="{StaticResource MarginLeft20}"
+                                                                            Background="Transparent"
+                                                                            Command="{Binding DeleteCommand}"
+                                                                            Style="{StaticResource ContentEditorButton}">
+                                                                            <svg:SVGImage
+                                                                                Width="20"
+                                                                                Height="20"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                VerticalContentAlignment="Center"
+                                                                                OverrideColor="{StaticResource IconColor}"
+                                                                                UriSource="../Icons/trash-solid.svg" />
+                                                                        </Button>
+                                                                        <TextBlock
+                                                                            MaxHeight="20"
+                                                                            Margin="{StaticResource MarginAllSides20}"
+                                                                            FontSize="{StaticResource FontSizeM}"
+                                                                            Text="{Binding IdeaValue.Name}"
+                                                                            TextTrimming="WordEllipsis"
+                                                                            TextWrapping="Wrap"
+                                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                                                    </StackPanel>
+                                                                </WrapPanel>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </WrapPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
+</UserControl>

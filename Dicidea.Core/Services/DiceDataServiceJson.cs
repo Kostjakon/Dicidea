@@ -40,28 +40,17 @@ namespace Dicidea.Core.Services
         {
             await Task.CompletedTask;
             _allDice.Remove(dice);
-
-            // In ViewModel von RollEmSpaces muss es registriert werden wenn sich etwas im ViewModel von Dice ändert (Zum Beispiel ein Würfel wird gelöscht oder geändert)
-            /*
-            foreach (var rollEmSpace in RollEmSpaceDataService.GetAllRollEmSpaces())
-            {
-                if (rollEmSpace.Value.DiceIds.Contains(dice.Id))
-                {
-                    rollEmSpace.Value.DiceIds.Remove(dice.Id);
-                    rollEmSpace.Value.Dices.Remove(dice.Id);
-                }
-            }*/
         }
 
+        /*
         public virtual async Task<Dice> GetDiceByIdAsync(string id)
         {
             await Task.CompletedTask;
             return _allDice.Find(d => d.Id == id);
-        }
+        }*/
         public virtual async Task<Dice> GetLastRolledDiceAsync()
         {
             await Task.CompletedTask;
-
             return _allDice.OrderByDescending(d => d.LastUsed).First();
         }
 
@@ -110,7 +99,6 @@ namespace Dicidea.Core.Services
         private async Task<List<Dice>> LoadDiceAsync()
         {
             await Task.Delay(0);
-            //Console.WriteLine("Load Dice");
 
             try
             {
@@ -138,19 +126,25 @@ namespace Dicidea.Core.Services
                     Id = Guid.NewGuid().ToString("N"),
                     Name = "Sims",
                     Description = "This is a dice to roll Sims",
-                    LastUsed = DateTime.Today,
+                    LastUsed = DateTime.Now,
+                    Active = true,
+                    Amount = 1,
                     Categories = new List<Category>()
                     {
                         new Category(){
                             Id = Guid.NewGuid().ToString("N"),
                             Name = "Genetics",
                             Description = "Genetics of a sim",
+                            Active = true,
+                            Amount = 1,
                             Elements = new List<Element>()
                             {
                                 new Element()
                                 {
                                     Id = Guid.NewGuid().ToString("N"),
                                     Name = "Eyecolor",
+                                    Active = true,
+                                    Amount = 1,
                                     Values = new List<Value>()
                                     {
                                         new Value()
@@ -173,6 +167,8 @@ namespace Dicidea.Core.Services
                                 {
                                     Id = Guid.NewGuid().ToString("N"),
                                     Name = "Haircolor",
+                                    Active = true,
+                                    Amount = 1,
                                     Values = new List<Value>()
                                     {
                                         new Value()
@@ -202,12 +198,16 @@ namespace Dicidea.Core.Services
                             Id = Guid.NewGuid().ToString("N"),
                             Name = "Style",
                             Description = "Style of a sim",
+                            Active = true,
+                            Amount = 1,
                             Elements = new List<Element>()
                             {
                                 new Element()
                                 {
                                     Id = Guid.NewGuid().ToString("N"),
                                     Name = "Hairstyle",
+                                    Active = true,
+                                    Amount = 1,
                                     Values = new List<Value>()
                                     {
                                         new Value()
@@ -230,6 +230,8 @@ namespace Dicidea.Core.Services
                                 {
                                     Id = Guid.NewGuid().ToString("N"),
                                     Name = "Clothing Style",
+                                    Active = true,
+                                    Amount = 1,
                                     Values = new List<Value>()
                                     {
                                         new Value()
@@ -272,7 +274,7 @@ namespace Dicidea.Core.Services
                 {
                     Directory.CreateDirectory(FolderName);
                 }
-                string data = JsonConvert.SerializeObject(_allDice);
+                string data = JsonConvert.SerializeObject(dice);
                 File.WriteAllText(FileName, data);
             }
             catch (Exception e)

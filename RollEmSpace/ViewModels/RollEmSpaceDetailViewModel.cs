@@ -17,6 +17,7 @@ using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using IdeaPage.ViewModels;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using RollEmSpacePage.Views;
 
 namespace RollEmSpacePage.ViewModels
@@ -26,6 +27,7 @@ namespace RollEmSpacePage.ViewModels
 
         private bool _isActive;
         private IdeaListViewModel _ideaListViewModel;
+        private IdeaListViewModel _mainIdeaListViewModel;
         //private readonly IDialogCoordinator _dialogCoordinator;
         private ListCollectionView _groupedIdeasView;
         private readonly IRegionManager _regionManager;
@@ -33,10 +35,12 @@ namespace RollEmSpacePage.ViewModels
         private DiceViewModel _selectedDice;
         private IIdeaDataService _ideaDataService;
         private DiceListViewModel _diceListViewModel;
+        private readonly IDialogService _dialogService;
         private Random _random = new Random();
 
-        public RollEmSpaceDetailViewModel(IRegionManager regionManager)
+        public RollEmSpaceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _regionManager = regionManager;
             GoToDiceCommand = new DelegateCommand<object>(GoToDice);
             GoToRollEmSpaceOverviewCommand = new DelegateCommand<object>(GoToRollEmSpaceOverview);
@@ -71,7 +75,7 @@ namespace RollEmSpacePage.ViewModels
             List<Idea> rolledIdeas = new List<Idea>();
             for (int j = 0; j < SelectedDice.Dice.Amount; j++)
             {
-                Idea idea = new Idea(SelectedDice.Dice.Name, SelectedDice.Dice.Description);
+                Idea idea = new Idea($"{j+1}. {SelectedDice.Dice.Name} idea", SelectedDice.Dice.Name, SelectedDice.Dice.Description);
                 rolledIdeas.Add(idea);
                 List<Category> Categories = SelectedDice.Dice.Categories;
                 for (int i = 0; i < Categories.Count; i++)
@@ -115,7 +119,7 @@ namespace RollEmSpacePage.ViewModels
                     }
                 }
             }
-            _ideaListViewModel = new IdeaListViewModel(rolledIdeas);
+            _ideaListViewModel = new IdeaListViewModel(rolledIdeas, _dialogService);//, _ideaDataService
             CreateGroupedView();
             SelectedDice.Dice.LastUsed = DateTime.Now;
             await _diceListViewModel.SaveDiceAsync();
@@ -155,30 +159,22 @@ namespace RollEmSpacePage.ViewModels
         {
             var selectedIdea = SelectedIdea;
             if (selectedIdea == null) return;
-            /*
-            var result = await _dialogCoordinator.ShowMessageAsync(this, "Delete dice?", $"Are you sure you want to delete '{selectedDice.Dice.Name}'?",
-                MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings
+
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
                 {
-                    AffirmativeButtonText = "Yes",
-                    NegativeButtonText = "No",
-                    AnimateHide = false,
-                    AnimateShow = false,
-                    DefaultButtonFocus = MessageDialogResult.Negative
+                    { "title", "Delete idea?" },
+                    { "message", $"Do you really want to delete '{selectedIdea.Idea.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes)
+                    {
+                        _ideaListViewModel.DeleteIdeaAsync(selectedIdea);
+                    }
                 });
-            */
-            //if (result == MessageDialogResult.Affirmative)
-            //{
-            await _ideaListViewModel.DeleteIdeaAsync(selectedIdea);
-            //}
-        }
-
-        private async void NewExecute()
-        {
-            var newIdea = await _ideaListViewModel.AddIdeaAsync();
-            GroupedIdeasView.Refresh();
-            GroupedIdeasView.MoveCurrentTo(newIdea);
-
-            newIdea.Idea.WhenPropertyChanged.Subscribe(OnNext);
         }
 
         private void OnNext(string propertyName)
@@ -191,7 +187,9 @@ namespace RollEmSpacePage.ViewModels
 
         private async void SaveExecute()
         {
-            await _ideaListViewModel.SaveIdeasAsync();
+            Debug.WriteLine("Save Command");
+            await _mainIdeaListViewModel.AddIdeasAsync(_ideaListViewModel.Ideas);
+            await _mainIdeaListViewModel.SaveIdeasAsync();
         }
 
         private void CreateGroupedView()
@@ -228,7 +226,8 @@ namespace RollEmSpacePage.ViewModels
                 {
                     _diceListViewModel = navigationContext.Parameters.GetValue<DiceListViewModel>("diceListViewModel");
                     _ideaDataService = navigationContext.Parameters.GetValue<IIdeaDataService>("ideaDataService");
-                    _ideaListViewModel = new IdeaListViewModel(_ideaDataService);
+                    _ideaListViewModel = new IdeaListViewModel(new List<Idea>(), _dialogService);
+                    _mainIdeaListViewModel = navigationContext.Parameters.GetValue<IdeaListViewModel>("ideaListViewModel");
                     CreateGroupedView();
                     if (navigationContext.Parameters["selectedDice"] != null)
                     {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -17,9 +18,11 @@ namespace IdeaPage.ViewModels
         private IdeaCategory _selectedIdeaCategory;
         private IdeaElementViewModel _selectedIdeaElement;
         private readonly IIdeaDataService _ideaDataService;
+        private readonly IDialogService _dialogService;
 
-        public IdeaValueListViewModel(Idea idea, IdeaCategory ideaCategory, IdeaElementViewModel ideaElement, IIdeaDataService ideaDataService)
+        public IdeaValueListViewModel(Idea idea, IdeaCategory ideaCategory, IdeaElementViewModel ideaElement, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _ideaDataService = ideaDataService;
             _selectedIdea = idea;
             _selectedIdeaCategory = ideaCategory;
@@ -39,24 +42,12 @@ namespace IdeaPage.ViewModels
             //await _ideaDataService.DeleteIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValue.IdeaValue);
         }
 
-        public async Task<IdeaValueViewModel> AddIdeaValueAsync()
-        {
-            // TODO: IdeaValue Konstruktor füllen
-            var ideaValueModel = new IdeaValue();
-            await _ideaDataService.AddIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValueModel);
-
-            var newIdeaValue = new IdeaValueViewModel(ideaValueModel, _selectedIdeaElement);
-            // DICEVIEWMODEL!
-            IdeaValues.Add(newIdeaValue);
-            return newIdeaValue;
-        }
-
         private void LoadElements()
         {
             IdeaValues = new ObservableCollection<IdeaValueViewModel>();
             List<IdeaValue> ideaValues = _selectedIdeaElement.IdeaElement.IdeaValues;
             //Debug.WriteLine(categories != null);
-            if (ideaValues != null) ideaValues.ToList().ForEach(v => IdeaValues.Add(new IdeaValueViewModel(v, _selectedIdeaElement)));
+            if (ideaValues != null) ideaValues.ToList().ForEach(v => IdeaValues.Add(new IdeaValueViewModel(v, _selectedIdeaElement, _dialogService)));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Dicidea.Core.Helper;
 using Newtonsoft.Json;
 
@@ -17,6 +18,23 @@ namespace Dicidea.Core.Models
         public Dice(bool newDice)
         {
             Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
+            Categories = new List<Category>
+            {
+                new Category(true)
+            };
+            Rules.Add(new DelegateRule<Dice>(nameof(Categories), "Everything has to have a name", d =>
+            {
+                bool hasNoErrors = true;
+                foreach (var category in d.Categories)
+                {
+                    if (category.HasErrors)
+                    {
+                        hasNoErrors = false;
+                    }
+                }
+
+                return hasNoErrors;
+            }));
             Id = Guid.NewGuid().ToString("N");
             Debug.WriteLine("New dice");
             Name = "";
@@ -25,10 +43,6 @@ namespace Dicidea.Core.Models
             Active = true;
             LastUsed = DateTime.Now;
             Debug.WriteLine(LastUsed.Date);
-            Categories = new List<Category>
-            {
-                new Category(true)
-            };
         }
         public Dice()
         {

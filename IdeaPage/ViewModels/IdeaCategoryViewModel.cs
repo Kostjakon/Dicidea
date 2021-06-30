@@ -13,6 +13,7 @@ using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
@@ -23,16 +24,17 @@ namespace IdeaPage.ViewModels
         private ListCollectionView _groupedIdeaElementsView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
+        private readonly IDialogService _dialogService;
 
-        public IdeaCategoryViewModel(IdeaViewModel idea, IdeaCategory ideaCategory, IIdeaDataService ideaDataService)
+        public IdeaCategoryViewModel(IdeaViewModel idea, IdeaCategory ideaCategory, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
-            DeleteCommand = new DelegateCommand<object>(DeleteExecute);
+            _dialogService = dialogService;
             _ideaViewModel = idea;
             IdeaCategory = ideaCategory;
             var self = this;
-            _ideaElementListViewModel ??= new IdeaElementListViewModel(idea.Idea, self, ideaDataService);
+            _ideaElementListViewModel ??= new IdeaElementListViewModel(idea.Idea, self, ideaDataService, _dialogService);
             EditCommand = new DelegateCommand(EditExecute);
-            AddCommand = new DelegateCommand(AddExecute);
+            DeleteCommand = new DelegateCommand(DeleteExecute);
             CreateGroupedView();
         }
         
@@ -50,16 +52,13 @@ namespace IdeaPage.ViewModels
 
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
+        public DelegateCommand DeleteSelfCommand { get; set; }
 
         public void EditExecute()
         {
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
 
-        }
-        public async void AddExecute()
-        {
-            await AddIdeaElementAsync();
         }
 
         public ListCollectionView GroupedIdeaElementsView
@@ -115,22 +114,30 @@ namespace IdeaPage.ViewModels
         public ICommand DeleteCommand { get; set; }
 
 
-        private async void DeleteExecute(object obj)
+        private async void DeleteExecute()
         {
-            _ideaViewModel.SelectedIdeaCategory = this;
+            var selectedIdeaCategory = this;
+            bool delete = false;
+            _dialogService.ShowDialog("ConfirmationDialog",
+                new DialogParameters
+                {
+                    { "title", "Delete category?" },
+                    { "message", $"Do you really want to delete the category '{selectedIdeaCategory.IdeaCategory.Name}'?" }
+                },
+                r =>
+                {
+                    if (r.Result == ButtonResult.None) return;
+                    if (r.Result == ButtonResult.No) return;
+                    if (r.Result == ButtonResult.Yes) delete = true;
+                });
+            if (!delete) return;
+            _ideaViewModel.SelectedIdeaCategory = selectedIdeaCategory;
             await _ideaViewModel.DeleteIdeaCategoryAsync();
         }
         public async Task DeleteIdeaElementAsync()
         {
-            Debug.WriteLine("Delete IdeaElement");
             await _ideaElementListViewModel.DeleteIdeaElementAsync(SelectedIdeaElement);
             GroupedIdeaElementsView.Refresh();
-        }
-        public async Task AddIdeaElementAsync()
-        {
-            Debug.WriteLine("Add IdeaCategory");
-            await _ideaElementListViewModel.AddIdeaElementAsync();
-            //GroupedCategoriesView.Refresh();
         }
     }
 }

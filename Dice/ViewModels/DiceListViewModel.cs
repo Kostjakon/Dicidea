@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
+using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
@@ -14,9 +15,11 @@ namespace DicePage.ViewModels
     {
         private readonly IDiceDataService _diceDataService;
         private ObservableCollection<DiceViewModel> _allDice;
+        private readonly IDialogService _dialogService;
 
-        public DiceListViewModel(IDiceDataService diceDataService)
+        public DiceListViewModel(IDiceDataService diceDataService, IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _diceDataService = diceDataService;
             LoadDiceAsync();
         }
@@ -38,7 +41,7 @@ namespace DicePage.ViewModels
             var diceModel = new Dice(true);
             await _diceDataService.AddDiceAsync(diceModel);
 
-            var newDice = new DiceViewModel(diceModel, _diceDataService);
+            var newDice = new DiceViewModel(diceModel, _diceDataService, _dialogService);
             AllDice.Add(newDice);
             return newDice;
         }
@@ -52,7 +55,7 @@ namespace DicePage.ViewModels
         {
             AllDice = new ObservableCollection<DiceViewModel>();
             List<Dice> dice = await _diceDataService.GetAllDiceAsync();
-            dice.ToList().ForEach(d => AllDice.Add(new DiceViewModel(d, _diceDataService)));
+            dice.ToList().ForEach(d => AllDice.Add(new DiceViewModel(d, _diceDataService, _dialogService)));
         }
     }
 }

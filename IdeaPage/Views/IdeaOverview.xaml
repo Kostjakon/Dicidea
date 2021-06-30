@@ -6,14 +6,218 @@
     xmlns:local="clr-namespace:IdeaPage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
+    xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
+    d:DesignHeight="900"
+    d:DesignWidth="1200"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid>
-        <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="Idea Page" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides20}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="102" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Command="{Binding DeleteCommand}"
+                Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="28"
+                    Height="28"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/trash-solid.svg" />
+            </Button>
+            <Label
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Ideas"
+                FontSize="{StaticResource HeaderXL}" />
+            <Button
+                Grid.Column="4"
+                HorizontalAlignment="Right"
+                Command="{Binding SaveCommand}"
+                Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="28"
+                    Height="28"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/save-solid.svg" />
+            </Button>
+        </Grid>
+        <ListView
+            Grid.Row="1"
+            Margin="{StaticResource MarginBottom20}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding GroupedIdeaView}"
+            MouseDoubleClick="IdeaOverview_MouseDoubleClick"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Rectangle
+                                    Grid.Row="0"
+                                    Height="80"
+                                    HorizontalAlignment="Stretch"
+                                    Fill="Black"
+                                    Opacity="0.5" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Margin="{StaticResource MarginAllSides20}"
+                                    FontSize="{StaticResource HeaderXL}"
+                                    FontWeight="SemiBold"
+                                    Foreground="{StaticResource IdeasBrush}"
+                                    Text="{Binding Path=Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="10" />
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Center" Background="Black">
+                        <Grid Width="400" Margin="{StaticResource MarginAllSides20}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock
+                                    Width="300"
+                                    MaxHeight="20"
+                                    Margin="{StaticResource PaddingBottom10}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource FontSizeS}"
+                                    Text="{Binding Path=Idea.SectionName, StringFormat=Section: {0}}"
+                                    TextTrimming="WordEllipsis"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                <TextBox
+                                    Width="300"
+                                    MaxHeight="20"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource FontSizeS}"
+                                    Style="{StaticResource DiceTextBox}"
+                                    Text="{Binding Path=Idea.SectionName}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                                <TextBlock
+                                    Width="300"
+                                    MaxHeight="40"
+                                    Margin="{StaticResource MarginBottom20}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource HeaderL}"
+                                    Text="{Binding Path=Idea.Name}"
+                                    TextTrimming="WordEllipsis"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                <TextBox
+                                    Width="300"
+                                    MaxHeight="68"
+                                    Margin="{StaticResource MarginBottom20}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource HeaderL}"
+                                    Style="{StaticResource DiceTextBox}"
+                                    Text="{Binding Path=Idea.Name}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="{StaticResource MarginBottom20}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding EditCommand}"
+                                    Style="{StaticResource DiceViewEditButton}">
+                                    <svg:SVGImage
+                                        Width="28"
+                                        Height="28"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        OverrideColor="{StaticResource IconColor}"
+                                        UriSource="../Icons/pen-solid.svg" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Width="400"
+                                MaxHeight="60"
+                                Margin="{StaticResource MarginBottom20}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                FontSize="{StaticResource HeaderM}"
+                                Text="{Binding Path=Idea.Description}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap"
+                                Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                            <TextBox
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Width="400"
+                                MaxHeight="60"
+                                Margin="{StaticResource MarginBottom20}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                FontSize="{StaticResource HeaderM}"
+                                Style="{StaticResource DiceTextBox}"
+                                Text="{Binding Path=Idea.Description}"
+                                TextWrapping="Wrap"
+                                Visibility="{Binding IsEditEnabled, Converter={StaticResource ConverterVisibility}}" />
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
     </Grid>
 </UserControl>
