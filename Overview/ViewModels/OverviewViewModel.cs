@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,10 +9,8 @@ using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using IdeaPage.ViewModels;
 using IdeaPage.Views;
-using MahApps.Metro.Controls.Dialogs;
 using MenuPage.Views;
 using OverviewPage.Views;
-using Prism;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -24,7 +21,6 @@ namespace OverviewPage.ViewModels
 {
     public class OverviewViewModel : BindableBase, INavigationAware
     {
-        private bool _isActive;
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
         private DiceListViewModel _diceListViewModel;

@@ -27,6 +27,8 @@ namespace IdeaPage.ViewModels
         private IdeaListViewModel _ideaListViewModel;
         private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
+        private bool _showSaved = false;
+        private bool _isSaving = false;
 
         public IdeaOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
@@ -40,6 +42,17 @@ namespace IdeaPage.ViewModels
             SortCommand = new DelegateCommand(SortExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
+        }
+
+        public bool ShowSaved
+        {
+            get => _showSaved;
+            set => SetProperty(ref _showSaved, value);
+        }
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => SetProperty(ref _isSaving, value);
         }
 
         public bool IsEditEnabled
@@ -167,7 +180,13 @@ namespace IdeaPage.ViewModels
 
         private async void SaveExecute()
         {
+            IsSaving = true;
+            await Task.Delay(3000);
             await _ideaListViewModel.SaveIdeasAsync();
+            IsSaving = false;
+            ShowSaved = true;
+            await Task.Delay(3000);
+            ShowSaved = false;
         }
 
         private async void DeleteExecute()

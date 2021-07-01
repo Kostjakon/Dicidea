@@ -111,35 +111,67 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Margin="200 0"
             VerticalAlignment="Center"
             Orientation="Vertical">
-            <Label
-                HorizontalAlignment="Center"
+            <TextBlock
+                MaxHeight="40"
+                HorizontalAlignment="Stretch"
+                TextAlignment="Center"
                 VerticalAlignment="Center"
-                Content="{Binding SelectedIdea.Idea.Name}"
+                TextTrimming="WordEllipsis"
+                TextWrapping="Wrap"
+                Text="{Binding SelectedIdea.Idea.Name}"
                 FontSize="{StaticResource HeaderL}" />
-            <Label
-                HorizontalAlignment="Center"
+            <TextBlock
+                MaxHeight="150"
+                HorizontalAlignment="Stretch"
+                TextAlignment="Center"
                 VerticalAlignment="Center"
-                Content="{Binding SelectedIdea.Idea.Description}"
+                TextTrimming="WordEllipsis"
+                TextWrapping="Wrap"
+                Text="{Binding SelectedIdea.Idea.Description}"
                 FontSize="{StaticResource FontSizeM}" />
         </StackPanel>
-        <Button
+        <StackPanel
             Grid.Row="0"
             Grid.Column="1"
-            Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right"
-            Command="{Binding SaveCommand}"
-            Style="{StaticResource ContentEditorButton}">
-            <svg:SVGImage
-                Width="28"
-                Height="28"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                OverrideColor="{StaticResource IconColor}"
-                UriSource="../Icons/save-solid.svg" />
-        </Button>
+            VerticalAlignment="Center"
+            Orientation="Vertical"
+                Margin="{StaticResource MarginHorizontal20}">
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding SaveCommand}"
+                Style="{StaticResource ContentEditorButton}">
+                <svg:SVGImage
+                    Width="28"
+                    Height="28"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    OverrideColor="{StaticResource IconColor}"
+                    UriSource="../Icons/save-solid.svg" />
+            </Button>
+            <Label Content="Saving completed!"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}"
+                   FontSize="{StaticResource FontSizeS}"
+                   Foreground="{StaticResource IdeasBrush}"
+                   HorizontalAlignment="Right"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35"
+                    Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}" />
+                <Label Content="Saving"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
+                       FontSize="{StaticResource FontSizeS}"
+                       Foreground="{StaticResource IdeasBrush}"/>
+            </StackPanel>
+        </StackPanel>
         <ListView
             Grid.Row="1"
             Grid.RowSpan="3"

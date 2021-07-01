@@ -1,11 +1,10 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using DicePage.ViewModels;
@@ -14,7 +13,6 @@ using Dicidea.Core.Constants;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
-using Dicidea.Core.Services;
 using IdeaPage.ViewModels;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -24,8 +22,6 @@ namespace RollEmSpacePage.ViewModels
 {
     public class RollEmSpaceDetailViewModel : NotifyPropertyChanges, INavigationAware
     {
-
-        private bool _isActive;
         private IdeaListViewModel _ideaListViewModel;
         private IdeaListViewModel _mainIdeaListViewModel;
         //private readonly IDialogCoordinator _dialogCoordinator;
@@ -33,10 +29,12 @@ namespace RollEmSpacePage.ViewModels
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
         private DiceViewModel _selectedDice;
-        private IIdeaDataService _ideaDataService;
         private DiceListViewModel _diceListViewModel;
         private readonly IDialogService _dialogService;
-        private Random _random = new Random();
+        private readonly Random _random = new Random();
+        private bool _showSaved = false;
+        private bool _isSaving = false;
+        private bool _showRolling = false;
 
         public RollEmSpaceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
@@ -51,7 +49,22 @@ namespace RollEmSpacePage.ViewModels
         }
         public ICommand GoToDiceCommand { get; private set; }
         public ICommand GoToRollEmSpaceOverviewCommand { get; private set; }
-        
+
+        public bool ShowSaved
+        {
+            get => _showSaved;
+            set => SetProperty(ref _showSaved, value);
+        }
+        public bool ShowRolling
+        {
+            get => _showRolling;
+            set => SetProperty(ref _showRolling, value);
+        }
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => SetProperty(ref _isSaving, value);
+        }
 
         private void GoToDice(object obj)
         {
@@ -70,12 +83,18 @@ namespace RollEmSpacePage.ViewModels
 
         private async void RollExecute()
         {
-            // TODO: Logic to roll ideas
-            //IdeaCategoryListViewModel ideaCategory = new IdeaCategoryListViewModel(Idea, _ideaDataService);
+            ShowRolling = true;
+            await Task.Delay(10);
+            await rollIdeas();
+            ShowRolling = false;
+        }
+
+        private async Task rollIdeas()
+        {
             List<Idea> rolledIdeas = new List<Idea>();
             for (int j = 0; j < SelectedDice.Dice.Amount; j++)
             {
-                Idea idea = new Idea($"{j+1}. {SelectedDice.Dice.Name} idea", SelectedDice.Dice.Name, SelectedDice.Dice.Description);
+                Idea idea = new Idea($"{j + 1}. {SelectedDice.Dice.Name} idea", SelectedDice.Dice.Name, SelectedDice.Dice.Description);
                 rolledIdeas.Add(idea);
                 List<Category> Categories = SelectedDice.Dice.Categories;
                 for (int i = 0; i < Categories.Count; i++)
@@ -91,7 +110,7 @@ namespace RollEmSpacePage.ViewModels
                             {
                                 if (Elements[a].Active)
                                 {
-                                    
+
                                     for (int m = 0; m < Elements[a].Amount; m++)
                                     {
                                         IdeaElement ideaElement = new IdeaElement(Elements[a].Name);
@@ -123,7 +142,6 @@ namespace RollEmSpacePage.ViewModels
             CreateGroupedView();
             SelectedDice.Dice.LastUsed = DateTime.Now;
             await _diceListViewModel.SaveDiceAsync();
-            //await SelectedDice.AddCategoryAsync();
         }
         private void EditExecute()
         {
@@ -157,6 +175,7 @@ namespace RollEmSpacePage.ViewModels
 
         private async void DeleteExecute()
         {
+            bool delete = false;
             var selectedIdea = SelectedIdea;
             if (selectedIdea == null) return;
 
@@ -170,11 +189,9 @@ namespace RollEmSpacePage.ViewModels
                 {
                     if (r.Result == ButtonResult.None) return;
                     if (r.Result == ButtonResult.No) return;
-                    if (r.Result == ButtonResult.Yes)
-                    {
-                        _ideaListViewModel.DeleteIdeaAsync(selectedIdea);
-                    }
+                    if (r.Result == ButtonResult.Yes) delete = true;
                 });
+            if(delete) await _ideaListViewModel.DeleteIdeaAsync(selectedIdea);
         }
 
         private void OnNext(string propertyName)
@@ -187,9 +204,14 @@ namespace RollEmSpacePage.ViewModels
 
         private async void SaveExecute()
         {
-            Debug.WriteLine("Save Command");
+            IsSaving = true;
+            await Task.Delay(3000);
             await _mainIdeaListViewModel.AddIdeasAsync(_ideaListViewModel.Ideas);
             await _mainIdeaListViewModel.SaveIdeasAsync();
+            IsSaving = false;
+            ShowSaved = true;
+            await Task.Delay(3000);
+            ShowSaved = false;
         }
 
         private void CreateGroupedView()
@@ -225,7 +247,6 @@ namespace RollEmSpacePage.ViewModels
                 if (navigationContext.Parameters["diceListViewModel"] != null)
                 {
                     _diceListViewModel = navigationContext.Parameters.GetValue<DiceListViewModel>("diceListViewModel");
-                    _ideaDataService = navigationContext.Parameters.GetValue<IIdeaDataService>("ideaDataService");
                     _ideaListViewModel = new IdeaListViewModel(new List<Idea>(), _dialogService);
                     _mainIdeaListViewModel = navigationContext.Parameters.GetValue<IdeaListViewModel>("ideaListViewModel");
                     CreateGroupedView();

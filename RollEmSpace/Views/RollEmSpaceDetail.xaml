@@ -102,7 +102,7 @@
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="{StaticResource MarginRight40Top10}"
+                Margin="{StaticResource MarginRight40Vertical10}"
                 Orientation="Horizontal">
                 <Slider
                     Width="48"
@@ -183,14 +183,14 @@
                                 MaxHeight="28"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="{StaticResource HeaderM}"
+                                FontSize="{StaticResource FontSizeM}"
                                 Text="{Binding Category.Name}"
                                 TextTrimming="WordEllipsis"
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Grid.Row="1"
                                 MaxHeight="20"
-                                Margin="{StaticResource MarginTop4Left6}"
+                                Margin="{StaticResource MarginTop4}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource FontSizeS}"
@@ -398,27 +398,39 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Orientation="Vertical">
-            <Label
-                HorizontalAlignment="Center"
+            Orientation="Vertical"
+            Margin="200 0">
+            <TextBlock
+                HorizontalAlignment="Stretch"
+                TextAlignment="Center"
                 VerticalAlignment="Center"
-                Content="{Binding SelectedDice.Dice.Name}"
+                TextWrapping="Wrap"
+                Text="{Binding SelectedDice.Dice.Name}"
                 FontSize="{StaticResource HeaderL}" />
-            <Label
-                HorizontalAlignment="Center"
+            <TextBlock
+                HorizontalAlignment="Stretch"
+                TextAlignment="Center"
                 VerticalAlignment="Center"
-                Content="{Binding SelectedDice.Dice.Description}"
+                TextWrapping="Wrap"
+                Text="{Binding SelectedDice.Dice.Description}"
                 FontSize="{StaticResource FontSizeM}" />
         </StackPanel>
-        <StackPanel
+        <Grid
             Grid.Row="0"
             Grid.Column="1"
             Margin="{StaticResource MarginHorizontal20}"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <Button Command="{Binding RollCommand}" Style="{StaticResource ContentEditorButton}">
+            HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Command="{Binding RollCommand}" Style="{StaticResource ContentEditorButton}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"
@@ -427,8 +439,20 @@
                     OverrideColor="{StaticResource IconColor}"
                     UriSource="../Icons/dice-solid.svg" />
             </Button>
-            <Button
-                Margin="{StaticResource MarginHorizontal10}"
+            <StackPanel Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35"
+                    Foreground="{StaticResource RollEmBrush}"
+                    Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}" />
+                <Label Content="Roll ideas"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}"
+                       FontSize="{StaticResource FontSizeS}"
+                       Foreground="{StaticResource RollEmBrush}"/>
+            </StackPanel>
+            <Button Grid.Column="1" Grid.Row="0"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveCommand}"
                 Style="{StaticResource ContentEditorButton}">
@@ -440,7 +464,26 @@
                     OverrideColor="{StaticResource IconColor}"
                     UriSource="../Icons/save-solid.svg" />
             </Button>
-        </StackPanel>
+            <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Saving completed!"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}"
+                   FontSize="{StaticResource FontSizeS}"
+                   Foreground="{StaticResource RollEmBrush}"
+                   HorizontalAlignment="Right"/>
+            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right">
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35"
+                    Foreground="{StaticResource RollEmBrush}"
+                    Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}" />
+                <Label Content="Saving"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
+                       FontSize="{StaticResource FontSizeS}"
+                       Foreground="{StaticResource RollEmBrush}"/>
+            </StackPanel>
+        </Grid>
         <ListView
             Grid.Row="1"
             Grid.RowSpan="3"
@@ -517,7 +560,7 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource FontSizeS}"
-                                        Text="{Binding Idea.DiceName, StringFormat=Section: {0}}"
+                                        Text="{Binding Idea.SectionName, StringFormat=Section: {0}}"
                                         TextAlignment="Right"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="Wrap" />

@@ -1,11 +1,13 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using Dicidea.Core.Constants;
 using Dicidea.Core.Helper;
@@ -26,6 +28,8 @@ namespace IdeaPage.ViewModels
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
         private readonly IDialogService _dialogService;
+        private bool _showSaved = false;
+        private bool _isSaving = false;
 
         public IdeaDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
@@ -40,6 +44,17 @@ namespace IdeaPage.ViewModels
             SortCommand = new DelegateCommand(SortExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
+        }
+
+        public bool ShowSaved
+        {
+            get => _showSaved;
+            set => SetProperty(ref _showSaved, value);
+        }
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => SetProperty(ref _isSaving, value);
         }
 
         public bool IsEditEnabled
@@ -157,10 +172,17 @@ namespace IdeaPage.ViewModels
                     break;
             }
         }
+        
 
         private async void SaveExecute()
         {
+            IsSaving = true;
+            await Task.Delay(3000);
             await _ideaListViewModel.SaveIdeasAsync();
+            IsSaving = false;
+            ShowSaved = true;
+            await Task.Delay(3000);
+            ShowSaved = false;
         }
 
         private async void DeleteExecute()

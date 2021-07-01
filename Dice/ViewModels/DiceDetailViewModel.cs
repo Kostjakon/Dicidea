@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using DicePage.Views;
@@ -26,6 +27,8 @@ namespace DicePage.ViewModels
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
         private readonly IDialogService _dialogService;
+        private bool _showSaved = false;
+        private bool _isSaving = false;
 
 
         public DiceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
@@ -37,6 +40,16 @@ namespace DicePage.ViewModels
             DeleteCommand = new DelegateCommand(DeleteExecute);
             EditCommand = new DelegateCommand(EditExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
+        }
+        public bool ShowSaved
+        {
+            get => _showSaved;
+            set => SetProperty(ref _showSaved, value);
+        }
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => SetProperty(ref _isSaving, value);
         }
         public ICommand GoToDiceOverviewCommand { get; private set; }
 
@@ -94,7 +107,13 @@ namespace DicePage.ViewModels
         }
         private async void SaveExecute()
         {
+            IsSaving = true;
+            await Task.Delay(3000);
             await _diceListViewModel.SaveDiceAsync();
+            IsSaving = false;
+            ShowSaved = true;
+            await Task.Delay(3000);
+            ShowSaved = false;
         }
 
         public IRegionManager RegionManager { get; private set; }
@@ -154,11 +173,6 @@ namespace DicePage.ViewModels
             {
                 GroupedDiceView.Refresh();
             }
-        }
-
-        private async void SaveExecute(object obj)
-        {
-            await _diceListViewModel.SaveDiceAsync();
         }
 
         private void CreateGroupedView()

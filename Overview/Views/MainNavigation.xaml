@@ -13,8 +13,8 @@
         <Button
             HorizontalContentAlignment="Left"
             Command="{Binding GoToMenu}"
-            Style="{StaticResource NavigationButton}"
-            IsEnabled="False">
+            IsEnabled="False"
+            Style="{StaticResource NavigationButton}">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                 <svg:SVGImage
                     Width="40"

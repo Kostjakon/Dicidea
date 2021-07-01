@@ -30,6 +30,8 @@ namespace DicePage.ViewModels
         private DiceListViewModel _diceListViewModel;
         private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
+        private bool _showSaved = false;
+        private bool _isSaving = false;
 
         public DiceOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
@@ -44,6 +46,16 @@ namespace DicePage.ViewModels
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
+        }
+        public bool ShowSaved
+        {
+            get => _showSaved;
+            set => SetProperty(ref _showSaved, value);
+        }
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => SetProperty(ref _isSaving, value);
         }
 
         public bool IsEditEnabled
@@ -171,7 +183,14 @@ namespace DicePage.ViewModels
         }
         private async void SaveExecute()
         {
+
+            IsSaving = true;
+            await Task.Delay(3000);
             await _diceListViewModel.SaveDiceAsync();
+            IsSaving = false;
+            ShowSaved = true;
+            await Task.Delay(3000);
+            ShowSaved = false;
         }
 
         private async void DeleteExecute()
