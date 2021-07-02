@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Dicidea.Core.Models;
+using Dicidea.Core.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -15,8 +16,10 @@ namespace IdeaPage.ViewModels
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
         private readonly IDialogService _dialogService;
-        public IdeaValueViewModel(IdeaValue ideaValue, IdeaElementViewModel ideaElementViewModel, IDialogService dialogService)
+        private readonly IIdeaDataService _ideaDataService;
+        public IdeaValueViewModel(IdeaValue ideaValue, IdeaElementViewModel ideaElementViewModel, IDialogService dialogService, IIdeaDataService ideaDataService)
         {
+            _ideaDataService = ideaDataService;
             _dialogService = dialogService;
             _ideaElementViewModel = ideaElementViewModel;
             IdeaValue = ideaValue;
@@ -37,8 +40,7 @@ namespace IdeaPage.ViewModels
 
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
-
-        // TODO: Edit to change value from the active one to anotherone from the dice
+        
         public void EditExecute()
         {
             Debug.WriteLine("Edit Value");
@@ -65,17 +67,13 @@ namespace IdeaPage.ViewModels
             if(!delete) return;
             _ideaElementViewModel.SelectedIdeaValue = selectedIdeaValue;
             await _ideaElementViewModel.DeleteIdeaValueAsync();
+            if (_ideaDataService != null)
+            {
+                await _ideaDataService.DeleteIdeaValueAsync(IdeaElement, IdeaValue);
+            }
         }
 
-        public bool IsSelected
-        {
-            get => _ideaElementViewModel.SelectedIdeaValue == this;
-        }
-
-        public IdeaElement IdeaElement
-        {
-            get => _ideaElementViewModel.IdeaElement;
-        }
+        public IdeaElement IdeaElement => _ideaElementViewModel.IdeaElement;
 
         public IdeaValue IdeaValue { get; }
     }

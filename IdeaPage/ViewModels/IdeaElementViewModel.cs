@@ -20,16 +20,17 @@ namespace IdeaPage.ViewModels
     public class IdeaElementViewModel : NotifyPropertyChanges
     {
         private readonly IdeaCategoryViewModel _ideaCategoryViewModel;
-        private IdeaValueListViewModel _ideaValueListViewModel;
+        private readonly IdeaValueListViewModel _ideaValueListViewModel;
         private ListCollectionView _groupedIdeaValuesView;
-        private IIdeaDataService _ideaDataService;
+        private readonly IIdeaDataService _ideaDataService;
         private readonly IDialogService _dialogService;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-        public IdeaElementViewModel(IdeaElement ideaElement, IdeaCategoryViewModel ideaCategoryViewModel, Idea idea, IIdeaDataService ideaDataService, IDialogService dialogService)
+        public IdeaElementViewModel(IdeaElement ideaElement, IdeaCategoryViewModel ideaCategoryViewModel, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
             _dialogService = dialogService;
             _ideaCategoryViewModel = ideaCategoryViewModel;
+            _ideaDataService = ideaDataService;
             FlipCommand = new DelegateCommand<object>(Flip, CanFlip);
             IdeaElement = ideaElement;
             EditCommand = new DelegateCommand(EditExecute);
@@ -37,7 +38,7 @@ namespace IdeaPage.ViewModels
             IdeaElementViewModel self = this;
             if (_ideaValueListViewModel == null)
             {
-                _ideaValueListViewModel = new IdeaValueListViewModel(idea, _ideaCategoryViewModel.IdeaCategory, self, ideaDataService, _dialogService);
+                _ideaValueListViewModel = new IdeaValueListViewModel(self, ideaDataService, _dialogService);
             }
             CreateGroupedView();
         }
@@ -126,17 +127,11 @@ namespace IdeaPage.ViewModels
                 });
             if(!delete) return;
             _ideaCategoryViewModel.SelectedIdeaElement = selectedIdeaElement;
-            await _ideaCategoryViewModel.DeleteIdeaElementAsync();
-        }
-
-        public bool IsSelected
-        {
-            get => _ideaCategoryViewModel.SelectedIdeaElement == this;
-        }
-
-        public IdeaCategory IdeaCategory
-        {
-            get => _ideaCategoryViewModel.IdeaCategory;
+            await _ideaCategoryViewModel.DeleteIdeaElementAsync(); 
+            if (_ideaDataService != null)
+            {
+                await _ideaDataService.DeleteIdeaElementAsync(_ideaCategoryViewModel.IdeaCategory, IdeaElement);
+            }
         }
 
         public IdeaElement IdeaElement { get; }

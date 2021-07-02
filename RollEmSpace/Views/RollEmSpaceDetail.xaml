@@ -3,11 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     av:DesignHeight="1093.923"
     av:DesignWidth="1557"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -442,9 +440,8 @@
             <StackPanel Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <ProgressBar
                     IsIndeterminate="True"
-                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Style="{StaticResource MaterialDesignCircularProgressBarRollEm}"
                     Value="35"
-                    Foreground="{StaticResource RollEmBrush}"
                     Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}" />
                 <Label Content="Roll ideas"
                        VerticalAlignment="Center"
@@ -491,6 +488,7 @@
             Margin="{StaticResource MarginBottom20}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
+            Focusable="False"
             ItemsSource="{Binding GroupedIdeasView}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -630,13 +628,13 @@
                                                 </StackPanel>
                                                 <WrapPanel Width="400" VerticalAlignment="Top">
                                                     <ListView
-                                                        Focusable="True"
+                                                        Focusable="False"
                                                         ItemsSource="{Binding GroupedIdeaElementsView}"
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                                         <ListView.ItemsPanel>
                                                             <ItemsPanelTemplate>
-                                                                <WrapPanel Width="400" />
+                                                                <WrapPanel Width="400"/>
                                                             </ItemsPanelTemplate>
                                                         </ListView.ItemsPanel>
                                                         <ListView.ItemContainerStyle>
@@ -645,6 +643,23 @@
                                                                 <Setter Property="Margin" Value="0" />
                                                                 <Setter Property="BorderThickness" Value="0" />
                                                                 <Setter Property="VerticalAlignment" Value="Top" />
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsFocused" Value="True">
+                                                                        <Setter Property="Background" Value="Transparent" />
+                                                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                                                        <Setter Property="BorderThickness" Value="0" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsSelected" Value="True">
+                                                                        <Setter Property="Background" Value="Transparent" />
+                                                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                                                        <Setter Property="BorderThickness" Value="0" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="Transparent" />
+                                                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                                                        <Setter Property="BorderThickness" Value="0" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
                                                             </Style>
                                                         </ListView.ItemContainerStyle>
                                                         <ListView.ItemTemplate>
@@ -685,7 +700,7 @@
                                                                     </StackPanel>
                                                                     <StackPanel Width="192">
                                                                         <ListView
-                                                                            Focusable="True"
+                                                                            Focusable="False"
                                                                             ItemsSource="{Binding GroupedIdeaValuesView}"
                                                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                                             ScrollViewer.VerticalScrollBarVisibility="Disabled">

@@ -37,6 +37,7 @@ namespace IdeaPage.ViewModels
         public async Task DeleteIdeaCategoryAsync(IdeaCategoryViewModel ideaCategory)
         {
             IdeaCategories.Remove(ideaCategory);
+            _selectedIdea.Idea.IdeaCategories.Remove(ideaCategory.IdeaCategory);
             //await _ideaDataService.DeleteIdeaCategoryAsync(_selectedIdea.Idea, ideaCategory.IdeaCategory);
         }
 

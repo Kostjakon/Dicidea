@@ -30,7 +30,9 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding DeleteCommand}"
-                Style="{StaticResource ContentEditorButton}">
+                Style="{StaticResource ContentEditorButton}"
+                HorizontalAlignment="Left"
+                Margin="{StaticResource MarginHorizontal20}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"
@@ -48,10 +50,10 @@
 
             <StackPanel
                 Grid.Column="4"
+                Margin="{StaticResource MarginHorizontal20}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Orientation="Vertical"
-                Margin="{StaticResource MarginHorizontal20}">
+                Orientation="Vertical">
                 <Button
                     HorizontalAlignment="Right"
                     Command="{Binding SaveCommand}"
@@ -64,23 +66,25 @@
                         OverrideColor="{StaticResource IconColor}"
                         UriSource="../Icons/save-solid.svg" />
                 </Button>
-                <Label Content="Saving completed!"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}"
-                       FontSize="{StaticResource FontSizeS}"
-                       Foreground="{StaticResource IdeasBrush}"
-                       HorizontalAlignment="Right"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Label
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Saving completed!"
+                    FontSize="{StaticResource FontSizeS}"
+                    Foreground="{StaticResource IdeasBrush}"
+                    Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <ProgressBar
                         IsIndeterminate="True"
                         Style="{StaticResource MaterialDesignCircularProgressBar}"
-                        Value="35"
+                        Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
+                        Value="35" />
+                    <Label
+                        VerticalAlignment="Center"
+                        Content="Saving"
+                        FontSize="{StaticResource FontSizeS}"
+                        Foreground="{StaticResource IdeasBrush}"
                         Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}" />
-                    <Label Content="Saving"
-                           VerticalAlignment="Center"
-                           Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
-                           FontSize="{StaticResource FontSizeS}"
-                           Foreground="{StaticResource IdeasBrush}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

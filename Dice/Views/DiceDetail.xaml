@@ -77,8 +77,10 @@
             </ListView.GroupStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
-                                Margin="{StaticResource MarginRight20}">
+                    <StackPanel
+                        Margin="{StaticResource MarginRight20}"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
                         <svg:SVGImage
                             Width="40"
                             Height="40"
@@ -115,30 +117,30 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
+            Margin="200,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Orientation="Vertical"
-            Margin="200 0">
+            Orientation="Vertical">
             <TextBlock
                 HorizontalAlignment="Stretch"
-                TextAlignment="Center"
                 VerticalAlignment="Center"
+                FontSize="{StaticResource HeaderL}"
                 Text="{Binding SelectedDice.Dice.Name}"
-                FontSize="{StaticResource HeaderL}" />
+                TextAlignment="Center" />
             <TextBlock
-                TextAlignment="Center"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
+                FontSize="{StaticResource FontSizeM}"
                 Text="{Binding SelectedDice.Dice.Description}"
-                FontSize="{StaticResource FontSizeM}" />
+                TextAlignment="Center" />
         </StackPanel>
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
+            Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Orientation="Vertical"
-            Margin="{StaticResource MarginHorizontal20}">
+            Orientation="Vertical">
             <Button
                 HorizontalAlignment="Right"
                 Command="{Binding SaveCommand}"
@@ -151,24 +153,25 @@
                     OverrideColor="{StaticResource IconColor}"
                     UriSource="../Icons/save-solid.svg" />
             </Button>
-            <Label Content="Saving completed!"
-                   VerticalAlignment="Center"
-                   Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}"
-                   FontSize="{StaticResource FontSizeS}"
-                   Foreground="{StaticResource DiceBrush}"
-                   HorizontalAlignment="Right"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Content="Saving completed!"
+                FontSize="{StaticResource FontSizeS}"
+                Foreground="{StaticResource DiceBrush}"
+                Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}" />
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <ProgressBar
                     IsIndeterminate="True"
-                    Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Value="35"
+                    Style="{StaticResource MaterialDesignCircularProgressBarDice}"
+                    Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
+                    Value="35" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Saving"
+                    FontSize="{StaticResource FontSizeS}"
                     Foreground="{StaticResource DiceBrush}"
                     Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}" />
-                <Label Content="Saving"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
-                       FontSize="{StaticResource FontSizeS}"
-                       Foreground="{StaticResource DiceBrush}"/>
             </StackPanel>
         </StackPanel>
         <ListView
@@ -408,14 +411,14 @@
                                         Margin="{StaticResource MarginBottom4}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
+                                        FontSize="{StaticResource HeaderL}"
+                                        Text="{Binding Path=Category.Name}"
                                         TextTrimming="WordEllipsis"
-                                        TextWrapping="Wrap"
-                                        FontSize="{StaticResource HeaderL}" 
-                                        Text="{Binding Path=Category.Name}" />
+                                        TextWrapping="Wrap" />
                                     <TextBlock
                                         Grid.Row="1"
-                                        Grid.ColumnSpan="2"
                                         Grid.Column="0"
+                                        Grid.ColumnSpan="2"
                                         Height="24"
                                         Margin="{StaticResource MarginLeft10Bottom20}"
                                         HorizontalAlignment="Stretch"

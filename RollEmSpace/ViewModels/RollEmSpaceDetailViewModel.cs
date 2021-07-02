@@ -32,9 +32,9 @@ namespace RollEmSpacePage.ViewModels
         private DiceListViewModel _diceListViewModel;
         private readonly IDialogService _dialogService;
         private readonly Random _random = new Random();
-        private bool _showSaved = false;
-        private bool _isSaving = false;
-        private bool _showRolling = false;
+        private bool _showSaved;
+        private bool _isSaving;
+        private bool _showRolling;
 
         public RollEmSpaceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
@@ -44,7 +44,6 @@ namespace RollEmSpacePage.ViewModels
             GoToRollEmSpaceOverviewCommand = new DelegateCommand<object>(GoToRollEmSpaceOverview);
             RollCommand = new DelegateCommand(RollExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
-            EditCommand = new DelegateCommand(EditExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
         public ICommand GoToDiceCommand { get; private set; }
@@ -78,18 +77,17 @@ namespace RollEmSpacePage.ViewModels
 
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand RollCommand { get; set; }
-        public DelegateCommand EditCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
         private async void RollExecute()
         {
             ShowRolling = true;
             await Task.Delay(10);
-            await rollIdeas();
+            await RollIdeas();
             ShowRolling = false;
         }
 
-        private async Task rollIdeas()
+        private async Task RollIdeas()
         {
             List<Idea> rolledIdeas = new List<Idea>();
             for (int j = 0; j < SelectedDice.Dice.Amount; j++)
@@ -143,10 +141,6 @@ namespace RollEmSpacePage.ViewModels
             SelectedDice.Dice.LastUsed = DateTime.Now;
             await _diceListViewModel.SaveDiceAsync();
         }
-        private void EditExecute()
-        {
-            //Task.Run(SelectedDice.EditCategoryAsync);
-        }
 
         public IRegionManager RegionManager { get; private set; }
         public ListCollectionView GroupedIdeasView
@@ -154,8 +148,6 @@ namespace RollEmSpacePage.ViewModels
             get => _groupedIdeasView;
             set => SetProperty(ref _groupedIdeasView, value);
         }
-
-        public bool IsEditEnabled => GroupedIdeasView.CurrentItem != null;
 
         public IdeaViewModel SelectedIdea
         {
@@ -274,7 +266,7 @@ namespace RollEmSpacePage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            Debug.WriteLine("Not implemented, navigated from DiceDetail to some other side");
+            Debug.WriteLine("Navigated from RollEmSpace to some other side");
         }
     }
 }

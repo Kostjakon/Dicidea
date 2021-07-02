@@ -14,18 +14,14 @@ namespace IdeaPage.ViewModels
     public class IdeaValueListViewModel : BindableBase
     {
         private ObservableCollection<IdeaValueViewModel> _ideaValues;
-        private Idea _selectedIdea;
-        private IdeaCategory _selectedIdeaCategory;
         private IdeaElementViewModel _selectedIdeaElement;
         private readonly IIdeaDataService _ideaDataService;
         private readonly IDialogService _dialogService;
 
-        public IdeaValueListViewModel(Idea idea, IdeaCategory ideaCategory, IdeaElementViewModel ideaElement, IIdeaDataService ideaDataService, IDialogService dialogService)
+        public IdeaValueListViewModel(IdeaElementViewModel ideaElement, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
             _dialogService = dialogService;
             _ideaDataService = ideaDataService;
-            _selectedIdea = idea;
-            _selectedIdeaCategory = ideaCategory;
             _selectedIdeaElement = ideaElement;
             LoadElements();
         }
@@ -39,6 +35,7 @@ namespace IdeaPage.ViewModels
         public async Task DeleteIdeaValueAsync(IdeaValueViewModel ideaValue)
         {
             IdeaValues.Remove(ideaValue);
+            _selectedIdeaElement.IdeaElement.IdeaValues.Remove(ideaValue.IdeaValue);
             //await _ideaDataService.DeleteIdeaValueAsync(_selectedIdea, _selectedIdeaCategory, _selectedIdeaElement.IdeaElement, ideaValue.IdeaValue);
         }
 
@@ -47,7 +44,7 @@ namespace IdeaPage.ViewModels
             IdeaValues = new ObservableCollection<IdeaValueViewModel>();
             List<IdeaValue> ideaValues = _selectedIdeaElement.IdeaElement.IdeaValues;
             //Debug.WriteLine(categories != null);
-            if (ideaValues != null) ideaValues.ToList().ForEach(v => IdeaValues.Add(new IdeaValueViewModel(v, _selectedIdeaElement, _dialogService)));
+            if (ideaValues != null) ideaValues.ToList().ForEach(v => IdeaValues.Add(new IdeaValueViewModel(v, _selectedIdeaElement, _dialogService, _ideaDataService)));
         }
     }
 }

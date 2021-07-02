@@ -15,16 +15,14 @@ namespace IdeaPage.ViewModels
     public class IdeaElementListViewModel : NotifyPropertyChanges
     {
         private ObservableCollection<IdeaElementViewModel> _ideaElements;
-        private Idea _selectedIdea;
         private IdeaCategoryViewModel _selectedIdeaCategory;
         private readonly IIdeaDataService _ideaDataService;
         private readonly IDialogService _dialogService;
 
-        public IdeaElementListViewModel(Idea idea, IdeaCategoryViewModel ideaCategory, IIdeaDataService ideaDataService, IDialogService dialogService)
+        public IdeaElementListViewModel(IdeaCategoryViewModel ideaCategory, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
             _dialogService = dialogService;
             _ideaDataService = ideaDataService;
-            _selectedIdea = idea;
             _selectedIdeaCategory = ideaCategory;
             LoadIdeaElements();
         }
@@ -38,6 +36,7 @@ namespace IdeaPage.ViewModels
         public async Task DeleteIdeaElementAsync(IdeaElementViewModel ideaElement)
         {
             IdeaElements.Remove(ideaElement);
+            _selectedIdeaCategory.IdeaCategory.IdeaElements.Remove(ideaElement.IdeaElement);
             //await _ideaDataService.DeleteIdeaElementAsync(_selectedIdea, _selectedIdeaCategory.IdeaCategory, ideaElement.IdeaElement);
         }
 
@@ -46,7 +45,7 @@ namespace IdeaPage.ViewModels
             IdeaElements = new ObservableCollection<IdeaElementViewModel>();
             List<IdeaElement> ideaElements = _selectedIdeaCategory.IdeaCategory.IdeaElements;
             //Debug.WriteLine(categories != null);
-            if (ideaElements != null) ideaElements.ToList().ForEach(e => IdeaElements.Add(new IdeaElementViewModel(e, _selectedIdeaCategory, _selectedIdea, _ideaDataService, _dialogService)));
+            ideaElements?.ToList().ForEach(e => IdeaElements.Add(new IdeaElementViewModel(e, _selectedIdeaCategory, _ideaDataService, _dialogService)));
         }
 
     }

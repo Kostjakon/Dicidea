@@ -21,6 +21,7 @@ namespace IdeaPage.ViewModels
     {
         private readonly IdeaElementListViewModel _ideaElementListViewModel;
         private readonly IdeaViewModel _ideaViewModel;
+        private readonly IIdeaDataService _ideaDataService;
         private ListCollectionView _groupedIdeaElementsView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
@@ -28,11 +29,11 @@ namespace IdeaPage.ViewModels
 
         public IdeaCategoryViewModel(IdeaViewModel idea, IdeaCategory ideaCategory, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
+            _ideaDataService = ideaDataService;
             _dialogService = dialogService;
             _ideaViewModel = idea;
             IdeaCategory = ideaCategory;
-            var self = this;
-            _ideaElementListViewModel ??= new IdeaElementListViewModel(idea.Idea, self, ideaDataService, _dialogService);
+            _ideaElementListViewModel ??= new IdeaElementListViewModel(this, ideaDataService, _dialogService);
             EditCommand = new DelegateCommand(EditExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             CreateGroupedView();
@@ -100,11 +101,12 @@ namespace IdeaPage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedIdeaElementsView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName,
-                Converter = new NameToInitialConverter()
-            });
+            if (GroupedIdeaElementsView.GroupDescriptions != null)
+                GroupedIdeaElementsView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName,
+                    Converter = new NameToInitialConverter()
+                });
             GroupedIdeaElementsView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedIdeaElement));
         }
 
@@ -133,6 +135,10 @@ namespace IdeaPage.ViewModels
             if (!delete) return;
             _ideaViewModel.SelectedIdeaCategory = selectedIdeaCategory;
             await _ideaViewModel.DeleteIdeaCategoryAsync();
+            if (_ideaDataService != null)
+            {
+                await _ideaDataService.DeleteIdeaCategoryAsync(_ideaViewModel.Idea, IdeaCategory);
+            }
         }
         public async Task DeleteIdeaElementAsync()
         {

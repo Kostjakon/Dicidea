@@ -85,9 +85,8 @@
                     Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <ProgressBar
-                        Foreground="{StaticResource DiceBrush}"
                         IsIndeterminate="True"
-                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Style="{StaticResource MaterialDesignCircularProgressBarDice}"
                         Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
                         Value="35" />
                     <Label

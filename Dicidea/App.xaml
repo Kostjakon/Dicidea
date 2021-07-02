@@ -69,6 +69,18 @@
                     <Color x:Key="CategoryColor">#131313</Color>
                     <SolidColorBrush x:Key="CategoryBrush" Color="{DynamicResource CategoryColor}" />
 
+                    <Style
+                        x:Key="MaterialDesignCircularProgressBarDice"
+                        BasedOn="{StaticResource MaterialDesignCircularProgressBar}"
+                        TargetType="{x:Type ProgressBar}">
+                        <Setter Property="Foreground" Value="{DynamicResource DiceBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="MaterialDesignCircularProgressBarRollEm"
+                        BasedOn="{StaticResource MaterialDesignCircularProgressBar}"
+                        TargetType="{x:Type ProgressBar}">
+                        <Setter Property="Foreground" Value="{DynamicResource RollEmBrush}" />
+                    </Style>
 
                     <Style x:Key="MaterialDesignCircularProgressBar" TargetType="{x:Type ProgressBar}">
                         <Setter Property="Foreground" Value="{DynamicResource IdeasBrush}" />
