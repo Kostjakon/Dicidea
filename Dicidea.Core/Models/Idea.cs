@@ -16,10 +16,10 @@ namespace Dicidea.Core.Models
         private bool _save;
         public Idea(string name, string sectionName, string description)
         {
+            IdeaCategories = new List<IdeaCategory>();
             SectionName = sectionName;
             Name = name;
             Description = description;
-            IdeaCategories = new List<IdeaCategory>();
             Id = Guid.NewGuid().ToString("N");
             Save = false;
             Rules.Add(new DelegateRule<Idea>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));

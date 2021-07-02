@@ -128,10 +128,6 @@ namespace IdeaPage.ViewModels
             if(!delete) return;
             _ideaCategoryViewModel.SelectedIdeaElement = selectedIdeaElement;
             await _ideaCategoryViewModel.DeleteIdeaElementAsync(); 
-            if (_ideaDataService != null)
-            {
-                await _ideaDataService.DeleteIdeaElementAsync(_ideaCategoryViewModel.IdeaCategory, IdeaElement);
-            }
         }
 
         public IdeaElement IdeaElement { get; }

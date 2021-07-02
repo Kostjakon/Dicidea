@@ -24,7 +24,7 @@ namespace IdeaPage.ViewModels
         {
             _dialogService = dialogService;
             _ideaDataService = ideaDataService;
-            LoadIdeasAsync();
+            LoadIdeasAsync().Wait();
         }
         public IdeaListViewModel(List<Idea> ideas, IDialogService dialogService)//, IIdeaDataService ideaDataService
         {

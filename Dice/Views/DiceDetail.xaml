@@ -137,14 +137,15 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
-            Margin="{StaticResource MarginHorizontal20}"
+            Margin="{StaticResource MarginHorizontal10}"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Orientation="Vertical">
             <Button
                 HorizontalAlignment="Right"
                 Command="{Binding SaveCommand}"
-                Style="{StaticResource ContentEditorButton}">
+                Style="{StaticResource ContentEditorButton}"
+                Background="{StaticResource DiceBrush}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"

@@ -17,11 +17,11 @@ namespace Dicidea.Core.Models
 
         public Dice(bool newDice)
         {
-            Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
             Categories = new List<Category>
             {
                 new Category(true)
             };
+            Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
             Rules.Add(new DelegateRule<Dice>(nameof(Categories), "Everything has to have a name", d =>
             {
                 bool hasNoErrors = true;

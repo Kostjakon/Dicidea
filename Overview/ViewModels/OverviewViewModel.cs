@@ -144,9 +144,9 @@ namespace OverviewPage.ViewModels
             else
             {
                 Debug.WriteLine("Create everything new");
-                _diceDataService ??= new DiceDataServiceJson();
+                _diceDataService ??= new DiceDataServiceJson(_dialogService);
                 _diceListViewModel ??= new DiceListViewModel(_diceDataService, _dialogService);
-                _ideaDataService ??= new IdeaDataServiceJson();
+                _ideaDataService ??= new IdeaDataServiceJson(_dialogService);
                 _ideaListViewModel ??= new IdeaListViewModel(_ideaDataService, _dialogService);
                 _parameters ??= new NavigationParameters
                 {

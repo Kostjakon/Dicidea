@@ -17,18 +17,16 @@ using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
-    public class DiceDetailViewModel : NotifyPropertyChanges, INavigationAware, IActiveAware
+    public class DiceDetailViewModel : NotifyPropertyChanges, INavigationAware
     {
-
-        private bool _isActive;
+        
         private DiceListViewModel _diceListViewModel;
         //private readonly IDialogCoordinator _dialogCoordinator;
         private ListCollectionView _groupedDiceView;
         private readonly IRegionManager _regionManager;
-        private NavigationParameters _parameters;
         private readonly IDialogService _dialogService;
-        private bool _showSaved = false;
-        private bool _isSaving = false;
+        private bool _showSaved;
+        private bool _isSaving;
 
 
         public DiceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
@@ -38,7 +36,6 @@ namespace DicePage.ViewModels
             GoToDiceOverviewCommand = new DelegateCommand<object>(GoToDiceOverview, CanGoToDiceOverview);
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
-            EditCommand = new DelegateCommand(EditExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
         public bool ShowSaved
@@ -51,7 +48,7 @@ namespace DicePage.ViewModels
             get => _isSaving;
             set => SetProperty(ref _isSaving, value);
         }
-        public ICommand GoToDiceOverviewCommand { get; private set; }
+        public ICommand GoToDiceOverviewCommand { get; }
 
         private bool CanGoToDiceOverview(object obj)
         {
@@ -73,7 +70,6 @@ namespace DicePage.ViewModels
 
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand AddCommand { get; set; }
-        public DelegateCommand EditCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
         private async void AddExecute()
@@ -81,10 +77,7 @@ namespace DicePage.ViewModels
             Debug.WriteLine("Add Category");
             await SelectedDice.AddCategoryAsync();
         }
-        private void EditExecute()
-        {
-            //Task.Run(SelectedDice.EditCategoryAsync);
-        }
+
         private async void DeleteExecute()
         {
             var selectedCategory = SelectedDice.SelectedCategory;
@@ -123,8 +116,6 @@ namespace DicePage.ViewModels
             set => SetProperty(ref _groupedDiceView, value);
         }
 
-        public bool IsEditEnabled => GroupedDiceView.CurrentItem != null;
-
         public DiceViewModel SelectedDice
         {
             get
@@ -133,38 +124,6 @@ namespace DicePage.ViewModels
                 else return null;
             }
             set => GroupedDiceView.MoveCurrentTo(value);
-        }
-
-        private async void DeleteExecute(object obj)
-        {
-            var selectedDice = SelectedDice;
-            bool delete = false;
-            if (selectedDice == null) return;
-            _dialogService.ShowDialog("ConfirmationDialog",
-                new DialogParameters
-                {
-                    { "title", "Delete dice?" },
-                    { "message", $"Do you really want to delete the dice '{selectedDice.Dice.Name}'?" }
-                },
-                r =>
-                {
-                    if (r.Result == ButtonResult.None) return;
-                    if (r.Result == ButtonResult.No) return;
-                    if (r.Result == ButtonResult.Yes) delete = true;
-                });
-            if (!delete) return;
-            await _diceListViewModel.DeleteDiceAsync(selectedDice);
-            GroupedDiceView.Refresh();
-            
-        }
-
-        private async void NewExecute(object obj)
-        {
-            var newDice = await _diceListViewModel.AddDiceAsync();
-            GroupedDiceView.Refresh();
-            GroupedDiceView.MoveCurrentTo(newDice);
-
-            newDice.Dice.WhenPropertyChanged.Subscribe(OnNext);
         }
 
         private void OnNext(string propertyName)
@@ -189,7 +148,7 @@ namespace DicePage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = {new SortDescription(propertyName, ListSortDirection.Ascending)}
             };
-            GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription
+            GroupedDiceView.GroupDescriptions?.Add(new PropertyGroupDescription
             {
                 PropertyName = propertyName,
                 Converter = new NameToInitialConverter()
@@ -218,7 +177,7 @@ namespace DicePage.ViewModels
                     {
                         GroupedDiceView.MoveCurrentToFirst();
                         GroupedDiceView.Refresh();
-                        if (GroupedDiceView.Count > 0) _parameters.Add("selectedDice", GroupedDiceView.GetItemAt(0));
+                        if (GroupedDiceView.Count > 0) Parameters.Add("selectedDice", GroupedDiceView.GetItemAt(0));
                     }
                 }
 
@@ -241,23 +200,5 @@ namespace DicePage.ViewModels
         {
             Debug.WriteLine("Not implemented, navigated from DiceDetail to some other side");
         }
-        
-
-        public bool IsActive
-        {
-            get { return _isActive; }
-            set
-            {
-                _isActive = value;
-                OnIsActiveChanged();
-            }
-        }
-
-        private void OnIsActiveChanged()
-        {
-            IsActiveChanged?.Invoke(this, new EventArgs());
-        }
-
-        public event EventHandler IsActiveChanged;
     }
 }

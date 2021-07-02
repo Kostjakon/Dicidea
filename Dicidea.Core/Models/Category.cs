@@ -14,16 +14,16 @@ namespace Dicidea.Core.Models
 
         public Category(bool newCategory)
         {
+            Elements = new List<Element>
+            {
+                new Element(true)
+            };
             Rules.Add(new DelegateRule<Category>(nameof(Name), "The category has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
             Id = Guid.NewGuid().ToString("N");
             Name = " ";
             Description = " ";
             Amount = 1;
             Active = true;
-            Elements = new List<Element>
-            {
-                new Element(true)
-            };
             Rules.Add(new DelegateRule<Category>(nameof(Elements), "Everything has to have a name", c =>
             {
                 bool hasNoErrors = true;

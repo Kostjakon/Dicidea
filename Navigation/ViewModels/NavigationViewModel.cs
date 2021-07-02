@@ -27,7 +27,7 @@ namespace Navigation.ViewModels
         {
             _regionManager = regionManager;
 
-            DiceDataService = new DiceDataServiceJson();
+            DiceDataService = new DiceDataServiceJson(dialogService);
 
             DiceListViewModel = new DiceListViewModel(DiceDataService, dialogService);
             GoToDiceCommand = new DelegateCommand<object>(GoToDice, CanGoToDice);

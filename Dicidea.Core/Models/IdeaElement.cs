@@ -13,10 +13,10 @@ namespace Dicidea.Core.Models
         private List<IdeaValue> _ideaValues;
         public IdeaElement(string name)
         {
+            IdeaValues = new List<IdeaValue>();
             Rules.Add(new DelegateRule<IdeaElement>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Id = Guid.NewGuid().ToString("N");
             Name = name;
-            IdeaValues = new List<IdeaValue>();
         }
 
         public IdeaElement()

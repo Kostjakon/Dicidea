@@ -6,15 +6,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dicidea.Core.Models;
 using Newtonsoft.Json;
+using Prism.Services.Dialogs;
 
 namespace Dicidea.Core.Services
 {
     public class DiceDataServiceJson : IDiceDataService
     {
         private readonly List<Dice> _allDice;
-
-        public DiceDataServiceJson()
+        private readonly IDialogService _dialogService;
+        public DiceDataServiceJson(IDialogService dialogService)
         {
+            _dialogService = dialogService;
             _allDice = LoadDiceAsync().Result;
             //SaveDiceAsync(_allDice);
         }
@@ -111,7 +113,19 @@ namespace Dicidea.Core.Services
             }
             catch (Exception e)
             {
-                Console.Out.WriteLine($"Fehler beim Laden: {e.Message}");
+                _dialogService.ShowDialog("ErrorDialog",
+                    new DialogParameters
+                    {
+                        { "title", "Error" },
+                        { "message", $"Loading of file '{FileName}' failed!\nError: '{e.Message}" }
+                    },
+                    r =>
+                    {
+                        if (r.Result == ButtonResult.None) return;
+                        if (r.Result == ButtonResult.OK) return;
+                        if (r.Result == ButtonResult.Cancel) { }
+                    });
+                throw;
                 throw;
             }
         }
@@ -279,7 +293,19 @@ namespace Dicidea.Core.Services
             }
             catch (Exception e)
             {
-                Console.Out.WriteLine($"Fehler beim Speichern: {e.Message}");
+                Console.WriteLine(e);
+                _dialogService.ShowDialog("ErrorDialog",
+                    new DialogParameters
+                    {
+                        { "title", "Error" },
+                        { "message", $"Saving in path '{FolderName}' failed!\nError: '{e.Message}" }
+                    },
+                    r =>
+                    {
+                        if (r.Result == ButtonResult.None) return;
+                        if (r.Result == ButtonResult.OK) return;
+                        if (r.Result == ButtonResult.Cancel) { }
+                    });
                 throw;
             }
         }

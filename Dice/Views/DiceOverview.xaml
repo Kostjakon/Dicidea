@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides20}">
+        <Grid Grid.Row="0" Margin="{StaticResource MarginVertical20Horizontal10}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="12" />
@@ -60,14 +60,14 @@
                 FontSize="{StaticResource HeaderXL}" />
             <StackPanel
                 Grid.Column="4"
-                Margin="{StaticResource MarginHorizontal20}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Orientation="Vertical">
                 <Button
                     HorizontalAlignment="Right"
                     Command="{Binding SaveCommand}"
-                    Style="{StaticResource ContentEditorButton}">
+                    Style="{StaticResource ContentEditorButton}"
+                    Background="{StaticResource DiceBrush}">
                     <svg:SVGImage
                         Width="28"
                         Height="28"

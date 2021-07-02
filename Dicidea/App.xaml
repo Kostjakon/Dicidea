@@ -24,6 +24,7 @@
                     <Thickness x:Key="MarginAllSides20">20</Thickness>
                     <Thickness x:Key="MarginHorizontal20">20 0</Thickness>
                     <Thickness x:Key="MarginHorizontal20Vertical10">20 10</Thickness>
+                    <Thickness x:Key="MarginVertical20Horizontal10">10 20</Thickness>
                     <Thickness x:Key="MarginBottom20">0 0 0 20</Thickness>
                     <Thickness x:Key="MarginBottom14">0 0 0 14</Thickness>
                     <Thickness x:Key="MarginBottom4">0 0 0 4</Thickness>

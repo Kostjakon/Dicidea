@@ -144,7 +144,8 @@
             <Button
                 HorizontalAlignment="Right"
                 Command="{Binding SaveCommand}"
-                Style="{StaticResource ContentEditorButton}">
+                Style="{StaticResource ContentEditorButton}"
+                Background="{StaticResource IdeasBrush}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"

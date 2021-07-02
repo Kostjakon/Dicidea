@@ -20,10 +20,9 @@ namespace DicePage.ViewModels
     {
         private readonly CategoryViewModel _categoryViewModel;
         private readonly IDialogService _dialogService;
-        private ValueListViewModel _valueListViewModel;
+        private readonly ValueListViewModel _valueListViewModel;
         private ListCollectionView _groupedValuesView;
-        private IDiceDataService _diceDataService;
-        private DiceViewModel _diceViewModel;
+        private readonly DiceViewModel _diceViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
         public ElementViewModel(Element element, CategoryViewModel categoryViewModel, DiceViewModel diceViewModel, IDiceDataService diceDataService, IDialogService dialogService)

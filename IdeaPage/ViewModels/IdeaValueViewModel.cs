@@ -67,13 +67,7 @@ namespace IdeaPage.ViewModels
             if(!delete) return;
             _ideaElementViewModel.SelectedIdeaValue = selectedIdeaValue;
             await _ideaElementViewModel.DeleteIdeaValueAsync();
-            if (_ideaDataService != null)
-            {
-                await _ideaDataService.DeleteIdeaValueAsync(IdeaElement, IdeaValue);
-            }
         }
-
-        public IdeaElement IdeaElement => _ideaElementViewModel.IdeaElement;
 
         public IdeaValue IdeaValue { get; }
     }

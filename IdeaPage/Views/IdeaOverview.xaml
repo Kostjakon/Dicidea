@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides20}">
+        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides10}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="188" />
                 <ColumnDefinition Width="12" />
@@ -32,7 +32,7 @@
                 Command="{Binding DeleteCommand}"
                 Style="{StaticResource ContentEditorButton}"
                 HorizontalAlignment="Left"
-                Margin="{StaticResource MarginHorizontal20}">
+                Margin="{StaticResource MarginHorizontal10}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"
@@ -50,14 +50,15 @@
 
             <StackPanel
                 Grid.Column="4"
-                Margin="{StaticResource MarginHorizontal20}"
+                Margin="{StaticResource MarginHorizontal10}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Orientation="Vertical">
                 <Button
                     HorizontalAlignment="Right"
                     Command="{Binding SaveCommand}"
-                    Style="{StaticResource ContentEditorButton}">
+                    Style="{StaticResource ContentEditorButton}"
+                    Background="{StaticResource IdeasBrush}">
                     <svg:SVGImage
                         Width="28"
                         Height="28"

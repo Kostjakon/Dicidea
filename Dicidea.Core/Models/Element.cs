@@ -15,16 +15,16 @@ namespace Dicidea.Core.Models
 
         public Element(bool newElement)
         {
-            Rules.Add(new DelegateRule<Element>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
+            Values = new List<Value>
+            {
+                new Value(true)
+            };
             Id = Guid.NewGuid().ToString("N"); 
             Name = "";
             Amount = 1;
             ValueAmount = 1;
             Active = true;
-            Values = new List<Value>
-            {
-                new Value(true)
-            };
+            Rules.Add(new DelegateRule<Element>(nameof(Name), "The element has to have a name.", e => !string.IsNullOrWhiteSpace(e?.Name)));
             Rules.Add(new DelegateRule<Element>(nameof(Values), "Everything has to have a name", e =>
             {
                 bool hasNoErrors = true;

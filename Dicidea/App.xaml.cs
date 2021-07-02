@@ -27,6 +27,7 @@ namespace Dicidea
             containerRegistry.Register<IDiceDataService, DiceDataServiceJson>();
             containerRegistry.Register<IIdeaDataService, IdeaDataServiceJson>();
             containerRegistry.RegisterDialog<ConfirmationDialog, ConfirmationDialogViewModel>();
+            containerRegistry.RegisterDialog<ErrorDialog, ErrorDialogViewModel>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

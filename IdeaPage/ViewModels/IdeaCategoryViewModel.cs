@@ -135,10 +135,6 @@ namespace IdeaPage.ViewModels
             if (!delete) return;
             _ideaViewModel.SelectedIdeaCategory = selectedIdeaCategory;
             await _ideaViewModel.DeleteIdeaCategoryAsync();
-            if (_ideaDataService != null)
-            {
-                await _ideaDataService.DeleteIdeaCategoryAsync(_ideaViewModel.Idea, IdeaCategory);
-            }
         }
         public async Task DeleteIdeaElementAsync()
         {

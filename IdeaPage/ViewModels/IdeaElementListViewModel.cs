@@ -37,7 +37,10 @@ namespace IdeaPage.ViewModels
         {
             IdeaElements.Remove(ideaElement);
             _selectedIdeaCategory.IdeaCategory.IdeaElements.Remove(ideaElement.IdeaElement);
-            //await _ideaDataService.DeleteIdeaElementAsync(_selectedIdea, _selectedIdeaCategory.IdeaCategory, ideaElement.IdeaElement);
+            if (_ideaDataService != null)
+            {
+                await _ideaDataService.DeleteIdeaElementAsync(_selectedIdeaCategory.IdeaCategory, ideaElement.IdeaElement);
+            }
         }
 
         private void LoadIdeaElements()

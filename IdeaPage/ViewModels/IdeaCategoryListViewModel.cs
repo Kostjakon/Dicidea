@@ -38,7 +38,10 @@ namespace IdeaPage.ViewModels
         {
             IdeaCategories.Remove(ideaCategory);
             _selectedIdea.Idea.IdeaCategories.Remove(ideaCategory.IdeaCategory);
-            //await _ideaDataService.DeleteIdeaCategoryAsync(_selectedIdea.Idea, ideaCategory.IdeaCategory);
+            if (_ideaDataService != null)
+            {
+                await _ideaDataService.DeleteIdeaCategoryAsync(_selectedIdea.Idea, ideaCategory.IdeaCategory);
+            }
         }
 
         private void LoadIdeaCategories()

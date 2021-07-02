@@ -126,7 +126,6 @@ namespace DicePage.ViewModels
         {
             var selectedCategory = this;
             bool delete = false;
-            if (selectedCategory == null) return;
             _dialogService.ShowDialog("ConfirmationDialog",
                 new DialogParameters
                 {
@@ -152,7 +151,7 @@ namespace DicePage.ViewModels
         {
             Debug.WriteLine("Add Category");
             await _elementListViewModel.AddElementAsync();
-            //GroupedCategoriesView.Refresh();
+            GroupedElementsView.Refresh();
         }
     }
 }

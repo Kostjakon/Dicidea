@@ -21,7 +21,7 @@ namespace DicePage.ViewModels
         {
             _dialogService = dialogService;
             _diceDataService = diceDataService;
-            LoadDiceAsync();
+            LoadDiceAsync().Wait();
         }
 
         public ObservableCollection<DiceViewModel> AllDice

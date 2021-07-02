@@ -396,24 +396,24 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
+            Margin="200,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Orientation="Vertical"
-            Margin="200 0">
+            Orientation="Vertical">
             <TextBlock
                 HorizontalAlignment="Stretch"
-                TextAlignment="Center"
                 VerticalAlignment="Center"
-                TextWrapping="Wrap"
+                FontSize="{StaticResource HeaderL}"
                 Text="{Binding SelectedDice.Dice.Name}"
-                FontSize="{StaticResource HeaderL}" />
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
             <TextBlock
                 HorizontalAlignment="Stretch"
-                TextAlignment="Center"
                 VerticalAlignment="Center"
-                TextWrapping="Wrap"
+                FontSize="{StaticResource FontSizeM}"
                 Text="{Binding SelectedDice.Dice.Description}"
-                FontSize="{StaticResource FontSizeM}" />
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
         </StackPanel>
         <Grid
             Grid.Row="0"
@@ -421,14 +421,21 @@
             Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Command="{Binding RollCommand}" Style="{StaticResource ContentEditorButton}">
+            <Button
+                Grid.Row="0"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                Background="{StaticResource RollEmBrush}"
+                Command="{Binding RollCommand}"
+                Style="{StaticResource ContentEditorButton}"
+                Margin="{StaticResource MarginHorizontal10}">
                 <svg:SVGImage
                     Width="28"
                     Height="28"
@@ -437,20 +444,29 @@
                     OverrideColor="{StaticResource IconColor}"
                     UriSource="../Icons/dice-solid.svg" />
             </Button>
-            <StackPanel Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
                 <ProgressBar
                     IsIndeterminate="True"
                     Style="{StaticResource MaterialDesignCircularProgressBarRollEm}"
-                    Value="35"
+                    Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}"
+                    Value="35" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Roll ideas"
+                    FontSize="{StaticResource FontSizeS}"
+                    Foreground="{StaticResource RollEmBrush}"
                     Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}" />
-                <Label Content="Roll ideas"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding ShowRolling, Converter={StaticResource ConverterVisibility}}"
-                       FontSize="{StaticResource FontSizeS}"
-                       Foreground="{StaticResource RollEmBrush}"/>
             </StackPanel>
-            <Button Grid.Column="1" Grid.Row="0"
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
                 HorizontalAlignment="Right"
+                Background="{StaticResource RollEmBrush}"
                 Command="{Binding SaveCommand}"
                 Style="{StaticResource ContentEditorButton}">
                 <svg:SVGImage
@@ -461,24 +477,34 @@
                     OverrideColor="{StaticResource IconColor}"
                     UriSource="../Icons/save-solid.svg" />
             </Button>
-            <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Saving completed!"
-                   VerticalAlignment="Center"
-                   Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}"
-                   FontSize="{StaticResource FontSizeS}"
-                   Foreground="{StaticResource RollEmBrush}"
-                   HorizontalAlignment="Right"/>
-            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Content="Saving completed!"
+                FontSize="{StaticResource FontSizeS}"
+                Foreground="{StaticResource RollEmBrush}"
+                Visibility="{Binding ShowSaved, Converter={StaticResource ConverterVisibility}}" />
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
                 <ProgressBar
+                    Foreground="{StaticResource RollEmBrush}"
                     IsIndeterminate="True"
                     Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Value="35"
+                    Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
+                    Value="35" />
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Saving"
+                    FontSize="{StaticResource FontSizeS}"
                     Foreground="{StaticResource RollEmBrush}"
                     Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}" />
-                <Label Content="Saving"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding IsSaving, Converter={StaticResource ConverterVisibility}}"
-                       FontSize="{StaticResource FontSizeS}"
-                       Foreground="{StaticResource RollEmBrush}"/>
             </StackPanel>
         </Grid>
         <ListView
@@ -634,7 +660,7 @@
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                                         <ListView.ItemsPanel>
                                                             <ItemsPanelTemplate>
-                                                                <WrapPanel Width="400"/>
+                                                                <WrapPanel Width="400" />
                                                             </ItemsPanelTemplate>
                                                         </ListView.ItemsPanel>
                                                         <ListView.ItemContainerStyle>
