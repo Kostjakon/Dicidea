@@ -214,10 +214,7 @@ namespace OverviewPage.ViewModels
 
 
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            Debug.WriteLine("Not implemented, navigated from DiceOverview to some other side");
-        }
+        public void OnNavigatedFrom(NavigationContext navigationContext) {}
 
     }
 }

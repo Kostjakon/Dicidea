@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Dicidea.Core.Helper;
+﻿using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -63,7 +62,6 @@ namespace DicePage.ViewModels
         /// </summary>
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Value");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
 

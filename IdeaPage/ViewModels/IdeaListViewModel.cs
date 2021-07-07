@@ -41,7 +41,6 @@ namespace IdeaPage.ViewModels
         public IdeaListViewModel(List<Idea> ideas, IDialogService dialogService)//, IIdeaDataService ideaDataService
         {
             _dialogService = dialogService;
-            //_ideaDataService = ideaDataService;
             AllIdeas = new ObservableCollection<IdeaViewModel>();
             Ideas = ideas;
             Ideas.ToList().ForEach(d => AllIdeas.Add(new IdeaViewModel(d, _ideaDataService, _dialogService)));

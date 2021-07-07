@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using Dicidea.Core.Helper;
@@ -145,24 +144,18 @@ namespace IdeaPage.ViewModels
             }
         }
         /// <summary>
-        /// Unsortierte Liste
+        /// Sortier Funktionen
         /// </summary>
         private void Unsort()
         {
             GroupedIdeaView.IsLiveSorting = false;
             GroupedIdeaView.CustomSort = null;
         }
-        /// <summary>
-        /// Aufsteigende Sortierung
-        /// </summary>
         private void SortAscending()
         {
             GroupedIdeaView.IsLiveSorting = true;
             GroupedIdeaView.CustomSort = Comparer<IdeaViewModel>.Create((i1, i2) => string.Compare(i1.Idea.Name, i2.Idea.Name, StringComparison.OrdinalIgnoreCase));
         }
-        /// <summary>
-        /// Absteigende Sortierung
-        /// </summary>
         private void SortDescending()
         {
             GroupedIdeaView.IsLiveSorting = true;
@@ -204,7 +197,6 @@ namespace IdeaPage.ViewModels
         /// </summary>
         private async void DeleteExecute()
         {
-            Debug.WriteLine("Delete Idea");
             var selectedIdea = SelectedIdea;
             bool delete = false;
             if (selectedIdea == null) return;

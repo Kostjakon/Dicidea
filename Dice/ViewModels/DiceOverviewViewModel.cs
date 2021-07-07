@@ -146,24 +146,18 @@ namespace DicePage.ViewModels
             }
         }
         /// <summary>
-        /// Unsortierte Liste
+        /// Sortier Funktionen
         /// </summary>
         private void Unsort()
         {
             GroupedDiceView.IsLiveSorting = false;
             GroupedDiceView.CustomSort = null;
         }
-        /// <summary>
-        /// Aufsteigende Sortierung
-        /// </summary>
         private void SortAscending()
         {
             GroupedDiceView.IsLiveSorting = true;
             GroupedDiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d1.Dice.Name, d2.Dice.Name, StringComparison.OrdinalIgnoreCase));
         }
-        /// <summary>
-        /// Absteigende Sortierung
-        /// </summary>
         private void SortDescending()
         {
             GroupedDiceView.IsLiveSorting = true;

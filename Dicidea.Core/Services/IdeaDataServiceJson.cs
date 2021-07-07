@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,11 +23,8 @@ namespace Dicidea.Core.Services
             _dialogService = dialogService;
             _allIdeas = LoadIdeasAsync().Result;
         }
-
         private string FileName => Path.Combine(FolderName, "idea.json");
-
-        private string FolderName =>
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dicidea");
+        private string FolderName => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dicidea");
 
         /// <summary>
         /// Funktion um die Liste der Ideen zu bekommen.
@@ -177,12 +173,7 @@ namespace Dicidea.Core.Services
             try
             {
 
-                if (!File.Exists(FileName))
-                {
-                    Debug.WriteLine("Create new Ideas List");
-                    return new List<Idea>();
-                }
-
+                if (!File.Exists(FileName))return new List<Idea>();
                 string data = File.ReadAllText(FileName);
                 List<Idea> allIdeas = JsonConvert.DeserializeObject<List<Idea>>(data);
                 return allIdeas;
@@ -213,17 +204,10 @@ namespace Dicidea.Core.Services
         /// <returns></returns>
         private async Task SaveIdeaAsync(List<Idea> ideas)
         {
-            foreach (Idea idea in ideas)
-            {
-                Debug.WriteLine(idea.Name);
-            }
             await Task.Delay(0);
             try
             {
-                if (!Directory.Exists(FolderName))
-                {
-                    Directory.CreateDirectory(FolderName);
-                }
+                if (!Directory.Exists(FolderName))Directory.CreateDirectory(FolderName);
                 string data = JsonConvert.SerializeObject(ideas);
                 File.WriteAllText(FileName, data);
             }

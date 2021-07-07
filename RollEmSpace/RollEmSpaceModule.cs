@@ -22,7 +22,6 @@ namespace RollEmSpacePage
         {
             containerRegistry.RegisterForNavigation<RollEmSpaceDetail>();
             containerRegistry.RegisterForNavigation<RollEmSpaceOverview>();
-            //containerRegistry.RegisterForNavigation<RollEmSpaceActive>();
         }
     }
 }

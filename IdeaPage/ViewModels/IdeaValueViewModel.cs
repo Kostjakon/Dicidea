@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Dicidea.Core.Models;
+﻿using Dicidea.Core.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -55,7 +54,6 @@ namespace IdeaPage.ViewModels
         /// </summary>
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Value");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
         }

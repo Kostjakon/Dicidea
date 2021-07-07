@@ -21,13 +21,9 @@ namespace Dicidea.Core.Services
         {
             _dialogService = dialogService;
             _allDice = LoadDiceAsync().Result;
-            //SaveDiceAsync(_allDice);
         }
-
         private string FileName => Path.Combine(FolderName, "dice.json");
-
-        private string FolderName =>
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dicidea");
+        private string FolderName => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dicidea");
 
         /// <summary>
         /// Funktion um die Liste der Würfel zu bekommen.
@@ -79,7 +75,6 @@ namespace Dicidea.Core.Services
         public virtual async Task SaveRolledDiceAsync()
         {
             await Task.CompletedTask;
-
             await SaveDiceAsync(GetDiceToSave());
         }
 
@@ -244,7 +239,6 @@ namespace Dicidea.Core.Services
             {
 
                 if (!File.Exists(FileName)) return LoadSampleDice();
-
                 string data = File.ReadAllText(FileName);
                 List<Dice> allDice = JsonConvert.DeserializeObject<List<Dice>>(data);
                 return allDice is {Count: > 0} ? allDice : LoadSampleDice();
@@ -278,7 +272,6 @@ namespace Dicidea.Core.Services
             {
                 sims
             };
-
             return tmp;
         }
 
@@ -292,10 +285,7 @@ namespace Dicidea.Core.Services
             await Task.Delay(0);
             try
             {
-                if (!Directory.Exists(FolderName))
-                {
-                    Directory.CreateDirectory(FolderName);
-                }
+                if (!Directory.Exists(FolderName))Directory.CreateDirectory(FolderName);
                 string data = JsonConvert.SerializeObject(dice);
                 File.WriteAllText(FileName, data);
             }

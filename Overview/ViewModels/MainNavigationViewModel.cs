@@ -1,6 +1,5 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
-using System.Diagnostics;
 using System.Windows.Input;
 using DicePage.Views;
 using Dicidea.Core.Constants;
@@ -90,7 +89,6 @@ namespace OverviewPage.ViewModels
         /// <param name="navigationContext"></param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Debug.WriteLine("Main Navigation");
             _parameters = navigationContext.Parameters;
         }
 

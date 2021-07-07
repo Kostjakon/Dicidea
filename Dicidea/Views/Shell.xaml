@@ -42,7 +42,8 @@
                     Grid.Column="0"
                     Fill="Black"
                     Visibility="Visible" />
-                <svg:SVGImage Grid.Column="0"
+                <svg:SVGImage
+                    Grid.Column="0"
                     Width="32"
                     Height="32"
                     Margin="{StaticResource MarginAllSides10}"
