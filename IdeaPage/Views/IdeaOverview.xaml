@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:IdeaPage.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:svg="clr-namespace:SVGImage.SVG;assembly=DotNetProjects.SVGImage"
@@ -46,7 +45,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="Ideas"
-                FontSize="{StaticResource HeaderXL}" />
+                FontSize="{StaticResource HeaderXl}" />
 
             <StackPanel
                 Grid.Column="4"
@@ -116,7 +115,7 @@
                                 <TextBlock
                                     Grid.Row="0"
                                     Margin="{StaticResource MarginAllSides20}"
-                                    FontSize="{StaticResource HeaderXL}"
+                                    FontSize="{StaticResource HeaderXl}"
                                     FontWeight="SemiBold"
                                     Foreground="{StaticResource IdeasBrush}"
                                     Text="{Binding Path=Name}" />

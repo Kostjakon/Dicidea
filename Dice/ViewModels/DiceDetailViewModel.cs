@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -10,25 +9,29 @@ using Dicidea.Core.Constants;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Models;
 using Dicidea.Core.Helper;
-using Prism;
 using Prism.Commands;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den <see cref="DiceDetail" />. Verwendet das <see cref="DiceListViewModel" /> als
+    /// Datenquelle, verwendet aber einen <see cref="ListCollectionView" /> für das Binden an die ListView.
+    /// </summary>
     public class DiceDetailViewModel : NotifyPropertyChanges, INavigationAware
     {
-        
         private DiceListViewModel _diceListViewModel;
-        //private readonly IDialogCoordinator _dialogCoordinator;
         private ListCollectionView _groupedDiceView;
         private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
         private bool _showSaved;
         private bool _isSaving;
-
-
+        /// <summary>
+        /// Erzeugt die verschiedenen Commands und erhält und setzt den RegionManager und den DialogService
+        /// </summary>
+        /// <param name="regionManager">Benötigt zum navigieren</param>
+        /// <param name="dialogService">Benötigt um Dialoge zu erzeugen</param>
         public DiceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             _dialogService = dialogService;
@@ -38,11 +41,17 @@ namespace DicePage.ViewModels
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Saved Anzeige
+        /// </summary>
         public bool ShowSaved
         {
             get => _showSaved;
             set => SetProperty(ref _showSaved, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen der Saving Anzeige
+        /// </summary>
         public bool IsSaving
         {
             get => _isSaving;
@@ -54,13 +63,17 @@ namespace DicePage.ViewModels
         {
             return true;
         }
-
+        /// <summary>
+        /// Zwischengespeicherte Navigation Parameter
+        /// </summary>
         public NavigationParameters Parameters
         {
             get;
             set;
         }
-
+        /// <summary>
+        /// Zum Navigieren zur Würfel Übersicht. Es wird die Parameterliste mit übergeben.
+        /// </summary>
         private void GoToDiceOverview(object obj)
         {
             Parameters.Add("diceListViewModel", _diceListViewModel);
@@ -71,13 +84,17 @@ namespace DicePage.ViewModels
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
-
+        /// <summary>
+        /// Zum Hinzufügen einer Kategorie zum ausgewählten Würfel
+        /// </summary>
         private async void AddExecute()
         {
-            Debug.WriteLine("Add Category");
             await SelectedDice.AddCategoryAsync();
         }
-
+        /// <summary>
+        /// Zum Löschen eines Würfels.
+        /// Wird auf den Löschen Button geklickt wird ein Dialog aufgerufen um zu fragen ob der Würfel gelöscht werden soll
+        /// </summary>
         private async void DeleteExecute()
         {
             var selectedCategory = SelectedDice.SelectedCategory;
@@ -98,10 +115,13 @@ namespace DicePage.ViewModels
             if (!delete) return;
             await SelectedDice.DeleteCategoryAsync();
         }
+        /// <summary>
+        /// Zum Speichern der Würfel
+        /// </summary>
         private async void SaveExecute()
         {
             IsSaving = true;
-            await Task.Delay(3000);
+            //await Task.Delay(3000);
             await _diceListViewModel.SaveDiceAsync();
             IsSaving = false;
             ShowSaved = true;
@@ -110,22 +130,30 @@ namespace DicePage.ViewModels
         }
 
         public IRegionManager RegionManager { get; private set; }
+        /// <summary>
+        /// Die gruppierte Liste der Würfel.
+        /// </summary>
         public ListCollectionView GroupedDiceView
         {
             get => _groupedDiceView;
             set => SetProperty(ref _groupedDiceView, value);
         }
-
+        /// <summary>
+        /// Ausgewählter Würfel
+        /// </summary>
         public DiceViewModel SelectedDice
         {
             get
             {
                 if (GroupedDiceView != null) return GroupedDiceView.CurrentItem as DiceViewModel;
-                else return null;
+                return null;
             }
             set => GroupedDiceView.MoveCurrentTo(value);
         }
-
+        /// <summary>
+        /// Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Dice.Name))
@@ -133,7 +161,9 @@ namespace DicePage.ViewModels
                 GroupedDiceView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Funktion um das diceListViewModel in einen ListCollectionView umzuwandeln. Dieser wird zur gruppierten Darstellung der Würfel benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<DiceViewModel> diceViewModels = _diceListViewModel.AllDice;
@@ -155,11 +185,13 @@ namespace DicePage.ViewModels
             });
             GroupedDiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
         }
-
-
+        /// <summary>
+        /// Wird aufgerufen wenn zu dieser Seite navigiert wird. Die übergebenen Parameter werden zwischengespeichert
+        /// und eine gruppierte Liste der Würfel erzeugt. Außerdem wird der übergebene Würfel in der Liste der Würfel ausgewählt.
+        /// </summary>
+        /// <param name="navigationContext">NavigationContext der die NavigationParameter beinhaltet.</param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Debug.WriteLine("Navigated to Detail Dice");
             if (navigationContext != null)
             {
                 Parameters = navigationContext.Parameters;
@@ -180,8 +212,6 @@ namespace DicePage.ViewModels
                         if (GroupedDiceView.Count > 0) Parameters.Add("selectedDice", GroupedDiceView.GetItemAt(0));
                     }
                 }
-
-
                 if (navigationContext.Parameters["regionManager"] != null)
                 {
                     RegionManager = navigationContext.Parameters["regionManager"] as IRegionManager;
@@ -194,11 +224,7 @@ namespace DicePage.ViewModels
             return true;
         }
 
-
-
         public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            Debug.WriteLine("Not implemented, navigated from DiceDetail to some other side");
-        }
+        {}
     }
 }

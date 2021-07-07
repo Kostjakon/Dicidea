@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using Dicidea.Core.Helper;
 using Newtonsoft.Json;
-using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Model Klasse einer Idee
+    /// </summary>
     public sealed class Idea : NotifyDataErrorInfo<Idea>
     {
         private string _name;

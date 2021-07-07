@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Model Klasse für einen Wert in einem Würfel
+    /// </summary>
     public class Value : NotifyDataErrorInfo<Value>
     {
         private string _name;
@@ -14,7 +17,7 @@ namespace Dicidea.Core.Models
             Rules.Add(new DelegateRule<Value>(nameof(Name), "The value has to have a name.", v => !string.IsNullOrWhiteSpace(v?.Name)));
             Id = Guid.NewGuid().ToString("N");
             Name = "";
-            Active = true;
+            Active = newValue;
         }
         public Value() { }
 
@@ -24,13 +27,6 @@ namespace Dicidea.Core.Models
             get;
             set;
         }
-
-        /*
-        public string Color
-        {
-            get;
-            set;
-        }*/
 
         public string Name
         {

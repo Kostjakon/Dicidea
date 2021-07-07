@@ -2,58 +2,45 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows.Data;
 using DicePage.ViewModels;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
-using Dicidea.Core.Services;
-using IdeaPage.ViewModels;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
 
 namespace RollEmSpacePage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den RollEmSpaceOverview. Verwendet das <see cref="DiceListViewModel" /> als
+    /// Datenquelle, verwendet aber einen <see cref="ListCollectionView" /> für das Binden an die ListView um später einfach
+    /// Sortieren und Filtern zu können.
+    /// </summary>
     public class RollEmSpaceOverviewViewModel : NotifyPropertyChanges, INavigationAware
     {
         private string _filterText;
         private SortOrder _sortOrder = SortOrder.Unsorted;
         private ListCollectionView _groupedDiceView;
         private DiceListViewModel _diceListViewModel;
-        private IIdeaDataService _ideaDataService;
-        private readonly IRegionManager _regionManager;
 
-        public RollEmSpaceOverviewViewModel(IRegionManager regionManager)
+        public RollEmSpaceOverviewViewModel()
         {
-            _regionManager = regionManager;
-            if (DiceView != null)
-            {
-                DiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
-                DiceView.Refresh();
-            }
             SortCommand = new DelegateCommand(SortExecute);
         }
-
-        public bool IsEditEnabled
-        {
-            get;
-            private set;
-        }
-
+        
+        /// <summary>
+        /// Zwischengespeicherte NavigationParameter
+        /// </summary>
         public NavigationParameters Parameters
         {
             get;
             set;
         }
 
-        public DiceListViewModel DiceListViewModel
-        {
-            get => _diceListViewModel;
-        }
-
+        /// <summary>
+        /// Die verschiedenen Sortiermöglichkeiten
+        /// </summary>
         public SortOrder SortOrder
         {
             get => _sortOrder;
@@ -76,11 +63,10 @@ namespace RollEmSpacePage.ViewModels
         }
 
         public DelegateCommand SortCommand { get; set; }
-
-        public ListCollectionView DiceView { get; private set; }
-
-        public IRegionManager RegionManager { get => _regionManager; }
-
+        
+        /// <summary>
+        /// Der Text nach dem gefiltert werden soll
+        /// </summary>
         public string FilterText
         {
             get => _filterText;
@@ -90,13 +76,9 @@ namespace RollEmSpacePage.ViewModels
                 Filter();
             }
         }
-
-        public IIdeaDataService IdeaDataService
-        {
-            get => _ideaDataService;
-            set => SetProperty(ref _ideaDataService, value);
-        }
-
+        /// <summary>
+        /// Der ausgewählte Würfel
+        /// </summary>
         public DiceViewModel SelectedDice
         {
             get
@@ -106,13 +88,19 @@ namespace RollEmSpacePage.ViewModels
             }
             set => GroupedDiceView.MoveCurrentTo(value);
         }
-
+        /// <summary>
+        ///     Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Würfelnamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedDiceView
         {
             get => _groupedDiceView;
             set => SetProperty(ref _groupedDiceView, value);
         }
 
+        /// <summary>
+        ///     Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Dice.Name))
@@ -121,24 +109,34 @@ namespace RollEmSpacePage.ViewModels
             }
         }
 
+        /// <summary>
+        /// Unsortierte Liste
+        /// </summary>
         private void Unsort()
         {
-            DiceView.IsLiveSorting = false;
-            DiceView.CustomSort = null;
+            GroupedDiceView.IsLiveSorting = false;
+            GroupedDiceView.CustomSort = null;
         }
-
+        /// <summary>
+        /// Aufsteigende Sortierung
+        /// </summary>
         private void SortAscending()
         {
-            DiceView.IsLiveSorting = true;
-            DiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d1.Dice.Name, d2.Dice.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedDiceView.IsLiveSorting = true;
+            GroupedDiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d1.Dice.Name, d2.Dice.Name, StringComparison.OrdinalIgnoreCase));
         }
-
+        /// <summary>
+        /// Absteigende Sortierung
+        /// </summary>
         private void SortDescending()
         {
-            DiceView.IsLiveSorting = true;
-            DiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d2.Dice.Name, d1.Dice.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedDiceView.IsLiveSorting = true;
+            GroupedDiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d2.Dice.Name, d1.Dice.Name, StringComparison.OrdinalIgnoreCase));
         }
 
+        /// <summary>
+        /// Funktion für das Sort Command. Noch nicht in der View implementiert.
+        /// </summary>
         private void SortExecute()
         {
             switch (SortOrder)
@@ -155,7 +153,9 @@ namespace RollEmSpacePage.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Funktion um das diceListViewModel in einen ListCollectionView umzuwandeln. Diese wird zur gruppierten Darstellung der Würfel benötigt.
+        /// </summary>
         private void CreateGroupedDiceView()
         {
             ObservableCollection<DiceViewModel> diceViewModels = _diceListViewModel.AllDice;
@@ -171,24 +171,28 @@ namespace RollEmSpacePage.ViewModels
                 IsLiveGrouping = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName,
-                Converter = new NameToInitialConverter()
-            });
+            if (GroupedDiceView.GroupDescriptions != null)
+                GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName,
+                    Converter = new NameToInitialConverter()
+                });
             GroupedDiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
         }
 
+        /// <summary>
+        /// Funktion zum Filtern der Würfel. Noch nicht implementiert!
+        /// </summary>
         private void Filter()
         {
             if (string.IsNullOrWhiteSpace(FilterText))
             {
-                DiceView.Filter = o => true;
+                GroupedDiceView.Filter = o => true;
             }
             else
             {
-                DiceView.IsLiveFiltering = true;
-                DiceView.Filter = o =>
+                GroupedDiceView.IsLiveFiltering = true;
+                GroupedDiceView.Filter = o =>
                 {
                     if (o is DiceViewModel vm)
                         return vm.Dice.Name?.IndexOf(FilterText, StringComparison.CurrentCultureIgnoreCase) >= 0;
@@ -197,31 +201,20 @@ namespace RollEmSpacePage.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Wird aufgerufen wenn zu dieser Seite navigiert wird. Die übergebenen Parameter werden zwischengespeichert, das übergebene DiceListViewModel gesetzt und die gruppierte Liste erzeugt
+        /// </summary>
+        /// <param name="navigationContext">NavigationContext der die NavigationParameter beinhaltet.</param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             Parameters = navigationContext.Parameters;
-            Debug.WriteLine("Navigated to RollEmSpace");
-            if (navigationContext != null)
+            if (navigationContext.Parameters["diceListViewModel"] != null)
             {
-                Debug.WriteLine("Navigationcontext is not null");
-                if (navigationContext.Parameters["diceListViewModel"] != null)
-                {
-                    Debug.WriteLine("DicelistView is not null");
-                    _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
-                    CreateGroupedDiceView();
-                    Debug.WriteLine(_diceListViewModel.AllDice.First().Dice.Name);
-                }
-                if (navigationContext.Parameters["ideaDataService"] != null)
-                {
-                    _ideaDataService = navigationContext.Parameters["ideaDataService"] as IIdeaDataService;
-                }
-                SortCommand = new DelegateCommand(SortExecute);
+                // Datenquelle
+                _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
+                CreateGroupedDiceView();
             }
-            else
-            {
-                //Message = $"Dice Active from your Prism Module, Dice Anzahl: {AllDice.Count}! Es wurde kein Würfel ausgewählt";
-            }
+            SortCommand = new DelegateCommand(SortExecute);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -233,7 +226,7 @@ namespace RollEmSpacePage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            Debug.WriteLine("Not implemented, navigated from DiceOverview to some other side");
+
         }
     }
 }

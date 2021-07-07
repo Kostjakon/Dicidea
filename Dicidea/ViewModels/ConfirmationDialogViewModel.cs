@@ -1,13 +1,14 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Prism.Services.Dialogs;
 
 namespace Dicidea.ViewModels
 {
+    /// <summary>
+    ///     ViewModel für den ConfirmationDialog.
+    /// </summary>
     public class ConfirmationDialogViewModel : BindableBase, IDialogAware
     {
         private DelegateCommand<string> _closeDialogCommand;
@@ -61,6 +62,10 @@ namespace Dicidea.ViewModels
 
         }
 
+        /// <summary>
+        /// Setzt beim Öffnen des Dialogs den Titel und die Nachricht
+        /// </summary>
+        /// <param name="parameters">Liste mit den Paramtern für den Titel und die Nachricht</param>
         public virtual void OnDialogOpened(IDialogParameters parameters)
         {
             Message = parameters.GetValue<string>("message");

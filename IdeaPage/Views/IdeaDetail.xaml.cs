@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace IdeaPage.Views
+﻿namespace IdeaPage.Views
 {
     /// <summary>
     /// Interaction logic for IdeaDetail
     /// </summary>
-    public partial class IdeaDetail : UserControl
+    public partial class IdeaDetail
     {
         public IdeaDetail()
         {

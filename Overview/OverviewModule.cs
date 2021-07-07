@@ -2,7 +2,6 @@
 using DicePage.ViewModels;
 using Dicidea.Core.Constants;
 using Dicidea.Core.Services;
-using OverviewPage.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;

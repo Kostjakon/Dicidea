@@ -7,10 +7,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Dicidea.Core.Helper
 {
+    /// <summary>
+    ///     Provides functionality to provide errors for the object if it is in an invalid state.
+    /// </summary>
+    /// <typeparam name="T">The type of this instance.</typeparam>
     public abstract class NotifyDataErrorInfo<T> : NotifyPropertyChanges, INotifyDataErrorInfo where T : NotifyDataErrorInfo<T>
     {
         #region Public Events

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Dicidea.Core.Helper;
 using Newtonsoft.Json;
-using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Model Klasse für einen Wert in einer Idee
+    /// </summary>
     public class IdeaValue : NotifyDataErrorInfo<IdeaValue>
     {
         private string _name;

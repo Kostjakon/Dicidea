@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Dicidea.Core.Helper;
 using Newtonsoft.Json;
-using Prism.Mvvm;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Modelklasse für ein Element einer Idee
+    /// </summary>
     public sealed class IdeaElement : NotifyDataErrorInfo<IdeaElement>
     {
         private string _name;
@@ -40,6 +41,21 @@ namespace Dicidea.Core.Models
         {
             get => _ideaValues; 
             set => SetProperty(ref _ideaValues, value);
+        }
+
+        /// <summary>
+        /// Funktion zum überprüfen ob die Liste der Werte bereits einen Wert mit diesem Namen hat
+        /// </summary>
+        /// <param name="name">Name des Werts nach dem überprüft werden soll</param>
+        /// <returns></returns>
+        public bool AlreadyHasValue(string name)
+        {
+            bool hasValue = false;
+            foreach (IdeaValue ideaValue in IdeaValues)
+            {
+                if(ideaValue.Name == name) hasValue = true;
+            }
+            return hasValue;
         }
     }
 }

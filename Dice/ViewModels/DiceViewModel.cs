@@ -1,75 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reactive;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
-using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
 
 namespace DicePage.ViewModels
 {
+    /// <summary>
+    /// Kapselt den Würfel, fügt UI-spezifische Eigenschaften hinzu (Editieren von Titel und Beschreibung, und hinzufügen von Kategorien)
+    /// und erstellt eine ListCollectionView der Kategorien des Würfels.
+    /// </summary>
     public class DiceViewModel : NotifyPropertyChanges
     {
-        private CategoryListViewModel _categoryListViewModel;
+        private readonly CategoryListViewModel _categoryListViewModel;
         private ListCollectionView _groupedCategoriesView;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
         private ElementViewModel _selectedElement;
-
-        private readonly IDialogService _dialogService;
-        //private readonly object _lock = new object();
+        /// <summary>
+        /// Erzeugt die gruppierte Liste der Kategorien des Würfels und setzt das EditCommand und das AddCommand.
+        /// </summary>
+        /// <param name="dice">Würfel für die das DiceViewModel erstellt werden soll</param>
+        /// <param name="diceDataService">Wird zur Weitergabe an das CategoryListViewModel benötigt</param>
+        /// <param name="dialogService">Wird zur Weitergabe an das CategoryListViewModel benötigt</param>
         public DiceViewModel(Dice dice, IDiceDataService diceDataService, IDialogService dialogService)
         {
-            _dialogService = dialogService;
-            //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
-            if(GroupedCategoriesView != null)
-            {
-                Debug.WriteLine("Binding of GroupedCategoriesView in DiceViewModel");
-                //System.Windows.Data.BindingOperations.EnableCollectionSynchronization(GroupedCategoriesView, _lock);
-            }
             Dice = dice;
-            
             DiceViewModel self = this;
             if (_categoryListViewModel == null)
             {
-                _categoryListViewModel = new CategoryListViewModel(self, diceDataService, _dialogService);
+                _categoryListViewModel = new CategoryListViewModel(self, diceDataService, dialogService);
             }
             CreateGroupedView();
             AddCommand = new DelegateCommand(AddExecute);
             EditCommand = new DelegateCommand(EditExecute);
         }
-
+        /// <summary>
+        /// Ausgewähltes Element für das flippen der Karte
+        /// </summary>
         public ElementViewModel SelectedElement
         {
             get => _selectedElement;
             set => SetProperty(ref _selectedElement, value);
         }
-
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textboxen
+        /// </summary>
         public bool IsEditEnabled
         {
             get => _isEditEnabled;
             set => SetProperty(ref _isEditEnabled, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textblöcke
+        /// </summary>
         public bool IsEditDisabled
         {
             get => _isEditDisabled;
             set => SetProperty(ref _isEditDisabled, value);
         }
-
-
+        /// <summary>
+        /// Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Würfelnamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedCategoriesView
         {
             get => _groupedCategoriesView;
@@ -77,41 +73,25 @@ namespace DicePage.ViewModels
         }
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
+        /// <summary>
+        /// Zum hinzufügen einer Kategorie
+        /// </summary>
         private async void AddExecute()
         {
-            Debug.WriteLine("Add Category");
-            //await Application.Current.Dispatcher.BeginInvoke(() => Task.Run(_categoryListViewModel.AddCategoryAsync));
-            /*
-            Thread thread = new Thread(delegate()
-            {
-                AddCategory();
-            });
-            thread.IsBackground = true;
-            thread.Start();
-            */
             await _categoryListViewModel.AddCategoryAsync();
-            //GroupedCategoriesView.Refresh();
-
         }
-
-        /*
-        public void AddCategory()
-        {
-            Dispatcher.BeginInvoke((Action) (async () =>
-            {
-                await Task.Run(_categoryListViewModel.AddCategoryAsync);
-            }));
-        }
-        */
-
+        /// <summary>
+        /// Zum Aktivieren und deaktivieren der Editierfunktion
+        /// </summary>
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Dice");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
 
         }
-
+        /// <summary>
+        /// Ausgewählte Kategorie
+        /// </summary>
         public CategoryViewModel SelectedCategory
         {
             get
@@ -121,22 +101,12 @@ namespace DicePage.ViewModels
             }
             set => GroupedCategoriesView.MoveCurrentTo(value);
         }
-
-        private void OnNext(string propertyName)
-        {
-            if (propertyName == nameof(Category.Name))
-            {
-                //GroupedCategoriesView.Refresh(); <- Hier ist das Problem
-            }
-        }
-
+        /// <summary>
+        /// Funktion um das CategoryListViewModel in einen ListCollectionView umzuwandeln. Dieser wird zur gruppierten Darstellung der Kategorien benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<CategoryViewModel> categoryViewModels = _categoryListViewModel.Categories;
-            //foreach (var categoryViewModel in categoryViewModels)
-            //{
-            //    categoryViewModel.Category.WhenPropertyChanged.Subscribe(OnNext);
-            //}
 
             var propertyName = "Category.Name";
             GroupedCategoriesView = new ListCollectionView(categoryViewModels)
@@ -144,28 +114,29 @@ namespace DicePage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            //GroupedCategoriesView.GroupDescriptions.Add(new PropertyGroupDescription
-            //{
-            //    PropertyName = propertyName,
-            //    Converter = new NameToInitialConverter()
-            //});
             
             GroupedCategoriesView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedCategory));
         }
-
+        /// <summary>
+        /// Zum Hinzufügen einer Kategorie
+        /// </summary>
+        /// <returns></returns>
         public async Task AddCategoryAsync()
         {
-            Debug.WriteLine("Add Category");
             await _categoryListViewModel.AddCategoryAsync();
-            //GroupedCategoriesView.Refresh();
         }
+        /// <summary>
+        /// Zum löschen einer Kategorie
+        /// </summary>
+        /// <returns></returns>
         public async Task DeleteCategoryAsync()
         {
             await _categoryListViewModel.DeleteCategoryAsync(SelectedCategory);
             GroupedCategoriesView.Refresh();
         }
-
-
+        /// <summary>
+        /// Der zum DiceViewModel gehörende Würfel
+        /// </summary>
         public Dice Dice { get; }
 
     }

@@ -1,42 +1,23 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using DicePage.ViewModels;
-using DicePage.Views;
-using Dicidea.Core.Constants;
-using Dicidea.Core.Helper;
-using Dicidea.Core.Services;
-using MenuPage.Views;
-using OverviewPage.ViewModels;
-using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Regions;
-using RollEmSpacePage.Views;
-using OverviewPage.Views;
-//using RollEmSpaceOverview = RollEmSpacePage.Views.RollEmSpaceOverview;
+﻿using Dicidea.Core.Helper;
 
 namespace Dicidea.ViewModels
 {
+    /// <summary>
+    ///     Interaction logic for Shell.xaml
+    /// </summary>
     public class ShellViewModel : NotifyPropertyChanges
     {
-        private string _title = "Dicidea";
-        private readonly IRegionManager _regionManager;
+        private string _title;
 
-        public ShellViewModel(IRegionManager regionManager)
+        public ShellViewModel()
         {
-            _regionManager = regionManager;
+            _title = "Dicidea";
         }
 
-        public bool HideTitleBackground
-        {
-            get => true;
-        }
-        
         public string Title
         {
-            get { return _title + HideTitleBackground; }
-            set { SetProperty(ref _title, value); }
+            get => _title;
+            set => SetProperty(ref _title, value);
         }
 
     }

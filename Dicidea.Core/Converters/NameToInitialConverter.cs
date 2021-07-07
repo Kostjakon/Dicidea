@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
 namespace Dicidea.Core.Converters
 {
+    /// <summary>
+    ///     Gibt vom übergebenen String (z.B. Name) den Anfangsbuchstaben als Großbuchstaben zurück.
+    /// </summary>
     public class NameToInitialConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

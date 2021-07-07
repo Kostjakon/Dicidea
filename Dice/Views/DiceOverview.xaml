@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="{StaticResource MarginVertical20Horizontal10}">
+        <Grid Grid.Row="0" Margin="{StaticResource MarginAllSides20}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="12" />
@@ -57,7 +57,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="Dice"
-                FontSize="{StaticResource HeaderXL}" />
+                FontSize="{StaticResource HeaderXl}" />
             <StackPanel
                 Grid.Column="4"
                 HorizontalAlignment="Right"
@@ -126,7 +126,7 @@
                                 <TextBlock
                                     Grid.Row="0"
                                     Margin="{StaticResource MarginAllSides20}"
-                                    FontSize="{StaticResource HeaderXL}"
+                                    FontSize="{StaticResource HeaderXl}"
                                     FontWeight="SemiBold"
                                     Foreground="{StaticResource DiceBrush}"
                                     Text="{Binding Path=Name, Converter={StaticResource NameToInitialConverter}}" />

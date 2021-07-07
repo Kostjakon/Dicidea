@@ -19,6 +19,11 @@ using RollEmSpacePage.Views;
 
 namespace OverviewPage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den <see cref="Overview" />. Hier werden beim Start des Programms die Ideen und Würfel geladen
+    /// und als DiceListViewModel und IdeaListViewModel über die Navigation Parameter an die Haupt-Navigation und die
+    /// Seite übergeben zu der navigiert wird
+    /// </summary>
     public class OverviewViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager _regionManager;
@@ -30,7 +35,11 @@ namespace OverviewPage.ViewModels
         private readonly IDialogService _dialogService;
         private Dice _lastRolledDice;
         private Idea _lastRolledIdea;
-
+        /// <summary>
+        /// Die Commands werden erzeugt und der regionManager und der dialogService gesetzt.
+        /// </summary>
+        /// <param name="regionManager">Zum navigieren benötigt</param>
+        /// <param name="dialogService">Zum Erzeugen von Dialogen benötigt</param>
         public OverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             _dialogService = dialogService;
@@ -41,24 +50,35 @@ namespace OverviewPage.ViewModels
             GoToIdeaCommand = new DelegateCommand<object>(GoToIdea);
             GoToLastRolledIdeaCommand = new DelegateCommand<object>(GoToLastRolledIdea);
         }
-
+        /// <summary>
+        /// Zuletzt gerollter/erzeugter Würfel
+        /// </summary>
         public Dice LastRolledDice
         {
             get => _lastRolledDice;
             set => SetProperty(ref _lastRolledDice, value);
         }
-
-        private async Task getLastRolledDice()
+        /// <summary>
+        /// Zum laden des zuletzt gerollten/erzeugten Würfels
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetLastRolledDice()
         {
             if(_diceDataService != null) LastRolledDice = await _diceDataService.GetLastRolledDiceAsync();
         }
+        /// <summary>
+        /// Zuletzt gerollte Idee
+        /// </summary>
         public Idea LastRolledIdea
         {
             get => _lastRolledIdea;
             set => SetProperty(ref _lastRolledIdea, value);
         }
-
-        private async Task getLastRolledIdea()
+        /// <summary>
+        /// Zum Laden der zuletzt gerollten Idee
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetLastRolledIdea()
         {
             if(_ideaDataService != null) LastRolledIdea = await _ideaDataService.GetLastRolledIdeaAsync();
         }
@@ -74,18 +94,28 @@ namespace OverviewPage.ViewModels
         {
             return true;
         }
-
+        /// <summary>
+        /// Zum Navigieren zur Würfel Überblick Seite
+        /// </summary>
+        /// <param name="obj"></param>
         private void GoToDice(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(DiceOverview), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
-
+        /// <summary>
+        /// Zum Navigieren zur RollEm Übersicht Seite
+        /// </summary>
+        /// <param name="obj"></param>
         public void GoToRollEmSpace(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
+        /// <summary>
+        /// Zum Navigieren zur RollEm Detail Seite. Gibt den zuletzt gerollten/erstellten Würfel mit.
+        /// </summary>
+        /// <param name="obj"></param>
         public void GoToLastRolledRollEmSpace(object obj)
         {
             if (_diceListViewModel.AllDice.Count > 0)
@@ -97,12 +127,19 @@ namespace OverviewPage.ViewModels
             _regionManager.RequestNavigate(RegionNames.LeftBottomContentRegion, nameof(RollEmSpaceDetail), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
-
+        /// <summary>
+        /// Zum Navigieren zur Ideen Übersicht Seite
+        /// </summary>
+        /// <param name="obj"></param>
         public void GoToIdea(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(IdeaOverview), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
+        /// <summary>
+        /// Zum Navigieren zur Ideen Detail Seite. Gibt die zuletzt gerollte Idee mit.
+        /// </summary>
+        /// <param name="obj"></param>
         public void GoToLastRolledIdea(object obj)
         {
             if (_ideaListViewModel.AllIdeas.Count > 0 && LastRolledIdea != null)
@@ -115,6 +152,9 @@ namespace OverviewPage.ViewModels
             _regionManager.RequestNavigate(RegionNames.LeftBottomContentRegion, nameof(IdeaDetail), _parameters);
             _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
         }
+        /// <summary>
+        /// Zum Navigieren zur Menü Seite. Die Seite ist noch nicht implementiert.
+        /// </summary>
         public DelegateCommand GoToMenu =>
             new DelegateCommand(() =>
                 {
@@ -122,7 +162,14 @@ namespace OverviewPage.ViewModels
                     _regionManager.RequestNavigate(RegionNames.LeftContentRegion, nameof(MainNavigation), _parameters);
                 });
 
-
+        /// <summary>
+        /// Wenn von einer anderen Seite zu dieser navigiert wird, werden die Navigations Parameter zwischengespeichert,
+        /// wenn das erste mal auf die Seite navigiert wird und die Navigation Parameter leer sind, wird alles neu erzeugt.
+        /// Dazu gehören: DiceListViewModel, DiceDataService, IdeaListViewModel, IdeaDataService.
+        /// Die zwischengespeicherte Navigation Parameter Variable wird in beiden Fällen neu erstellt und mit den
+        /// jeweiligen Parametern gefüllt.
+        /// </summary>
+        /// <param name="navigationContext"></param>
         public async void OnNavigatedTo(NavigationContext navigationContext)
         {
             if (navigationContext.Parameters["diceListViewModel"] != null)
@@ -138,8 +185,8 @@ namespace OverviewPage.ViewModels
                     { "ideaDataService", _ideaDataService },
                     { "diceDataService", _diceDataService }
                 };
-                await getLastRolledDice();
-                await getLastRolledIdea();
+                await GetLastRolledDice();
+                await GetLastRolledIdea();
             }
             else
             {
@@ -155,8 +202,8 @@ namespace OverviewPage.ViewModels
                     { "ideaDataService", _ideaDataService },
                     { "diceDataService", _diceDataService }
                 };
-                await getLastRolledDice();
-                await getLastRolledIdea();
+                await GetLastRolledDice();
+                await GetLastRolledIdea();
             }
         }
 

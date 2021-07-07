@@ -1,25 +1,28 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Dicidea.Core.Models;
 using Prism.Services.Dialogs;
 
 namespace Dicidea.ViewModels
 {
     /// <summary>
-    ///     ViewModel für den ErrorDialog.
+    ///     ViewModel für den SavedDiceDialog.
     /// </summary>
-    public class ErrorDialogViewModel : BindableBase, IDialogAware
+    public class SavedDiceDialogViewModel : BindableBase, IDialogAware
     {
         private DelegateCommand<string> _okDialogCommand;
         public DelegateCommand<string> OkDialogCommand =>
             _okDialogCommand ?? (_okDialogCommand = new DelegateCommand<string>(OkDialog));
+        
 
-        private string _message;
-        public string Message
+        private List<Dice> _dice;
+        public List<Dice> Dice
         {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
+            get { return _dice; }
+            set { SetProperty(ref _dice, value); }
         }
 
         private string _title = "Title";
@@ -31,10 +34,6 @@ namespace Dicidea.ViewModels
 
         public event Action<IDialogResult> RequestClose;
 
-        /// <summary>
-        /// Setzt das Result des klickens auf den Button
-        /// </summary>
-        /// <param name="parameter"></param>
         protected virtual void OkDialog(string parameter)
         {
             ButtonResult result = ButtonResult.None;
@@ -67,12 +66,12 @@ namespace Dicidea.ViewModels
         }
 
         /// <summary>
-        /// Setzt beim Öffnen des Dialogs den Titel und die Nachricht
+        /// Legt beim öffnen des Dialogs eine Liste der übergebenen Würfel an und setzt den Titel des Dialogs
         /// </summary>
-        /// <param name="parameters">Liste mit den Paramtern für den Titel und die Nachricht</param>
+        /// <param name="parameters">Liste mit den Paramtern für den Titel und der Liste der gespeicherten Würfel</param>
         public virtual void OnDialogOpened(IDialogParameters parameters)
         {
-            Message = parameters.GetValue<string>("message");
+            Dice = parameters.GetValue<List<Dice>>("allDice");
             Title = parameters.GetValue<string>("title");
         }
     }

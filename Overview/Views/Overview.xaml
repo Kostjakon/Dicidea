@@ -280,7 +280,5 @@
                 </Grid>
             </Button>
         </Grid>
-        <ContentControl MinWidth="200" prism:RegionManager.RegionName="OverviewStartscreen" />
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </UserControl>

@@ -20,11 +20,18 @@ using RollEmSpacePage.Views;
 
 namespace RollEmSpacePage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den <see cref="RollEmSpaceDetail" />. Verwendet das <see cref="IdeaListViewModel" /> als
+    /// Datenquelle, verwendet aber einen <see cref="ListCollectionView" /> für das Binden an die ListView.
+    /// Verwendet außerdem das <see cref="DiceViewModel" /> eines ausgewählten Würfels als Datenquelle für die
+    /// Würfeloptionen
+    /// </summary>
     public class RollEmSpaceDetailViewModel : NotifyPropertyChanges, INavigationAware
     {
+        // temporäre Ideenliste für das würfeln
         private IdeaListViewModel _ideaListViewModel;
+        // Haupt Ideenliste mit allen gespeicherten Ideen
         private IdeaListViewModel _mainIdeaListViewModel;
-        //private readonly IDialogCoordinator _dialogCoordinator;
         private ListCollectionView _groupedIdeasView;
         private readonly IRegionManager _regionManager;
         private NavigationParameters _parameters;
@@ -36,6 +43,11 @@ namespace RollEmSpacePage.ViewModels
         private bool _isSaving;
         private bool _showRolling;
 
+        /// <summary>
+        /// Erzeugt die verschiedenen Commands und erhält und setzt den RegionManager und den DialogService
+        /// </summary>
+        /// <param name="regionManager">Benötigt zum navigieren</param>
+        /// <param name="dialogService">Benötigt um Dialoge zu erzeugen</param>
         public RollEmSpaceDetailViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             _dialogService = dialogService;
@@ -48,27 +60,42 @@ namespace RollEmSpacePage.ViewModels
         }
         public ICommand GoToDiceCommand { get; private set; }
         public ICommand GoToRollEmSpaceOverviewCommand { get; private set; }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Saved Anzeige
+        /// </summary>
         public bool ShowSaved
         {
             get => _showSaved;
             set => SetProperty(ref _showSaved, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Rolling Anzeige
+        /// </summary>
         public bool ShowRolling
         {
             get => _showRolling;
             set => SetProperty(ref _showRolling, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen der Saving Anzeige
+        /// </summary>
         public bool IsSaving
         {
             get => _isSaving;
             set => SetProperty(ref _isSaving, value);
         }
-
+        /// <summary>
+        /// Funktion zum navigieren zur Würfel Detail Seite des selectierten Würfels
+        /// </summary>
+        /// <param name="obj"></param>
         private void GoToDice(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.LeftBottomContentRegion, nameof(DiceDetail), _parameters);
         }
+        /// <summary>
+        /// Funktion zum navigieren zurück zur RollEm Übersicht
+        /// </summary>
+        /// <param name="obj"></param>
         private void GoToRollEmSpaceOverview(object obj)
         {
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(RollEmSpaceOverview), _parameters);
@@ -78,77 +105,168 @@ namespace RollEmSpacePage.ViewModels
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand RollCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
+        /// <summary>
+        /// Funktion zum checken ob der aktive Würfel Fehler hat. Sie gibt einen Bool Wert zurück.
+        /// </summary>
+        /// <returns>True: Würfel hat Error, False: Würfel hat keine Error</returns>
+        private bool AreThereErrors()
+        {
+            if (!SelectedDice.Dice.HasErrors)
+            {
+                foreach (Category category in SelectedDice.Dice.Categories)
+                {
+                    if (!category.HasErrors)
+                    {
+                        foreach (Element element in category.Elements)
+                        {
+                            if (!element.HasErrors)
+                            {
+                                foreach (Value value in element.Values)
+                                {
+                                    if (value.HasErrors)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
 
+                return false;
+            }
+
+            return true;
+        }
+        /// <summary>
+        /// Funktion zum Rollen von Würfeln. Hier wird gecheckt ob das Würfeln mit dem Würfel erlaubt ist.
+        /// </summary>
         private async void RollExecute()
         {
-            ShowRolling = true;
-            await Task.Delay(10);
-            await RollIdeas();
-            ShowRolling = false;
+            if (!AreThereErrors())
+            {
+                ShowRolling = true;
+                await Task.Delay(10);
+                RollIdeas();
+                ShowRolling = false;
+                SelectedDice.Dice.LastUsed = DateTime.Now;
+                await _diceListViewModel.SaveRolledDiceAsync();
+            }
+            else
+            {
+                _dialogService.ShowDialog("ErrorDialog",
+                    new DialogParameters
+                    {
+                        { "title", "Error" },
+                        { "message", $"Your dice has to be error free to roll ideas!" }
+                    },
+                    r =>
+                    {
+                        if (r.Result == ButtonResult.None) return;
+                        if (r.Result == ButtonResult.OK) return;
+                        if (r.Result == ButtonResult.Cancel) { }
+                    });
+            }
+
         }
 
-        private async Task RollIdeas()
+        /// <summary>
+        /// Funktion die die Logik zum Würfeln beinhaltet. Hierbei wird eine neue Ideen Liste erzeugt und in das temporäre IdeaListViewModel gespeichert.
+        /// </summary>
+        private void RollIdeas()
         {
             List<Idea> rolledIdeas = new List<Idea>();
             for (int j = 0; j < SelectedDice.Dice.Amount; j++)
             {
                 Idea idea = new Idea($"{j + 1}. {SelectedDice.Dice.Name} idea", SelectedDice.Dice.Name, SelectedDice.Dice.Description);
                 rolledIdeas.Add(idea);
-                List<Category> Categories = SelectedDice.Dice.Categories;
-                for (int i = 0; i < Categories.Count; i++)
+                if (SelectedDice.Dice.Categories != null)
                 {
-                    if (Categories[i].Active)
+                    List<Category> categories = SelectedDice.Dice.Categories;
+                    for (int i = 0; i < categories.Count; i++)
                     {
-                        for (int l = 0; l < Categories[i].Amount; l++)
+                        if (categories[i].Active)
                         {
-                            IdeaCategory ideaCategory = new IdeaCategory(Categories[i].Name);
-                            idea.IdeaCategories.Add(ideaCategory);
-                            List<Element> Elements = Categories[i].Elements;
-                            for (int a = 0; a < Elements.Count; a++)
+                            for (int l = 0; l < categories[i].Amount; l++)
                             {
-                                if (Elements[a].Active)
+                                IdeaCategory ideaCategory = new IdeaCategory(categories[i].Name);
+                                idea.IdeaCategories.Add(ideaCategory);
+                                if (categories[i].Elements != null)
                                 {
-
-                                    for (int m = 0; m < Elements[a].Amount; m++)
+                                    List<Element> elements = categories[i].Elements;
+                                    for (int a = 0; a < elements.Count; a++)
                                     {
-                                        IdeaElement ideaElement = new IdeaElement(Elements[a].Name);
-                                        ideaCategory.IdeaElements.Add(ideaElement);
-                                        List<Value> Values = Elements[a].Values;
-                                        for (int k = 0; k < Elements[a].ValueAmount; k++)
+                                        if (elements[a].Active)
                                         {
-                                            bool valid = false;
-                                            Value value = new Value(true);
-                                            do
+
+                                            for (int m = 0; m < elements[a].Amount; m++)
                                             {
-                                                int index = _random.Next(Values.Count);
-                                                value = Values[index];
-                                                if (value.Active)
+                                                IdeaElement ideaElement = new IdeaElement(elements[a].Name);
+                                                ideaCategory.IdeaElements.Add(ideaElement);
+                                                if (elements[a].Values != null && elements[a].Values.Count > 0)
                                                 {
-                                                    valid = true;
+                                                    List<Value> values = elements[a].Values;
+                                                    for (int k = 0; k < elements[a].ValueAmount; k++)
+                                                    {
+                                                        bool valid = false;
+                                                        Value value;
+                                                        do
+                                                        {
+                                                            int index = _random.Next(values.Count);
+                                                            value = values[index];
+                                                            if (value.Active)
+                                                            {
+                                                                if (elements[a].OnlyUnique && elements[a].CanBeUnique)
+                                                                {
+                                                                    if (!ideaElement.AlreadyHasValue(value.Name))
+                                                                    {
+                                                                        valid = true;
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    valid = true;
+                                                                }
+                                                            }
+                                                        } while (!valid);
+                                                        ideaElement.IdeaValues.Add(new IdeaValue(value.Name));
+                                                    }
                                                 }
-                                            } while (!valid);
-                                            ideaElement.IdeaValues.Add(new IdeaValue(value.Name));
+                                            }
                                         }
                                     }
                                 }
+                                
                             }
                         }
                     }
                 }
+                
             }
-            _ideaListViewModel = new IdeaListViewModel(rolledIdeas, _dialogService);//, _ideaDataService
+            _ideaListViewModel = new IdeaListViewModel(rolledIdeas, _dialogService);
             CreateGroupedView();
-            SelectedDice.Dice.LastUsed = DateTime.Now;
-            await _diceListViewModel.SaveDiceAsync();
         }
 
         public IRegionManager RegionManager { get; private set; }
+        /// <summary>
+        ///     Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Ideenamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedIdeasView
         {
             get => _groupedIdeasView;
             set => SetProperty(ref _groupedIdeasView, value);
         }
-
+        /// <summary>
+        /// Die ausgewählte Idee
+        /// </summary>
         public IdeaViewModel SelectedIdea
         {
             get
@@ -158,13 +276,19 @@ namespace RollEmSpacePage.ViewModels
             }
             set => GroupedIdeasView.MoveCurrentTo(value);
         }
+        /// <summary>
+        /// Der aktive Würfel für die Würfelfunktionen auf der Seite
+        /// </summary>
         public DiceViewModel SelectedDice
         {
             get => _selectedDice;
             
             set => SetProperty(ref _selectedDice, value);
         }
-
+        /// <summary>
+        /// Zum Löschen einer Idee.
+        /// Wird auf den Löschen Button geklickt wird ein Dialog aufgerufen um zu fragen ob die Idee gelöscht werden soll
+        /// </summary>
         private async void DeleteExecute()
         {
             bool delete = false;
@@ -186,6 +310,10 @@ namespace RollEmSpacePage.ViewModels
             if(delete) await _ideaListViewModel.DeleteIdeaAsync(selectedIdea);
         }
 
+        /// <summary>
+        ///     Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Dice.Name))
@@ -193,11 +321,13 @@ namespace RollEmSpacePage.ViewModels
                 GroupedIdeasView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Zum Speichern der ausgewählten Ideen. Diese werden zuerst zur Haupt Ideen Liste hinzugefügt und diese dann gespeichert.
+        /// </summary>
         private async void SaveExecute()
         {
             IsSaving = true;
-            await Task.Delay(3000);
+            //await Task.Delay(3000);
             await _mainIdeaListViewModel.AddIdeasAsync(_ideaListViewModel.Ideas);
             await _mainIdeaListViewModel.SaveIdeasAsync();
             IsSaving = false;
@@ -206,6 +336,9 @@ namespace RollEmSpacePage.ViewModels
             ShowSaved = false;
         }
 
+        /// <summary>
+        /// Funktion um das ideaListViewModel in einen ListCollectionView umzuwandeln. Diese wird zur gruppierten Darstellung der gewürfelten Ideen benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<IdeaViewModel> ideaViewModels = _ideaListViewModel.AllIdeas;
@@ -220,22 +353,26 @@ namespace RollEmSpacePage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedIdeasView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName,
-                Converter = new NameToInitialConverter()
-            });
+            if (GroupedIdeasView.GroupDescriptions != null)
+                GroupedIdeasView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName,
+                    Converter = new NameToInitialConverter()
+                });
             GroupedIdeasView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedIdea));
         }
 
-
+        /// <summary>
+        /// Wird aufgerufen wenn zu dieser Seite navigiert wird. Die übergebenen Parameter werden zwischengespeichert, der zuvor doppegeklickte Würfel gesetzt,
+        /// die übergebenen DiceListViewModel und IdeaListViewModel gesetzt und mit einer leeren Ideen Liste die gruppierte Liste erzeugt
+        /// </summary>
+        /// <param name="navigationContext">NavigationContext der die NavigationParameter beinhaltet.</param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             Debug.WriteLine("Navigated to Detail Dice");
             if (navigationContext != null)
             {
                 _parameters = navigationContext.Parameters;
-                //navigationContext.Parameters;
                 if (navigationContext.Parameters["diceListViewModel"] != null)
                 {
                     _diceListViewModel = navigationContext.Parameters.GetValue<DiceListViewModel>("diceListViewModel");
@@ -244,8 +381,6 @@ namespace RollEmSpacePage.ViewModels
                     CreateGroupedView();
                     if (navigationContext.Parameters["selectedDice"] != null)
                     {
-                        Debug.WriteLine("Selected dice is not null");
-                        Debug.WriteLine("Selected Dice: " + navigationContext.Parameters.GetValue<DiceViewModel>("selectedDice").Dice.Name);
                         SelectedDice = navigationContext.Parameters.GetValue<DiceViewModel>("selectedDice");
                     }
                 }
@@ -265,8 +400,6 @@ namespace RollEmSpacePage.ViewModels
 
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            Debug.WriteLine("Navigated from RollEmSpace to some other side");
-        }
+        { }
     }
 }

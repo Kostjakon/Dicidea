@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Dicidea.Views
+﻿namespace Dicidea.Views
 {
     /// <summary>
     /// Interaction logic for ErrorDialog
     /// </summary>
-    public partial class ErrorDialog : UserControl
+    public partial class ErrorDialog
     {
         public ErrorDialog()
         {

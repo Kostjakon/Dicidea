@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Model Klasse einer Kategorie eines Würfels
+    /// </summary>
     public sealed class Category : NotifyDataErrorInfo<Category>
     {
         private string _name;
@@ -16,7 +19,7 @@ namespace Dicidea.Core.Models
         {
             Elements = new List<Element>
             {
-                new Element(true)
+                new Element(newCategory)
             };
             Rules.Add(new DelegateRule<Category>(nameof(Name), "The category has to have a name.", c => !string.IsNullOrWhiteSpace(c?.Name)));
             Id = Guid.NewGuid().ToString("N");
@@ -24,19 +27,6 @@ namespace Dicidea.Core.Models
             Description = " ";
             Amount = 1;
             Active = true;
-            Rules.Add(new DelegateRule<Category>(nameof(Elements), "Everything has to have a name", c =>
-            {
-                bool hasNoErrors = true;
-                foreach (var element in c.Elements)
-                {
-                    if (element.HasErrors)
-                    {
-                        hasNoErrors = false;
-                    }
-                }
-
-                return hasNoErrors;
-            }));
         }
         public Category()
         {

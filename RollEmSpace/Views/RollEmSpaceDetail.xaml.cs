@@ -1,13 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows.Controls;
-using System.Windows.Input;
-
-namespace RollEmSpacePage.Views
+﻿namespace RollEmSpacePage.Views
 {
     /// <summary>
     /// Interaction logic for RollEmSpaceDetail
     /// </summary>
-    public partial class RollEmSpaceDetail : UserControl
+    public partial class RollEmSpaceDetail
     {
         public RollEmSpaceDetail()
         {

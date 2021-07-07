@@ -14,6 +14,10 @@ using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
+    /// <summary>
+    /// Kapselt die Kategorie eines Würfels, fügt UI-spezifische Eigenschaften hinzu (Löschen der Kategorie, Editieren der Kategorie, Aktivieren der Kategorie, Hinzufügen eines neuen Elements)
+    /// und erstellt eine ListCollectionView der Kategorien des Würfels.
+    /// </summary>
     public class CategoryViewModel : NotifyPropertyChanges
     {
         private readonly ElementListViewModel _elementListViewModel;
@@ -22,14 +26,19 @@ namespace DicePage.ViewModels
         private readonly IDialogService _dialogService;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
-
+        /// <summary>
+        /// Erzeugt die gruppierte Liste der Elemente der Ideen Kategorie und setzt das EditCommand und DeleteCommand.
+        /// </summary>
+        /// <param name="dice">Würfel zu dem die Kategorie gehört, wird benötigt zum löschen der Kategorie</param>
+        /// <param name="category">Kategorie für die das CategoryViewModel erstellt werden soll</param>
+        /// <param name="diceDataService">Wird zur Weitergabe an das ValueListViewModel benötigt</param>
+        /// <param name="dialogService">Wird zum Erzeugen eines Dialogs benötigt</param>
         public CategoryViewModel(DiceViewModel dice, Category category, IDiceDataService diceDataService, IDialogService dialogService)
         {
             _dialogService = dialogService;
             DeleteCommand = new DelegateCommand<object>(DeleteExecute);
             _diceViewModel = dice;
             Category = category;
-            // TODO: SendMailCommand is not needed, because dice doesn't have an email
             var self = this;
             _elementListViewModel ??= new ElementListViewModel(dice, self, diceDataService, _dialogService);
             EditCommand = new DelegateCommand(EditExecute);
@@ -37,12 +46,17 @@ namespace DicePage.ViewModels
             AddCommand = new DelegateCommand(AddExecute);
             CreateGroupedView();
         }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textboxen
+        /// </summary>
         public bool IsEditEnabled
         {
             get => _isEditEnabled;
             set => SetProperty(ref _isEditEnabled, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textblöcke
+        /// </summary>
         public bool IsEditDisabled
         {
             get => _isEditDisabled;
@@ -52,30 +66,39 @@ namespace DicePage.ViewModels
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand ActivateCommand { get; set; }
-
+        /// <summary>
+        /// Zum Aktivieren der Kategorie für das Flippen der Karte
+        /// </summary>
         public void ActivateExecute()
         {
             Category.Active = !Category.Active;
         }
+        /// <summary>
+        /// Zum editieren von Kategorien
+        /// </summary>
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Dice");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
-
         }
+        /// <summary>
+        /// Zum Hinzufügen eines neuen Elements
+        /// </summary>
         public async void AddExecute()
         {
             await AddElementAsync();
         }
-
+        /// <summary>
+        /// Gruppierte Liste der Elemente
+        /// </summary>
         public ListCollectionView GroupedElementsView
         {
             get => _groupedElementsView;
             set => SetProperty(ref _groupedElementsView, value);
         }
-
-
+        /// <summary>
+        /// Das ausgewählte Element
+        /// </summary>
         public ElementViewModel SelectedElement
         {
             get
@@ -85,7 +108,10 @@ namespace DicePage.ViewModels
             }
             set => GroupedElementsView.MoveCurrentTo(value);
         }
-
+        /// <summary>
+        /// Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Category.Name))
@@ -93,7 +119,9 @@ namespace DicePage.ViewModels
                 //GroupedElementsView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Funktion um das elementListViewModel in einen ListCollectionView umzuwandeln. Dieser wird zur gruppierten Darstellung der Elemente benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<ElementViewModel> elementViewModels = _elementListViewModel.Elements;
@@ -108,20 +136,25 @@ namespace DicePage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedElementsView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName,
-                Converter = new NameToInitialConverter()
-            });
+            if (GroupedElementsView.GroupDescriptions != null)
+                GroupedElementsView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName,
+                    Converter = new NameToInitialConverter()
+                });
             GroupedElementsView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedElement));
         }
-
-
+        /// <summary>
+        /// Die zum CategoryViewModel gehörige Kategorie
+        /// </summary>
         public Category Category { get; }
 
         public ICommand DeleteCommand { get; set; }
-        
 
+        /// <summary>
+        /// Zum Löschen von Kategorien. Wird auf den Button geklickt wird zuerst ein Dialog angezeigt
+        /// der mit Ja bestätigt werden muss, erst dann wird die Kategorie gelöscht.
+        /// </summary>
         private async void DeleteExecute(object obj)
         {
             var selectedCategory = this;
@@ -142,11 +175,19 @@ namespace DicePage.ViewModels
             _diceViewModel.SelectedCategory = this;
             await _diceViewModel.DeleteCategoryAsync();
         }
+        /// <summary>
+        /// Zum Löschen von Elementen aus der Kategorie. Wird über das ElementViewModel verwendet.
+        /// </summary>
+        /// <returns></returns>
         public async Task DeleteElementAsync()
         {
             await _elementListViewModel.DeleteElementAsync(SelectedElement);
             GroupedElementsView.Refresh();
         }
+        /// <summary>
+        /// Zum Hinzufügen neuer Elemente
+        /// </summary>
+        /// <returns></returns>
         public async Task AddElementAsync()
         {
             Debug.WriteLine("Add Category");

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Dicidea.Core.Constants
 {
+    /// <summary>
+    /// Klasse mit Namen Konstanten für die verschiedenen Regions
+    /// </summary>
     public class RegionNames
     {
         public static readonly string MainContentRegion = "MainContentRegion";

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Dicidea.Core.Helper;
 using Newtonsoft.Json;
 
 namespace Dicidea.Core.Models
 {
+    /// <summary>
+    /// Model Klasse eines Würfels
+    /// </summary>
     public sealed class Dice : NotifyDataErrorInfo<Dice>
     {
         private string _name;
@@ -19,36 +20,19 @@ namespace Dicidea.Core.Models
         {
             Categories = new List<Category>
             {
-                new Category(true)
+                new Category(newDice)
             };
             Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
-            Rules.Add(new DelegateRule<Dice>(nameof(Categories), "Everything has to have a name", d =>
-            {
-                bool hasNoErrors = true;
-                foreach (var category in d.Categories)
-                {
-                    if (category.HasErrors)
-                    {
-                        hasNoErrors = false;
-                    }
-                }
-
-                return hasNoErrors;
-            }));
             Id = Guid.NewGuid().ToString("N");
-            Debug.WriteLine("New dice");
             Name = "";
             Description = "";
             Amount = 1;
             Active = true;
             LastUsed = DateTime.Now;
-            Debug.WriteLine(LastUsed.Date);
         }
         public Dice()
         {
             Rules.Add(new DelegateRule<Dice>(nameof(Name), "The dice has to have a name.", d => !string.IsNullOrWhiteSpace(d?.Name)));
-            //Id ??= Guid.NewGuid().ToString("N");
-            Debug.WriteLine("Loaded dice");
         }
 
         [JsonProperty(PropertyName = "DiceId", Required = Required.Always)]

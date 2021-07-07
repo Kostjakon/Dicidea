@@ -137,7 +137,7 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
-            Margin="{StaticResource MarginHorizontal10}"
+            Margin="{StaticResource MarginHorizontal20}"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Orientation="Vertical">

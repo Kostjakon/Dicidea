@@ -2,79 +2,79 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
-using DicePage.Views;
-using Dicidea.Core.Constants;
 using Dicidea.Core.Converters;
 using Dicidea.Core.Models;
-using Dicidea.Core.Services;
 using Dicidea.Core.Helper;
-using MaterialDesignThemes.Wpf;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den DiceOverview. Verwendet das DiceListViewModel als
+    /// Datenquelle, verwendet aber einen <see cref="ListCollectionView" /> für das Binden an die ListView um später einfach
+    /// Sortieren und Filtern zu können.
+    /// </summary>
     public class DiceOverviewViewModel : NotifyPropertyChanges, INavigationAware
     {
         private string _filterText;
         private SortOrder _sortOrder = SortOrder.Unsorted;
         private ListCollectionView _groupedDiceView;
         private DiceListViewModel _diceListViewModel;
-        private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
-        private bool _showSaved = false;
-        private bool _isSaving = false;
-
+        private bool _showSaved;
+        private bool _isSaving;
+        /// <summary>
+        /// Erhält den RegionManager und den DialogManager und setzt das Sort-, Save- und DeleteCommand
+        /// </summary>
+        /// <param name="dialogService"></param>
+        /// <param name="regionManager"></param>
         public DiceOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             _dialogService = dialogService;
-            _regionManager = regionManager;
-            if (DiceView != null)
-            {
-                DiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
-                DiceView.Refresh();
-            }
+            RegionManager = regionManager;
             SortCommand = new DelegateCommand(SortExecute);
             AddCommand = new DelegateCommand(AddExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Saved Anzeige
+        /// </summary>
         public bool ShowSaved
         {
             get => _showSaved;
             set => SetProperty(ref _showSaved, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen der Saving Anzeige
+        /// </summary>
         public bool IsSaving
         {
             get => _isSaving;
             set => SetProperty(ref _isSaving, value);
         }
-
-        public bool IsEditEnabled
-        {
-            get;
-            private set;
-        }
-
+        /// <summary>
+        /// Zwischengespeicherte NavigationParameter
+        /// </summary>
         public NavigationParameters Parameters
         {
             get;
             set;
         }
-
+        /// <summary>
+        /// Zwischengespeichertes DiceistViewModel
+        /// </summary>
         public DiceListViewModel DiceListViewModel
         {
             get => _diceListViewModel;
         }
-
+        /// <summary>
+        /// Die verschiedenen Sortiermöglichkeiten
+        /// </summary>
         public SortOrder SortOrder
         {
             get => _sortOrder;
@@ -101,10 +101,10 @@ namespace DicePage.ViewModels
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
-        public ListCollectionView DiceView { get; private set; }
-
-        public IRegionManager RegionManager { get => _regionManager; }
-
+        public IRegionManager RegionManager { get; }
+        /// <summary>
+        /// Der Text nach dem gefiltert werden soll
+        /// </summary>
         public string FilterText
         {
             get => _filterText;
@@ -114,8 +114,9 @@ namespace DicePage.ViewModels
                 Filter();
             }
         }
-
-
+        /// <summary>
+        /// Ausgewählter Würfel
+        /// </summary>
         public DiceViewModel SelectedDice
         {
             get
@@ -125,13 +126,18 @@ namespace DicePage.ViewModels
             }
             set => GroupedDiceView.MoveCurrentTo(value);
         }
-
+        /// <summary>
+        /// Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Würfelnamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedDiceView
         {
             get => _groupedDiceView;
             set => SetProperty(ref _groupedDiceView, value);
         }
-
+        /// <summary>
+        /// Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Dice.Name))
@@ -139,25 +145,33 @@ namespace DicePage.ViewModels
                 GroupedDiceView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Unsortierte Liste
+        /// </summary>
         private void Unsort()
         {
-            DiceView.IsLiveSorting = false;
-            DiceView.CustomSort = null;
+            GroupedDiceView.IsLiveSorting = false;
+            GroupedDiceView.CustomSort = null;
         }
-
+        /// <summary>
+        /// Aufsteigende Sortierung
+        /// </summary>
         private void SortAscending()
         {
-            DiceView.IsLiveSorting = true;
-            DiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d1.Dice.Name, d2.Dice.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedDiceView.IsLiveSorting = true;
+            GroupedDiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d1.Dice.Name, d2.Dice.Name, StringComparison.OrdinalIgnoreCase));
         }
-
+        /// <summary>
+        /// Absteigende Sortierung
+        /// </summary>
         private void SortDescending()
         {
-            DiceView.IsLiveSorting = true;
-            DiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d2.Dice.Name, d1.Dice.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedDiceView.IsLiveSorting = true;
+            GroupedDiceView.CustomSort = Comparer<DiceViewModel>.Create((d1, d2) => string.Compare(d2.Dice.Name, d1.Dice.Name, StringComparison.OrdinalIgnoreCase));
         }
-
+        /// <summary>
+        /// Funktion für das Sort Command. Noch nicht in der View implementiert.
+        /// </summary>
         private void SortExecute()
         {
             switch (SortOrder)
@@ -173,7 +187,9 @@ namespace DicePage.ViewModels
                     break;
             }
         }
-
+        /// <summary>
+        /// Zum Hinzufügen eines neuen Würfels
+        /// </summary>
         private async void AddExecute()
         {
             DiceViewModel result = await _diceListViewModel.AddDiceAsync();
@@ -181,18 +197,23 @@ namespace DicePage.ViewModels
             GroupedDiceView.Refresh();
 
         }
+        /// <summary>
+        /// Zum Speichern der Würfel
+        /// </summary>
         private async void SaveExecute()
         {
-
             IsSaving = true;
-            await Task.Delay(3000);
+            //await Task.Delay(3000);
             await _diceListViewModel.SaveDiceAsync();
             IsSaving = false;
             ShowSaved = true;
             await Task.Delay(3000);
             ShowSaved = false;
         }
-
+        /// <summary>
+        /// Zum Löschen eines Würfels.
+        /// Wird auf den Löschen Button geklickt wird ein Dialog aufgerufen um zu fragen ob der Würfel gelöscht werden soll
+        /// </summary>
         private async void DeleteExecute()
         {
             var selectedDice = SelectedDice;
@@ -215,7 +236,9 @@ namespace DicePage.ViewModels
             GroupedDiceView.Refresh();
         }
 
-
+        /// <summary>
+        /// Funktion um das diceListViewModel in einen ListCollectionView umzuwandeln. Dieser wird zur gruppierten Darstellung der Würfel benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<DiceViewModel> diceViewModels = _diceListViewModel.AllDice;
@@ -231,24 +254,27 @@ namespace DicePage.ViewModels
                 IsLiveGrouping = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName,
-                Converter = new NameToInitialConverter()
-            });
+            if (GroupedDiceView.GroupDescriptions != null)
+                GroupedDiceView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName,
+                    Converter = new NameToInitialConverter()
+                });
             GroupedDiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
         }
-
+        /// <summary>
+        /// Funktion zum Filtern der Würfel. Noch nicht implementiert!
+        /// </summary>
         private void Filter()
         {
             if (string.IsNullOrWhiteSpace(FilterText))
             {
-                DiceView.Filter = o => true;
+                GroupedDiceView.Filter = o => true;
             }
             else
             {
-                DiceView.IsLiveFiltering = true;
-                DiceView.Filter = o =>
+                GroupedDiceView.IsLiveFiltering = true;
+                GroupedDiceView.Filter = o =>
                 {
                     if (o is DiceViewModel vm)
                         return vm.Dice.Name?.IndexOf(FilterText, StringComparison.CurrentCultureIgnoreCase) >= 0;
@@ -256,43 +282,28 @@ namespace DicePage.ViewModels
                 };
             }
         }
-
-
+        /// <summary>
+        /// Wird aufgerufen wenn zu dieser Seite navigiert wird. Die übergebenen Parameter werden zwischengespeichert
+        /// und eine gruppierte Liste der Würfel erzeugt.
+        /// </summary>
+        /// <param name="navigationContext">NavigationContext der die NavigationParameter beinhaltet.</param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             Parameters = navigationContext.Parameters;
-            Debug.WriteLine("Navigated to Dice Overview");
-            if (navigationContext != null)
+            if (navigationContext.Parameters["diceListViewModel"] != null)
             {
-                Debug.WriteLine("Navigation Context is not null");
-                Debug.WriteLine(navigationContext.Parameters);
-                if (navigationContext.Parameters["diceListViewModel"] != null)
-                {
-                    Debug.WriteLine("diceListViewModel is not null");
-                    _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
-                    //DiceView = new ListCollectionView(DiceListViewModel.AllDice);
-                    //DiceView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedDice));
-                    CreateGroupedView();
-                    //if (DiceView.Count >0) DiceView.Refresh();
-                }
-                SortCommand = new DelegateCommand(SortExecute);
+                _diceListViewModel = navigationContext.Parameters["diceListViewModel"] as DiceListViewModel;
+                CreateGroupedView();
             }
-            else
-            {
-                //Message = $"Dice Active from your Prism Module, Dice Anzahl: {AllDice.Count}! Es wurde kein Würfel ausgewählt";
-            }
+            SortCommand = new DelegateCommand(SortExecute);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
         }
-
-
-
+        
         public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            Debug.WriteLine("Not implemented, navigated from DiceOverview to some other side");
-        }
+        {}
     }
 }

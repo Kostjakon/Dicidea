@@ -1,16 +1,11 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Dicidea.Core.Constants;
-using Dicidea.Core.Converters;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using IdeaPage.Views;
@@ -19,59 +14,67 @@ using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
+    /// <summary>
+    /// ViewModel für den <see cref="IdeaOverview" />. Verwendet das <see cref="IdeaListViewModel" /> als
+    /// Datenquelle, verwendet aber einen <see cref="ListCollectionView" /> für das Binden an die ListView um später einfach
+    /// Sortieren und Filtern zu können.
+    /// </summary>
     public class IdeaOverviewViewModel : NotifyPropertyChanges, INavigationAware
     {
         private string _filterText;
         private SortOrder _sortOrder = SortOrder.Unsorted;
         private ListCollectionView _groupedIdeaView;
         private IdeaListViewModel _ideaListViewModel;
-        private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
-        private bool _showSaved = false;
-        private bool _isSaving = false;
+        private bool _showSaved;
+        private bool _isSaving;
 
-        public IdeaOverviewViewModel(IRegionManager regionManager, IDialogService dialogService)
+        /// <summary>
+        /// Erhält den RegionManager und den DialogManager und setzt das Sort-, Save- und DeleteCommand
+        /// </summary>
+        /// <param name="dialogService"></param>
+        public IdeaOverviewViewModel(IDialogService dialogService)
         {
             _dialogService = dialogService;
-            _regionManager = regionManager;
-            if (IdeaView != null)
-            {
-                IdeaView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedIdea));
-                IdeaView.Refresh();
-            }
             SortCommand = new DelegateCommand(SortExecute);
             DeleteCommand = new DelegateCommand(DeleteExecute);
             SaveCommand = new DelegateCommand(SaveExecute);
         }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Saved Anzeige
+        /// </summary>
         public bool ShowSaved
         {
             get => _showSaved;
             set => SetProperty(ref _showSaved, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen der Saving Anzeige
+        /// </summary>
         public bool IsSaving
         {
             get => _isSaving;
             set => SetProperty(ref _isSaving, value);
         }
 
-        public bool IsEditEnabled
-        {
-            get;
-            private set;
-        }
-
+        /// <summary>
+        /// Zwischengespeicherte NavigationParameter
+        /// </summary>
         public NavigationParameters Parameters
         {
             get;
             set;
         }
-
+        /// <summary>
+        /// Zwischengespeichertes IdeaListViewModel
+        /// </summary>
         public IdeaListViewModel IdeaListViewModel
         {
             get => _ideaListViewModel;
         }
-
+        /// <summary>
+        /// Die verschiedenen Sortiermöglichkeiten
+        /// </summary>
         public SortOrder SortOrder
         {
             get => _sortOrder;
@@ -96,19 +99,10 @@ namespace IdeaPage.ViewModels
         public DelegateCommand SortCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
-
-        public DelegateCommand GoToOverview =>
-            new DelegateCommand(() =>
-            {
-                _regionManager.RequestNavigate(RegionNames.MainContentRegion, nameof(IdeaOverview), Parameters);
-                _regionManager.Regions[RegionNames.LeftContentRegion].RemoveAll();
-                _regionManager.Regions[RegionNames.LeftBottomContentRegion].RemoveAll();
-            });
-
-        public ListCollectionView IdeaView { get; private set; }
-
-        public IRegionManager RegionManager { get => _regionManager; }
-
+        
+        /// <summary>
+        /// Der Text nach dem gefiltert werden soll
+        /// </summary>
         public string FilterText
         {
             get => _filterText;
@@ -119,7 +113,9 @@ namespace IdeaPage.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Die ausgewählte Idee
+        /// </summary>
         public IdeaViewModel SelectedIdea
         {
             get
@@ -129,13 +125,18 @@ namespace IdeaPage.ViewModels
             }
             set => GroupedIdeaView.MoveCurrentTo(value);
         }
-
+        /// <summary>
+        /// Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Ideenamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedIdeaView
         {
             get => _groupedIdeaView;
             set => SetProperty(ref _groupedIdeaView, value);
         }
-
+        /// <summary>
+        /// Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Idea.Name))
@@ -143,25 +144,33 @@ namespace IdeaPage.ViewModels
                 GroupedIdeaView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Unsortierte Liste
+        /// </summary>
         private void Unsort()
         {
-            IdeaView.IsLiveSorting = false;
-            IdeaView.CustomSort = null;
+            GroupedIdeaView.IsLiveSorting = false;
+            GroupedIdeaView.CustomSort = null;
         }
-
+        /// <summary>
+        /// Aufsteigende Sortierung
+        /// </summary>
         private void SortAscending()
         {
-            IdeaView.IsLiveSorting = true;
-            IdeaView.CustomSort = Comparer<IdeaViewModel>.Create((i1, i2) => string.Compare(i1.Idea.Name, i2.Idea.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedIdeaView.IsLiveSorting = true;
+            GroupedIdeaView.CustomSort = Comparer<IdeaViewModel>.Create((i1, i2) => string.Compare(i1.Idea.Name, i2.Idea.Name, StringComparison.OrdinalIgnoreCase));
         }
-
+        /// <summary>
+        /// Absteigende Sortierung
+        /// </summary>
         private void SortDescending()
         {
-            IdeaView.IsLiveSorting = true;
-            IdeaView.CustomSort = Comparer<IdeaViewModel>.Create((i1, i2) => string.Compare(i2.Idea.Name, i1.Idea.Name, StringComparison.OrdinalIgnoreCase));
+            GroupedIdeaView.IsLiveSorting = true;
+            GroupedIdeaView.CustomSort = Comparer<IdeaViewModel>.Create((i1, i2) => string.Compare(i2.Idea.Name, i1.Idea.Name, StringComparison.OrdinalIgnoreCase));
         }
-
+        /// <summary>
+        /// Funktion für das Sort Command. Noch nicht in der View implementiert.
+        /// </summary>
         private void SortExecute()
         {
             switch (SortOrder)
@@ -177,18 +186,22 @@ namespace IdeaPage.ViewModels
                     break;
             }
         }
-
+        /// <summary>
+        /// Zum Speichern der Ideen.
+        /// </summary>
         private async void SaveExecute()
         {
             IsSaving = true;
-            await Task.Delay(3000);
             await _ideaListViewModel.SaveIdeasAsync();
             IsSaving = false;
             ShowSaved = true;
             await Task.Delay(3000);
             ShowSaved = false;
         }
-
+        /// <summary>
+        /// Zum Löschen einer Idee.
+        /// Wird auf den Löschen Button geklickt wird ein Dialog aufgerufen um zu fragen ob die Idee gelöscht werden soll
+        /// </summary>
         private async void DeleteExecute()
         {
             Debug.WriteLine("Delete Idea");
@@ -213,7 +226,9 @@ namespace IdeaPage.ViewModels
             GroupedIdeaView.Refresh();
         }
 
-
+        /// <summary>
+        /// Funktion um das ideaListViewModel in einen ListCollectionView umzuwandeln. Diese wird zur gruppierten Darstellung der gewürfelten Ideen benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<IdeaViewModel> ideaViewModels = _ideaListViewModel.AllIdeas;
@@ -229,23 +244,26 @@ namespace IdeaPage.ViewModels
                 IsLiveGrouping = true,
                 SortDescriptions = { new SortDescription(propertyName, ListSortDirection.Ascending) }
             };
-            GroupedIdeaView.GroupDescriptions.Add(new PropertyGroupDescription
-            {
-                PropertyName = propertyName
-            });
+            if (GroupedIdeaView.GroupDescriptions != null)
+                GroupedIdeaView.GroupDescriptions.Add(new PropertyGroupDescription
+                {
+                    PropertyName = propertyName
+                });
             GroupedIdeaView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedIdea));
         }
-
+        /// <summary>
+        /// Funktion zum Filtern der Würfel. Noch nicht implementiert!
+        /// </summary>
         private void Filter()
         {
             if (string.IsNullOrWhiteSpace(FilterText))
             {
-                IdeaView.Filter = o => true;
+                GroupedIdeaView.Filter = o => true;
             }
             else
             {
-                IdeaView.IsLiveFiltering = true;
-                IdeaView.Filter = o =>
+                GroupedIdeaView.IsLiveFiltering = true;
+                GroupedIdeaView.Filter = o =>
                 {
                     if (o is IdeaViewModel vm)
                         return vm.Idea.Name?.IndexOf(FilterText, StringComparison.CurrentCultureIgnoreCase) >= 0;
@@ -253,26 +271,21 @@ namespace IdeaPage.ViewModels
                 };
             }
         }
-
-
+        
+        /// <summary>
+        /// Wird aufgerufen wenn zu dieser Seite navigiert wird. Die übergebenen Parameter werden zwischengespeichert
+        /// und eine gruppierte Liste der Ideen erzeugt.
+        /// </summary>
+        /// <param name="navigationContext">NavigationContext der die NavigationParameter beinhaltet.</param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             Parameters = navigationContext.Parameters;
-            if (navigationContext != null)
+            if (navigationContext.Parameters["ideaListViewModel"] != null)
             {
-                if (navigationContext.Parameters["ideaListViewModel"] != null)
-                {
-                    Debug.WriteLine("Idea List View is not null");
-                    _ideaListViewModel = navigationContext.Parameters["ideaListViewModel"] as IdeaListViewModel;
-                    foreach (IdeaViewModel ideaViewModel in _ideaListViewModel.AllIdeas)
-                    {
-                        Debug.WriteLine(ideaViewModel.Idea.Name);
-                    }
-                    CreateGroupedView();
-                }
-                SortCommand = new DelegateCommand(SortExecute);
-                //_dialogCoordinator = navigationContext.Parameters.GetValue<IDialogCoordinator>("dialogCoordinator");
+                _ideaListViewModel = navigationContext.Parameters["ideaListViewModel"] as IdeaListViewModel;
+                CreateGroupedView();
             }
+            SortCommand = new DelegateCommand(SortExecute);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -280,11 +293,7 @@ namespace IdeaPage.ViewModels
             return true;
         }
 
-
-
         public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            Debug.WriteLine("Not implemented, navigated from IdeaOverview to some other side");
-        }
+        {}
     }
 }

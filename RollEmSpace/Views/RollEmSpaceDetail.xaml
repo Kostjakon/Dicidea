@@ -30,7 +30,6 @@
         <Button
             Grid.Row="0"
             Grid.Column="0"
-            HorizontalContentAlignment="Left"
             Command="{Binding GoToRollEmSpaceOverviewCommand}"
             Style="{StaticResource NavigationButton}">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
@@ -64,8 +63,8 @@
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
-                Margin="{StaticResource MarginHorizontalTop20}"
-                HorizontalAlignment="Left"
+                Margin="{StaticResource MarginLeftTop20Right10}"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 FontSize="{StaticResource HeaderL}"
                 FontWeight="SemiBold"
@@ -92,7 +91,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="{StaticResource MarginHorizontal20}"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 FontSize="{StaticResource FontSizeM}"
                 Text="Amount of ideas:"
@@ -100,7 +99,8 @@
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="{StaticResource MarginRight40Vertical10}"
+                HorizontalAlignment="Right"
+                Margin="{StaticResource MarginHorizontal20Vertical10}"
                 Orientation="Horizontal">
                 <Slider
                     Width="48"
@@ -114,8 +114,9 @@
                 <TextBlock
                     Width="18"
                     MaxHeight="20"
-                    Margin="{StaticResource MarginLeft10}"
-                    HorizontalAlignment="Left"
+                    Margin="{StaticResource MarginLeft4}"
+                    HorizontalAlignment="Right"
+                    TextAlignment="Right"
                     VerticalAlignment="Center"
                     FontSize="{StaticResource FontSizeM}"
                     Text="{Binding SelectedDice.Dice.Amount}"
@@ -129,7 +130,7 @@
             Grid.Column="0"
             Margin="{StaticResource MarginBottom20}"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
+            VerticalAlignment="Stretch"
             Focusable="False"
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding SelectedDice.GroupedCategoriesView}"
@@ -139,9 +140,9 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Padding" Value="0" />
-                    <Setter Property="Margin" Value="20,10,20,0" />
+                    <Setter Property="Margin" Value="20,0" />
                     <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -179,6 +180,7 @@
                             <TextBlock
                                 Grid.Row="0"
                                 MaxHeight="28"
+                                Width="110"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource FontSizeM}"
@@ -196,7 +198,6 @@
                                 TextTrimming="WordEllipsis"
                                 TextWrapping="Wrap" />
                         </Grid>
-
                         <StackPanel
                             Grid.Row="0"
                             Grid.Column="2"
@@ -214,9 +215,10 @@
                             <TextBlock
                                 Width="14"
                                 MaxHeight="20"
-                                Margin="{StaticResource MarginLeft10}"
+                                Margin="{StaticResource MarginLeft4}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
+                                TextAlignment="Right"
                                 FontSize="{StaticResource FontSizeM}"
                                 Text="{Binding Category.Amount}"
                                 TextTrimming="WordEllipsis"
@@ -233,9 +235,8 @@
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListViewItem}">
                                     <Setter Property="Padding" Value="0" />
-                                    <Setter Property="Margin" Value="0,0,10,0" />
+                                    <Setter Property="Margin" Value="10,0,10,0" />
                                     <Setter Property="BorderThickness" Value="0" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
@@ -252,6 +253,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <CheckBox
@@ -265,6 +267,7 @@
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             MaxHeight="20"
+                                            Width="90"
                                             Margin="{StaticResource MarginAllSides10}"
                                             HorizontalAlignment="Left"
                                             FontSize="{StaticResource FontSizeM}"
@@ -288,9 +291,10 @@
                                             <TextBlock
                                                 Width="12"
                                                 MaxHeight="20"
-                                                Margin="{StaticResource MarginLeft10}"
+                                                Margin="{StaticResource MarginLeft4}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
+                                                TextAlignment="Right"
                                                 FontSize="{StaticResource FontSizeS}"
                                                 Text="{Binding Element.Amount}"
                                                 TextTrimming="WordEllipsis"
@@ -301,17 +305,19 @@
                                             Grid.Column="0"
                                             Grid.ColumnSpan="2"
                                             MaxHeight="20"
+                                            Width="120"
                                             Margin="{StaticResource MarginHorizontalBottom10}"
-                                            HorizontalAlignment="Left"
+                                            HorizontalAlignment="Stretch"
                                             VerticalAlignment="Center"
                                             FontSize="{StaticResource FontSizeS}"
-                                            Text="Amount of Values:"
+                                            Text="Amount of Values"
                                             TextTrimming="WordEllipsis"
                                             TextWrapping="Wrap" />
                                         <StackPanel
                                             Grid.Row="1"
                                             Grid.Column="2"
-                                            Margin="{StaticResource MarginHorizontalBottom10}"
+                                            HorizontalAlignment="Right"
+                                            Margin="{StaticResource MarginRightBottom10}"
                                             Orientation="Horizontal">
                                             <Slider
                                                 Width="48"
@@ -325,16 +331,37 @@
                                             <TextBlock
                                                 Width="12"
                                                 MaxHeight="20"
-                                                Margin="{StaticResource MarginLeft10}"
+                                                Margin="{StaticResource MarginLeft4}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
+                                                TextAlignment="Right"
                                                 FontSize="{StaticResource FontSizeS}"
                                                 Text="{Binding Element.ValueAmount}"
                                                 TextTrimming="WordEllipsis"
                                                 TextWrapping="Wrap" />
                                         </StackPanel>
-                                        <ListView
+                                        <TextBlock
                                             Grid.Row="2"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="2"
+                                            MaxHeight="20"
+                                            Margin="{StaticResource MarginHorizontalBottom10}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{StaticResource FontSizeS}"
+                                            Text="Only unique values"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <CheckBox
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Right"
+                                            Margin="10 0 0 10"
+                                            IsEnabled="{Binding Element.CanBeUnique}"
+                                            IsChecked="{Binding Element.OnlyUnique}"
+                                            Style="{StaticResource MaterialDesignRollEmCheckbox}" />
+                                        <ListView
+                                            Grid.Row="3"
                                             Grid.Column="0"
                                             Grid.ColumnSpan="3"
                                             Focusable="False"
@@ -365,16 +392,19 @@
                                                             <RowDefinition Height="*" />
                                                         </Grid.RowDefinitions>
                                                         <StackPanel
-                                                            HorizontalAlignment="Left"
+                                                            HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Center"
                                                             Orientation="Horizontal">
                                                             <CheckBox
                                                                 Margin="{StaticResource MarginLeft10}"
                                                                 IsChecked="{Binding Value.Active}"
+                                                                Command="{Binding ActivateCommand}"
                                                                 Style="{StaticResource MaterialDesignRollEmCheckbox}" />
                                                             <TextBlock
                                                                 MaxHeight="20"
+                                                                Width="140"
                                                                 Margin="{StaticResource MarginAllSides10}"
+                                                                HorizontalAlignment="Stretch"
                                                                 VerticalAlignment="Center"
                                                                 FontSize="{StaticResource FontSizeS}"
                                                                 Text="{Binding Value.Name}"
@@ -419,7 +449,8 @@
             Grid.Row="0"
             Grid.Column="1"
             Margin="{StaticResource MarginHorizontal20}"
-            HorizontalAlignment="Right">
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -509,75 +540,79 @@
         </Grid>
         <ListView
             Grid.Row="1"
-            Grid.RowSpan="3"
+            Grid.RowSpan="2"
             Grid.Column="1"
-            Margin="{StaticResource MarginBottom20}"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
+            VerticalAlignment="Stretch"
+            Margin="{StaticResource MarginBottom20}"
             Focusable="False"
             ItemsSource="{Binding GroupedIdeasView}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.ItemContainerStyle>
+            <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Padding" Value="0" />
                     <Setter Property="Margin" Value="20" />
                 </Style>
-            </ListView.ItemContainerStyle>
+            </ListView.Resources>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Center" Background="Black">
-                        <WrapPanel Margin="{StaticResource MarginAllSides20}">
-                            <Grid Width="400">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <StackPanel
+                        <Grid Width="400" Margin="{StaticResource MarginAllSides20}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     Margin="{StaticResource MarginRight20Bottom10}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Top"
                                     Orientation="Horizontal">
-                                    <TextBlock
+                                <TextBlock
                                         Width="248"
                                         MaxHeight="60"
                                         FontSize="{StaticResource HeaderL}"
                                         Text="{Binding Idea.Name}"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="Wrap" />
-                                </StackPanel>
-                                <StackPanel
+                            </StackPanel>
+                            <StackPanel
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Width="120"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <StackPanel
+                                <StackPanel
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
                                         Orientation="Horizontal">
-                                        <TextBlock
+                                    <TextBlock
                                             VerticalAlignment="Center"
                                             FontSize="{StaticResource FontSizeS}"
                                             Text="Save"
                                             TextTrimming="WordEllipsis"
                                             TextWrapping="Wrap" />
-                                        <CheckBox
+                                    <CheckBox
                                             Margin="4,0,0,0"
                                             HorizontalAlignment="Right"
                                             IsChecked="{Binding Idea.Save}"
                                             Style="{StaticResource MaterialDesignRollEmCheckbox}" />
-                                    </StackPanel>
-                                    <TextBlock
+                                </StackPanel>
+                                <TextBlock
                                         Width="120"
                                         Height="20"
                                         Margin="0,4,2,0"
@@ -588,20 +623,20 @@
                                         TextAlignment="Right"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="Wrap" />
-                                </StackPanel>
-                                <StackPanel
+                            </StackPanel>
+                            <StackPanel
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
                                     HorizontalAlignment="Stretch">
-                                    <TextBlock
+                                <TextBlock
                                         Margin="{StaticResource MarginBottom20}"
                                         VerticalAlignment="Top"
                                         FontSize="{StaticResource FontSizeL}"
                                         Text="{Binding Idea.Description}"
                                         TextWrapping="Wrap" />
-                                </StackPanel>
-                                <ListView
+                            </StackPanel>
+                            <ListView
                                     Grid.Row="3"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
@@ -609,189 +644,185 @@
                                     ItemsSource="{Binding GroupedIdeaCategoriesView}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListViewItem}">
-                                            <Setter Property="Padding" Value="0" />
-                                            <Setter Property="Margin" Value="0" />
-                                            <Setter Property="BorderThickness" Value="0" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="0" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
                                                 Width="400"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center">
-                                                <StackPanel
+                                            <StackPanel
                                                     Width="400"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     Background="{StaticResource RollEmBrush}"
                                                     Orientation="Horizontal">
-                                                    <Button
+                                                <Button
                                                         Width="28"
                                                         Height="28"
                                                         Margin="{StaticResource MarginLeft10}"
                                                         Background="Transparent"
                                                         Command="{Binding DeleteCommand}"
                                                         Style="{StaticResource ContentEditorButton}">
-                                                        <svg:SVGImage
+                                                    <svg:SVGImage
                                                             Width="20"
                                                             Height="20"
                                                             HorizontalContentAlignment="Center"
                                                             VerticalContentAlignment="Center"
                                                             OverrideColor="{StaticResource IconColor}"
                                                             UriSource="../Icons/trash-solid.svg" />
-                                                    </Button>
-                                                    <TextBlock
-                                                        Width="230"
+                                                </Button>
+                                                <TextBlock
+                                                        Width="320"
                                                         MaxHeight="20"
                                                         Margin="{StaticResource MarginAllSides20}"
                                                         FontSize="{StaticResource HeaderM}"
                                                         Text="{Binding IdeaCategory.Name}"
                                                         TextTrimming="WordEllipsis"
                                                         TextWrapping="Wrap" />
-                                                </StackPanel>
-                                                <WrapPanel Width="400" VerticalAlignment="Top">
-                                                    <ListView
+                                            </StackPanel>
+                                            <WrapPanel Width="400" VerticalAlignment="Top">
+                                                <ListView
                                                         Focusable="False"
                                                         ItemsSource="{Binding GroupedIdeaElementsView}"
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                                        <ListView.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel Width="400" />
-                                                            </ItemsPanelTemplate>
-                                                        </ListView.ItemsPanel>
-                                                        <ListView.ItemContainerStyle>
-                                                            <Style TargetType="{x:Type ListViewItem}">
-                                                                <Setter Property="Padding" Value="4,4,4,20" />
-                                                                <Setter Property="Margin" Value="0" />
-                                                                <Setter Property="BorderThickness" Value="0" />
-                                                                <Setter Property="VerticalAlignment" Value="Top" />
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsFocused" Value="True">
-                                                                        <Setter Property="Background" Value="Transparent" />
-                                                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                                                        <Setter Property="BorderThickness" Value="0" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="IsSelected" Value="True">
-                                                                        <Setter Property="Background" Value="Transparent" />
-                                                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                                                        <Setter Property="BorderThickness" Value="0" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="Transparent" />
-                                                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                                                        <Setter Property="BorderThickness" Value="0" />
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </ListView.ItemContainerStyle>
-                                                        <ListView.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <WrapPanel
+                                                    <ListView.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel Width="400" />
+                                                        </ItemsPanelTemplate>
+                                                    </ListView.ItemsPanel>
+                                                    <ListView.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type ListViewItem}">
+                                                            <Setter Property="Padding" Value="4,4,4,20" />
+                                                            <Setter Property="Margin" Value="0" />
+                                                            <Setter Property="BorderThickness" Value="0" />
+                                                            <Setter Property="VerticalAlignment" Value="Top" />
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsFocused" Value="True">
+                                                                    <Setter Property="Background" Value="Transparent" />
+                                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                                    <Setter Property="BorderThickness" Value="0" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsSelected" Value="True">
+                                                                    <Setter Property="Background" Value="Transparent" />
+                                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                                    <Setter Property="BorderThickness" Value="0" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="Transparent" />
+                                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                                    <Setter Property="BorderThickness" Value="0" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ListView.ItemContainerStyle>
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <WrapPanel
                                                                     Width="192"
                                                                     HorizontalAlignment="Left"
                                                                     VerticalAlignment="Top"
                                                                     Background="{StaticResource CategoryBrush}">
-                                                                    <StackPanel
+                                                                <StackPanel
                                                                         Width="192"
                                                                         HorizontalAlignment="Left"
                                                                         VerticalAlignment="Top"
                                                                         Background="{StaticResource CategoryBrush}"
                                                                         Orientation="Horizontal">
-                                                                        <Button
+                                                                    <Button
                                                                             Width="28"
                                                                             Height="28"
                                                                             Margin="{StaticResource MarginLeft20}"
                                                                             Background="Transparent"
                                                                             Command="{Binding DeleteCommand}"
                                                                             Style="{StaticResource ContentEditorButton}">
-                                                                            <svg:SVGImage
+                                                                        <svg:SVGImage
                                                                                 Width="20"
                                                                                 Height="20"
                                                                                 HorizontalContentAlignment="Center"
                                                                                 VerticalContentAlignment="Center"
                                                                                 OverrideColor="{StaticResource IconColor}"
                                                                                 UriSource="../Icons/trash-solid.svg" />
-                                                                        </Button>
-                                                                        <TextBlock
+                                                                    </Button>
+                                                                    <TextBlock
                                                                             MaxHeight="20"
+                                                                            Width="100"
                                                                             Margin="{StaticResource MarginAllSides20}"
                                                                             FontSize="{StaticResource FontSizeM}"
                                                                             Text="{Binding IdeaElement.Name}"
                                                                             TextTrimming="WordEllipsis"
                                                                             TextWrapping="Wrap" />
-                                                                    </StackPanel>
-                                                                    <StackPanel Width="192">
-                                                                        <ListView
+                                                                </StackPanel>
+                                                                <StackPanel Width="192">
+                                                                    <ListView
                                                                             Focusable="False"
                                                                             ItemsSource="{Binding GroupedIdeaValuesView}"
                                                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                                             ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                                                            <ListView.ItemContainerStyle>
-                                                                                <Style TargetType="{x:Type ListViewItem}">
-                                                                                    <Setter Property="Padding" Value="0" />
-                                                                                    <Setter Property="Margin" Value="0" />
-                                                                                    <Setter Property="BorderThickness" Value="0" />
-                                                                                </Style>
-                                                                            </ListView.ItemContainerStyle>
-                                                                            <ListView.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <StackPanel
+                                                                        <ListView.ItemContainerStyle>
+                                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                                <Setter Property="Padding" Value="0" />
+                                                                                <Setter Property="Margin" Value="0" />
+                                                                                <Setter Property="BorderThickness" Value="0" />
+                                                                            </Style>
+                                                                        </ListView.ItemContainerStyle>
+                                                                        <ListView.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <StackPanel
                                                                                         Width="192"
                                                                                         HorizontalAlignment="Left"
                                                                                         VerticalAlignment="Center"
                                                                                         Background="Black"
                                                                                         Orientation="Horizontal">
-                                                                                        <Button
+                                                                                    <Button
                                                                                             Width="28"
                                                                                             Height="28"
                                                                                             Margin="{StaticResource MarginLeft20}"
                                                                                             Background="Transparent"
                                                                                             Command="{Binding DeleteCommand}"
                                                                                             Style="{StaticResource ContentEditorButton}">
-                                                                                            <svg:SVGImage
+                                                                                        <svg:SVGImage
                                                                                                 Width="16"
                                                                                                 Height="16"
                                                                                                 HorizontalContentAlignment="Center"
                                                                                                 VerticalContentAlignment="Center"
                                                                                                 OverrideColor="{StaticResource IconColor}"
                                                                                                 UriSource="../Icons/trash-solid.svg" />
-                                                                                        </Button>
-                                                                                        <TextBlock
+                                                                                    </Button>
+                                                                                    <TextBlock
                                                                                             MaxHeight="20"
+                                                                                            Width="100"
                                                                                             Margin="{StaticResource MarginHorizontal20}"
                                                                                             VerticalAlignment="Center"
                                                                                             FontSize="{StaticResource FontSizeS}"
                                                                                             Text="{Binding IdeaValue.Name}"
                                                                                             TextTrimming="WordEllipsis"
                                                                                             TextWrapping="Wrap" />
-                                                                                    </StackPanel>
-                                                                                </DataTemplate>
-                                                                            </ListView.ItemTemplate>
-                                                                        </ListView>
-                                                                    </StackPanel>
-                                                                </WrapPanel>
-                                                            </DataTemplate>
-                                                        </ListView.ItemTemplate>
-                                                    </ListView>
-                                                </WrapPanel>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                        </WrapPanel>
+                                                                                </StackPanel>
+                                                                            </DataTemplate>
+                                                                        </ListView.ItemTemplate>
+                                                                    </ListView>
+                                                                </StackPanel>
+                                                            </WrapPanel>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
         </ListView>
     </Grid>
 </UserControl>

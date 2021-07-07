@@ -1,75 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using Dicidea.Core.Helper;
 using Dicidea.Core.Models;
 using Dicidea.Core.Services;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
 namespace IdeaPage.ViewModels
 {
+    /// <summary>
+    /// Kapselt die Idee, fügt UI-spezifische Eigenschaften hinzu (Editieren von Titel, Section und Beschreibung der Idee)
+    /// und erstellt eine ListCollectionView der Kategorien der Idee.
+    /// </summary>
     public class IdeaViewModel : NotifyPropertyChanges
     {
         private readonly IdeaCategoryListViewModel _ideaCategoryListViewModel;
         private ListCollectionView _groupedIdeaCategoriesView;
         private bool _isEditEnabled;
-        private readonly IDialogService _dialogService;
-
         private bool _isEditDisabled = true;
-
-        //private readonly object _lock = new object();
+        /// <summary>
+        /// Erzeugt die gruppierte Liste der Kategorien der Idee und setzt das EditCommand.
+        /// </summary>
+        /// <param name="idea">Idee für die das IdeaViewModel erstellt werden soll</param>
+        /// <param name="ideaDataService">Wird zur Weitergabe an das IdeaCategoryListViewModel benötigt</param>
+        /// <param name="dialogService">Wird zur Weitergabe an das IdeaCategoryListViewModel benötigt</param>
         public IdeaViewModel(Idea idea, IIdeaDataService ideaDataService, IDialogService dialogService)
         {
-            _dialogService = dialogService;
-            //SendMailCommand = new DelegateCommand(SendMailCommand, CanSendMailExecute);
-            if (GroupedIdeaCategoriesView != null)
-            {
-                Debug.WriteLine("Binding of GroupedCategoriesView in DiceViewModel");
-                //System.Windows.Data.BindingOperations.EnableCollectionSynchronization(GroupedCategoriesView, _lock);
-            }
-
             Idea = idea;
 
             IdeaViewModel self = this;
             if (_ideaCategoryListViewModel == null)
             {
-                _ideaCategoryListViewModel = new IdeaCategoryListViewModel(self, ideaDataService, _dialogService);
+                _ideaCategoryListViewModel = new IdeaCategoryListViewModel(self, ideaDataService, dialogService);
             }
 
             CreateGroupedView();
             EditCommand = new DelegateCommand(EditExecute);
         }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textboxen
+        /// </summary>
         public bool IsEditEnabled
         {
             get => _isEditEnabled;
             set => SetProperty(ref _isEditEnabled, value);
         }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textblöcke
+        /// </summary>
         public bool IsEditDisabled
         {
             get => _isEditDisabled;
             set => SetProperty(ref _isEditDisabled, value);
         }
-
-
+        /// <summary>
+        /// Der gruppierte <see cref="ListCollectionView" />, nach dem Anfangsbuchstaben des Sektionnamens gruppiert.
+        /// </summary>
         public ListCollectionView GroupedIdeaCategoriesView
         {
             get => _groupedIdeaCategoriesView;
             set => SetProperty(ref _groupedIdeaCategoriesView, value);
         }
-
-        public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
         
-
+        /// <summary>
+        /// Zum Aktivieren und Deaktivieren des Editierens
+        /// </summary>
         public void EditExecute()
         {
             Debug.WriteLine("Edit Idea");
@@ -77,7 +77,9 @@ namespace IdeaPage.ViewModels
             IsEditDisabled = !IsEditDisabled;
 
         }
-
+        /// <summary>
+        /// Ausgewählte Kategorie
+        /// </summary>
         public IdeaCategoryViewModel SelectedIdeaCategory
         {
             get
@@ -89,6 +91,10 @@ namespace IdeaPage.ViewModels
             set => GroupedIdeaCategoriesView.MoveCurrentTo(value);
         }
 
+        /// <summary>
+        ///     Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(IdeaCategory.Name))
@@ -96,7 +102,9 @@ namespace IdeaPage.ViewModels
                 GroupedIdeaCategoriesView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Funktion um das ideaCategoryListViewModel in einen ListCollectionView umzuwandeln. Dieser wird zur gruppierten Darstellung der Ideen Kategorien benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<IdeaCategoryViewModel> ideaCategoryViewModels =
@@ -112,16 +120,14 @@ namespace IdeaPage.ViewModels
                 IsLiveSorting = true,
                 SortDescriptions = {new SortDescription(propertyName, ListSortDirection.Ascending)}
             };
-            //GroupedIdeaCategoriesView.GroupDescriptions.Add(new PropertyGroupDescription
-            //{
-            //    PropertyName = propertyName,
-            //    Converter = new NameToInitialConverter()
-            //});
 
             GroupedIdeaCategoriesView.CurrentChanged +=
                 (sender, args) => OnPropertyChanged(nameof(SelectedIdeaCategory));
         }
-
+        /// <summary>
+        /// Zum Löschen einer Kategorie einer Idee.
+        /// </summary>
+        /// <returns></returns>
         public async Task DeleteIdeaCategoryAsync()
         {
             var selectedIdeaCategory = SelectedIdeaCategory;
@@ -129,7 +135,9 @@ namespace IdeaPage.ViewModels
             GroupedIdeaCategoriesView.Refresh();
         }
 
-
+        /// <summary>
+        /// Idea des IdeaViewModels
+        /// </summary>
         public Idea Idea { get; }
     }
 }

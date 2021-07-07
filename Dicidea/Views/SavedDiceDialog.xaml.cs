@@ -1,11 +1,11 @@
 ﻿namespace Dicidea.Views
 {
     /// <summary>
-    /// Interaction logic for ConfirmationDialog
+    /// Interaction logic for SavedDiceDialog
     /// </summary>
-    public partial class ConfirmationDialog
+    public partial class SavedDiceDialog 
     {
-        public ConfirmationDialog()
+        public SavedDiceDialog()
         {
             InitializeComponent();
         }

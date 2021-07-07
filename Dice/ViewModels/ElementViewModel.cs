@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -16,6 +13,10 @@ using Prism.Services.Dialogs;
 
 namespace DicePage.ViewModels
 {
+    /// <summary>
+    /// Kapselt das Element einer Kategorie, fügt UI-spezifische Eigenschaften hinzu (Löschen des Elements, hinzufügen eines Werts)
+    /// und erstellt eine ListCollectionView der Werte des Würfels.
+    /// </summary>
     public class ElementViewModel : NotifyPropertyChanges
     {
         private readonly CategoryViewModel _categoryViewModel;
@@ -25,6 +26,14 @@ namespace DicePage.ViewModels
         private readonly DiceViewModel _diceViewModel;
         private bool _isEditEnabled;
         private bool _isEditDisabled = true;
+        /// <summary>
+        /// Erzeugt die gruppierte Liste der Werte des Elements und setzt das EditCommand, das AddCommand, das ActivateCommand und das DeleteCommand.
+        /// </summary>
+        /// <param name="element">Element für den das ElementViewModel erstellt werden soll</param>
+        /// <param name="categoryViewModel">Kategorie zu der das Element gehört, wird benötigt zum löschen eines Elements und zur Auswahl des Inhalts auf der Rückseite der Karten</param>
+        /// <param name="diceViewModel">Würfel zur Auswahl des Inhalts auf der Rückseite der Karten benötigt</param>
+        /// <param name="diceDataService">Wird zur Weitergabe an das ValueListViewModel benötigt</param>
+        /// <param name="dialogService">Wird zum Erzeugen eines Dialogs benötigt</param>
         public ElementViewModel(Element element, CategoryViewModel categoryViewModel, DiceViewModel diceViewModel, IDiceDataService diceDataService, IDialogService dialogService)
         {
             _dialogService = dialogService;
@@ -39,17 +48,21 @@ namespace DicePage.ViewModels
             ElementViewModel self = this;
             if (_valueListViewModel == null)
             {
-                _valueListViewModel = new ValueListViewModel(diceViewModel.Dice, _categoryViewModel.Category, self, diceDataService, _dialogService);
+                _valueListViewModel = new ValueListViewModel(self, diceDataService, _dialogService);
             }
             CreateGroupedView();
         }
-
+        /// <summary>
+        /// Gruppierte Liste der Werte
+        /// </summary>
         public ListCollectionView GroupedValuesView
         {
             get => _groupedValuesView;
             set => SetProperty(ref _groupedValuesView, value);
         }
-
+        /// <summary>
+        /// Ausgewählter Wert
+        /// </summary>
         public ValueViewModel SelectedValue
         {
             get
@@ -59,6 +72,10 @@ namespace DicePage.ViewModels
             }
             set => GroupedValuesView.MoveCurrentTo(value);
         }
+        /// <summary>
+        /// Aktualisiert die Liste wenn der Name geändert wurde.
+        /// </summary>
+        /// <param name="propertyName">Name der geänderten Property</param>
         private void OnNext(string propertyName)
         {
             if (propertyName == nameof(Element.Name))
@@ -66,7 +83,9 @@ namespace DicePage.ViewModels
                 //GroupedElementsView.Refresh();
             }
         }
-
+        /// <summary>
+        /// Funktion um das valueListViewModel in einen ListCollectionView umzuwandeln. Diese wird zur gruppierten Darstellung der Werte benötigt.
+        /// </summary>
         private void CreateGroupedView()
         {
             ObservableCollection<ValueViewModel> valueViewModels = _valueListViewModel.Values;
@@ -89,12 +108,17 @@ namespace DicePage.ViewModels
                 });
             GroupedValuesView.CurrentChanged += (sender, args) => OnPropertyChanged(nameof(SelectedValue));
         }
-
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textboxen
+        /// </summary>
         public bool IsEditEnabled
         {
             get => _isEditEnabled;
             set => SetProperty(ref _isEditEnabled, value);
         }
+        /// <summary>
+        /// Bool zum anzeigen und ausblenden der Textblöcke
+        /// </summary>
         public bool IsEditDisabled
         {
             get => _isEditDisabled;
@@ -105,22 +129,32 @@ namespace DicePage.ViewModels
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
         public DelegateCommand ActivateCommand { get; set; }
-
+        /// <summary>
+        /// Zum Aktivsetzen von Elementen
+        /// </summary>
         public void ActivateExecute()
         {
             Element.Active = !Element.Active;
         }
-
+        /// <summary>
+        /// Zum Editieren von Elementen
+        /// </summary>
         public void EditExecute()
         {
-            Debug.WriteLine("Edit Dice");
             IsEditEnabled = !IsEditEnabled;
             IsEditDisabled = !IsEditDisabled;
         }
+        /// <summary>
+        /// Zum Hinzufügen von Elementen
+        /// </summary>
         public async void AddExecute()
         {
             await AddValueAsync();
         }
+        /// <summary>
+        /// Zum Löschen von Elementen. Wird auf den Button geklickt wird zuerst ein Dialog angezeigt
+        /// der mit Ja bestätigt werden muss, erst dann wird das Element gelöscht.
+        /// </summary>
         public async void DeleteExecute()
         {
             var selectedElement = this;
@@ -141,21 +175,30 @@ namespace DicePage.ViewModels
             _categoryViewModel.SelectedElement = selectedElement;
             await _categoryViewModel.DeleteElementAsync();
         }
-
+        /// <summary>
+        /// Gibt an ob dieses Element in der Kategorie ausgewählt ist
+        /// </summary>
         public bool IsSelected
         {
             get => _categoryViewModel.SelectedElement == this;
         }
-
+        /// <summary>
+        /// Die Category zu der das Element gehört
+        /// </summary>
         public Category Category
         {
             get => _categoryViewModel.Category;
         }
+        /// <summary>
+        /// Der Würfel zu dem das Element gehört
+        /// </summary>
         public Dice Dice
         {
             get => _diceViewModel.Dice;
         }
-
+        /// <summary>
+        /// Das Element das zum ElementViewModel gehört
+        /// </summary>
         public Element Element { get; }
         public ICommand FlipCommand { get; set; }
 
@@ -163,27 +206,33 @@ namespace DicePage.ViewModels
         {
             return true;
         }
-
+        /// <summary>
+        /// Zum Hinzufügen eines Werts
+        /// </summary>
+        /// <returns></returns>
         public async Task AddValueAsync()
         {
-            Debug.WriteLine("Add Category");
             await _valueListViewModel.AddValueAsync();
             //GroupedCategoriesView.Refresh();
         }
+        /// <summary>
+        /// Zum Löschen eines Werts
+        /// </summary>
+        /// <returns></returns>
         public async Task DeleteValueAsync()
         {
             await _valueListViewModel.DeleteValueAsync(SelectedValue);
             GroupedValuesView.Refresh();
         }
-
+        /// <summary>
+        /// Zum flippen der Karte
+        /// </summary>
+        /// <param name="obj"></param>
         private void Flip(object obj)
         {
             _diceViewModel.SelectedElement = this;
             _categoryViewModel.SelectedElement = this;
             _diceViewModel.SelectedCategory = _categoryViewModel;
-            Debug.WriteLine("Flip Element: " + Element.Name);
-            Debug.WriteLine("Is selected: "+IsSelected);
-            Debug.WriteLine(_categoryViewModel.Category.Name);
         }
     }
 }

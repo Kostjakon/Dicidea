@@ -225,13 +225,12 @@
                                             UriSource="../Icons/trash-solid.svg" />
                                     </Button>
                                     <TextBlock
-                                        Width="248"
-                                        MaxHeight="60"
+                                        Width="300"
                                         FontSize="{StaticResource HeaderL}"
+                                        Margin="{StaticResource MarginLeft20}"
                                         Text="{Binding IdeaCategory.Name}"
                                         TextTrimming="WordEllipsis"
-                                        TextWrapping="Wrap"
-                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
                                 <ListView
                                     Grid.Row="1"
@@ -276,14 +275,12 @@
                                                             UriSource="../Icons/trash-solid.svg" />
                                                     </Button>
                                                     <TextBlock
-                                                        Width="230"
-                                                        MaxHeight="20"
+                                                        Width="300"
                                                         Margin="{StaticResource MarginAllSides20}"
                                                         FontSize="{StaticResource HeaderM}"
                                                         Text="{Binding IdeaElement.Name}"
                                                         TextTrimming="WordEllipsis"
-                                                        TextWrapping="Wrap"
-                                                        Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                                        TextWrapping="Wrap" />
                                                 </StackPanel>
                                                 <WrapPanel Width="400" VerticalAlignment="Top">
                                                     <ListView
@@ -313,7 +310,7 @@
                                                                     Background="{StaticResource CategoryBrush}">
                                                                     <StackPanel
                                                                         Width="200"
-                                                                        HorizontalAlignment="Left"
+                                                                        HorizontalAlignment="Stretch"
                                                                         VerticalAlignment="Top"
                                                                         Background="{StaticResource CategoryBrush}"
                                                                         Orientation="Horizontal">
@@ -333,13 +330,12 @@
                                                                                 UriSource="../Icons/trash-solid.svg" />
                                                                         </Button>
                                                                         <TextBlock
-                                                                            MaxHeight="20"
+                                                                            Width="110"
                                                                             Margin="{StaticResource MarginAllSides20}"
                                                                             FontSize="{StaticResource FontSizeM}"
                                                                             Text="{Binding IdeaValue.Name}"
                                                                             TextTrimming="WordEllipsis"
-                                                                            TextWrapping="Wrap"
-                                                                            Visibility="{Binding IsEditDisabled, Converter={StaticResource ConverterVisibility}}" />
+                                                                            TextWrapping="Wrap" />
                                                                     </StackPanel>
                                                                 </WrapPanel>
                                                             </DataTemplate>
