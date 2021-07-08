@@ -143,6 +143,7 @@ namespace Dicidea.Core.Helper
                 ApplyRules();
             else
                 ApplyRules(propertyName);
+            // ReSharper disable once ExplicitCallerInfoArgument
             base.OnPropertyChanged(HasErrorsPropertyName);
         }
 
